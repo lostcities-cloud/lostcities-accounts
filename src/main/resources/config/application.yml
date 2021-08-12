@@ -4,7 +4,7 @@ spring:
   config:
     use-legacy-processing: true
   application:
-    name: lostcities
+    name: lostcities-accounts
   profiles:
     # The commented value for `active` can be replaced with valid Spring profiles to load.
     # Otherwise, it will be filled in by gradle when building the JAR file
@@ -60,12 +60,6 @@ spring:
       console-available: true
   autoconfigure:
     exclude= org.springframework.boot.autoconfigure.web.servlet.error.ErrorMvcAutoConfiguration
-
-kafka:
-  server: kafka:9092
-  command-job-topic: command-job-topic
-  game-change-notification-topic: game-change-notification-topic
-
 server:
   port: 8080
   servlet:
