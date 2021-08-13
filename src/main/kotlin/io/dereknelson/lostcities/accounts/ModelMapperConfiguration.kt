@@ -3,8 +3,9 @@ package io.dereknelson.lostcities.accounts
 import io.dereknelson.lostcities.accounts.api.RegistrationDto
 import io.dereknelson.lostcities.accounts.service.Registration
 import io.dereknelson.lostcities.common.model.User
-import io.dereknelson.lostcities.common.model.UserRef
+
 import io.dereknelson.lostcities.accounts.persistence.AuthorityEntity
+import io.dereknelson.lostcities.common.auth.entity.UserRef
 import org.modelmapper.ModelMapper
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
