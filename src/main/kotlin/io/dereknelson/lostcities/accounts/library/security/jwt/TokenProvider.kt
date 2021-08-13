@@ -1,12 +1,12 @@
 package io.dereknelson.lostcities.accounts.library.security.jwt
 
+import io.dereknelson.lostcities.accounts.library.security.LostCitiesAuthenticationToken
+import io.dereknelson.lostcities.common.model.UserRef
 import io.jsonwebtoken.*
 import org.slf4j.LoggerFactory
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.core.Authentication
 import org.springframework.security.core.GrantedAuthority
 import org.springframework.security.core.authority.SimpleGrantedAuthority
-import org.springframework.security.core.userdetails.User
 import org.springframework.stereotype.Service
 import java.util.*
 import java.util.stream.Collectors
@@ -35,7 +35,7 @@ class TokenProvider(
             1000 * tokenValidityInSecondsForRememberMe.toLong()
     }
 
-    fun createToken(authentication: Authentication, rememberMe: Boolean): String {
+    fun createToken(authentication: Authentication, userRef: UserRef, rememberMe: Boolean): String {
         val authorities = authentication.authorities.stream()
             .map { obj: GrantedAuthority -> obj.authority }
             .collect(Collectors.joining(","))
@@ -49,6 +49,9 @@ class TokenProvider(
         return Jwts.builder()
             .setSubject(authentication.name)
             .claim(AUTHORITIES_KEY, authorities)
+            .claim(USER_ID_KEY, userRef.id)
+            .claim(LOGIN_KEY, userRef.login)
+            .claim(EMAIL_KEY, userRef.email)
             .signWith(SignatureAlgorithm.HS512, secretKey!!)
             .setExpiration(validity)
             .compact()
@@ -59,13 +62,13 @@ class TokenProvider(
             .setSigningKey(secretKey)
             .parseClaimsJws(token)
             .body
-        val authorities: Collection<GrantedAuthority> = Arrays.stream(
+        val authorities: MutableCollection<GrantedAuthority> = Arrays.stream(
             claims[AUTHORITIES_KEY].toString().split(",".toRegex()).toTypedArray()
         )
             .map { role: String? -> SimpleGrantedAuthority(role) }
             .collect(Collectors.toList())
-        val principal = User(claims.subject, "", authorities)
-        return UsernamePasswordAuthenticationToken(principal, token, authorities)
+        val principal = UserRef(claims[USER_ID_KEY].toString().toLong(), claims[LOGIN_KEY].toString(), claims[EMAIL_KEY].toString())
+        return LostCitiesAuthenticationToken(principal, token, authorities)
     }
 
     fun validateToken(authToken: String?): Boolean {
@@ -93,5 +96,8 @@ class TokenProvider(
 
     companion object {
         private const val AUTHORITIES_KEY = "auth"
+        private const val USER_ID_KEY = "user_id"
+        private const val LOGIN_KEY = "login"
+        private const val EMAIL_KEY = "email"
     }
 }

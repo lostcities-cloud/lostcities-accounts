@@ -4,6 +4,7 @@ import io.dereknelson.lostcities.accounts.persistence.UserRepository
 import io.dereknelson.lostcities.common.model.User
 import io.dereknelson.lostcities.accounts.persistence.UserEntity
 import io.dereknelson.lostcities.common.Constants
+import io.dereknelson.lostcities.common.model.UserRef
 import org.modelmapper.ModelMapper
 import org.springframework.cache.CacheManager
 import org.springframework.security.core.userdetails.UserDetails
@@ -21,6 +22,11 @@ class UserService(
     fun find(userDetails: UserDetails) : Optional<User> {
         return userRepository.findOneByLogin(userDetails.username)
             .map { modelMapper.map(it, User::class.java) }
+    }
+
+    fun findRefByLogin(login: String): Optional<UserRef> {
+        return userRepository.findOneByLogin(login)
+            .map { UserRef(it.id, it.login, it.email) }
     }
 
     fun findById(id: Long): Optional<User> {

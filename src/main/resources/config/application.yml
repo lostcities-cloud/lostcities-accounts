@@ -67,6 +67,13 @@ server:
       cookie:
         http-only: true
 
+springdoc:
+  api-docs.enabled: true
+  swagger-ui.enabled: true
+  packagesToScan: io.dereknelson.lostcities.accounts.api
+  pathsToMatch: /v1
+
+
 # Properties to be exposed on the /info management endpoint
 info:
   # Comma separated list of profiles that will trigger the ribbon to show

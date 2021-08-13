@@ -54,6 +54,7 @@ dependencies {
 	implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
 
 	implementation("org.zalando:problem-spring-web:0.21.0")
+
 	implementation("org.springdoc:springdoc-openapi-webmvc-core:1.5.10")
 	implementation("org.springdoc:springdoc-openapi-ui:1.5.10")
 	implementation("org.springdoc:springdoc-openapi-kotlin:1.5.10")

@@ -8,7 +8,6 @@ import io.dereknelson.lostcities.common.AuthoritiesConstants
 import io.dereknelson.lostcities.accounts.library.security.jwt.JwtFilter
 import io.dereknelson.lostcities.accounts.library.security.jwt.TokenProvider
 
-
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.responses.ApiResponse
 import io.swagger.v3.oas.annotations.responses.ApiResponses
@@ -81,7 +80,8 @@ class UserController (
 
         val authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken)
         SecurityContextHolder.getContext().authentication = authentication
-        val jwt = tokenProvider.createToken(authentication, loginDto.rememberMe)
+        val userRef = userService.findRefByLogin(loginDto.username!!).get()
+        val jwt = tokenProvider.createToken(authentication, userRef, loginDto.rememberMe)
         val httpHeaders = HttpHeaders()
         httpHeaders.add(JwtFilter.AUTHORIZATION_HEADER, "Bearer $jwt")
         return ResponseEntity<JwtTokenDto>(JwtTokenDto(jwt), httpHeaders, HttpStatus.OK)
