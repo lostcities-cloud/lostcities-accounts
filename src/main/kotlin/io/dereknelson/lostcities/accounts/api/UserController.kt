@@ -5,8 +5,8 @@ import io.dereknelson.lostcities.accounts.service.Registration
 import io.dereknelson.lostcities.accounts.service.UserService
 import io.dereknelson.lostcities.accounts.persistence.AuthorityEntity
 import io.dereknelson.lostcities.common.AuthoritiesConstants
-import io.dereknelson.lostcities.accounts.library.security.jwt.JwtFilter
-import io.dereknelson.lostcities.accounts.library.security.jwt.TokenProvider
+import io.dereknelson.lostcities.common.auth.JwtFilter
+import io.dereknelson.lostcities.common.auth.TokenProvider
 
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.responses.ApiResponse

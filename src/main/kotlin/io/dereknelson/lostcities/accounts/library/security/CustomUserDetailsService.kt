@@ -1,6 +1,6 @@
 package io.dereknelson.lostcities.accounts.library.security
 
-import io.dereknelson.lostcities.accounts.service.UserNotActivatedException
+import io.dereknelson.lostcities.accounts.service.exceptions.UserNotActivatedException
 import io.dereknelson.lostcities.accounts.persistence.UserRepository
 import io.dereknelson.lostcities.accounts.persistence.UserEntity
 import org.hibernate.validator.internal.constraintvalidators.hv.EmailValidator

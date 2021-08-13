@@ -1,7 +1,9 @@
 package io.dereknelson.lostcities.accounts.service
 
 import io.dereknelson.lostcities.accounts.persistence.UserRepository
+import io.dereknelson.lostcities.common.auth.LostCitiesUserDetails
 import org.springframework.security.core.userdetails.UserDetailsService
+import org.springframework.security.core.userdetails.UsernameNotFoundException
 import org.springframework.stereotype.Service
 
 @Service
@@ -10,18 +12,19 @@ class LostCitiesUserDetailsService(
 ): UserDetailsService {
 
     override fun loadUserByUsername(username: String): LostCitiesUserDetails {
-        return userRepository.findOneByLogin(username)
+        return userRepository.findUserForLogin(username)
             .map {
                 LostCitiesUserDetails(
                     id = it.id!!,
-                    login = it.login,
-                    email = it.email,
+                    login = it.login!!,
+                    email = it.email!!,
                     authorities = setOf(),
+                    password = it.password!!,
                     accountNonExpired = true,
                     accountNonLocked = true,
                     credentialsNonExpired = true,
                     enabled = true,
                 )
-            }.get()
+            }.orElseThrow { UsernameNotFoundException("User was not found: $username") }
     }
 }

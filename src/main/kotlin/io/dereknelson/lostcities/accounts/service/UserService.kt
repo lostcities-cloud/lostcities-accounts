@@ -3,6 +3,7 @@ package io.dereknelson.lostcities.accounts.service
 import io.dereknelson.lostcities.accounts.persistence.UserRepository
 import io.dereknelson.lostcities.common.model.User
 import io.dereknelson.lostcities.accounts.persistence.UserEntity
+import io.dereknelson.lostcities.accounts.service.exceptions.UserAlreadyExistsException
 import io.dereknelson.lostcities.common.Constants
 import io.dereknelson.lostcities.common.model.UserRef
 import org.modelmapper.ModelMapper

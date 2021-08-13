@@ -1,11 +1,13 @@
 package io.dereknelson.lostcities.accounts.config
 
 import io.dereknelson.lostcities.common.AuthoritiesConstants
-import io.dereknelson.lostcities.accounts.library.security.jwt.JwtConfigurer
-import io.dereknelson.lostcities.accounts.library.security.jwt.TokenProvider
+import io.dereknelson.lostcities.accounts.service.LostCitiesUserDetailsService
+import io.dereknelson.lostcities.common.auth.JwtConfigurer
+import io.dereknelson.lostcities.common.auth.TokenProvider
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Import
 import org.springframework.http.HttpMethod
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.config.annotation.web.builders.WebSecurity
@@ -27,7 +29,13 @@ class SecurityConfiguration(
     private val tokenProvider: TokenProvider,
     private val corsFilter: CorsFilter,
     private val problemSupport: SecurityProblemSupport,
+    private val lostCitiesUserDetailsService: LostCitiesUserDetailsService
 ) : WebSecurityConfigurerAdapter() {
+
+    @Bean
+    fun userDetailsService(authenticationManagerBuilder: AuthenticationManagerBuilder) {
+        authenticationManagerBuilder.userDetailsService(lostCitiesUserDetailsService)
+    }
 
     override fun configure(web: WebSecurity) {
         web

@@ -1,4 +1,4 @@
-package io.dereknelson.lostcities.accounts.service
+package io.dereknelson.lostcities.accounts.service.exceptions
 
 import org.springframework.http.HttpStatus
 import org.springframework.security.core.AuthenticationException
