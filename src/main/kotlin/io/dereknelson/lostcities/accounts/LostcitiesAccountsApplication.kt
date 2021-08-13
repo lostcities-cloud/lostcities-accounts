@@ -9,10 +9,8 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories
 
 @EnableJpaRepositories
 @ComponentScan(
-	"io.dereknelson.lostcities.accounts.library.security",
-	"io.dereknelson.lostcities.accounts.config",
-	"io.dereknelson.lostcities.domains",
-	"io.dereknelson.lostcities.api",
+	"io.dereknelson.lostcities.accounts",
+	"io.dereknelson.lostcities.accounts.config"
 )
 
 @SpringBootApplication(exclude=[ErrorMvcAutoConfiguration::class])

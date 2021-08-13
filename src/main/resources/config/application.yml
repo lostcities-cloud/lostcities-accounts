@@ -70,14 +70,21 @@ server:
 springdoc:
   api-docs.enabled: true
   swagger-ui.enabled: true
-  packagesToScan: io.dereknelson.lostcities.accounts.api
-  pathsToMatch: /v1
+  packages-to-scan: io.dereknelson.lostcities.accounts.api
+
 
 
 # Properties to be exposed on the /info management endpoint
 info:
   # Comma separated list of profiles that will trigger the ribbon to show
   display-ribbon-on-profiles: 'dev'
+
+logging:
+  level:
+    ROOT: debug
+    org:springdoc.api: trace
+    org.springdoc.webmvc.api: trace
+    io.dereknelson.lostcities: trace
 
 application:
   security:

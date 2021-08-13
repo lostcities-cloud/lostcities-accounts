@@ -65,7 +65,6 @@ spring:
   thymeleaf:
     cache: false
   security:
-
     user:
       name: admin
       password: testing
