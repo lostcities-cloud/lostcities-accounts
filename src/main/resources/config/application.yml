@@ -71,8 +71,7 @@ springdoc:
   api-docs.enabled: true
   swagger-ui.enabled: true
   packages-to-scan: io.dereknelson.lostcities.accounts.api
-
-
+  show-login-endpoint: true
 
 # Properties to be exposed on the /info management endpoint
 info:
