@@ -69,7 +69,7 @@ class UserEntity: AbstractAuditingEntity(), Serializable {
     var resetDate: Instant? = null
 
     @JsonIgnore
-    @ManyToMany
+    @ManyToMany(fetch=FetchType.EAGER)
     @JoinTable(
         name = "user_authority",
         joinColumns = [JoinColumn(name = "user_id", referencedColumnName = "id")],
