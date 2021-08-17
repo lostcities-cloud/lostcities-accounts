@@ -3,7 +3,7 @@ package io.dereknelson.lostcities.accounts.config
 import io.dereknelson.lostcities.common.AuthoritiesConstants
 import io.dereknelson.lostcities.accounts.service.LostCitiesUserDetailsService
 import io.dereknelson.lostcities.common.auth.JwtConfigurer
-import io.dereknelson.lostcities.common.auth.TokenProvider
+import io.dereknelson.lostcities.common.library.TokenProvider
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Import
 import org.springframework.http.HttpMethod

@@ -1,8 +1,8 @@
 package io.dereknelson.lostcities.accounts.persistence
 
 import com.fasterxml.jackson.annotation.JsonIgnore
-import io.dereknelson.lostcities.accounts.library.security.AbstractAuditingEntity
 import io.dereknelson.lostcities.common.Constants
+import io.dereknelson.lostcities.common.library.AbstractAuditingEntity
 import org.apache.commons.lang3.StringUtils
 import org.hibernate.annotations.BatchSize
 import org.hibernate.annotations.Cache

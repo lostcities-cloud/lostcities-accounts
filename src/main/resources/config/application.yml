@@ -1,3 +1,8 @@
+logging:
+  level:
+    ROOT: info
+    io.dereknelson.lostcities: error
+
 spring:
   mvc:
     throw-exception-if-no-handler-found: true
@@ -77,13 +82,6 @@ springdoc:
 info:
   # Comma separated list of profiles that will trigger the ribbon to show
   display-ribbon-on-profiles: 'dev'
-
-logging:
-  level:
-    ROOT: debug
-    org:springdoc.api: trace
-    org.springdoc.webmvc.api: trace
-    io.dereknelson.lostcities: trace
 
 application:
   security:

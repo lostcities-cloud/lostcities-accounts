@@ -9,7 +9,6 @@ import io.dereknelson.lostcities.common.auth.entity.UserRef
 
 import org.modelmapper.ModelMapper
 import org.springframework.cache.CacheManager
-import org.springframework.security.core.userdetails.UserDetails
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
 import java.util.*
@@ -21,11 +20,6 @@ class UserService(
     private var passwordEncoder: PasswordEncoder,
     private var cacheManager: CacheManager
 ) {
-    fun find(userDetails: UserDetails) : Optional<User> {
-        return userRepository.findOneByLogin(userDetails.username)
-            .map { modelMapper.map(it, User::class.java) }
-    }
-
     fun findRefByLogin(login: String): Optional<UserRef> {
         return userRepository.findOneByLogin(login)
             .map { UserRef(it.id, it.login, it.email) }
