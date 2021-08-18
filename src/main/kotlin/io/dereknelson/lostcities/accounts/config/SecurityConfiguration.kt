@@ -1,7 +1,7 @@
 package io.dereknelson.lostcities.accounts.config
 
-import io.dereknelson.lostcities.common.AuthoritiesConstants
 import io.dereknelson.lostcities.accounts.service.LostCitiesUserDetailsService
+import io.dereknelson.lostcities.common.AuthoritiesConstants
 import io.dereknelson.lostcities.common.auth.JwtConfigurer
 import io.dereknelson.lostcities.common.library.TokenProvider
 import org.springframework.context.annotation.Bean
@@ -19,6 +19,7 @@ import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter
 import org.springframework.security.web.header.writers.ReferrerPolicyHeaderWriter
 import org.springframework.web.filter.CorsFilter
+import org.springframework.web.filter.ForwardedHeaderFilter
 import org.zalando.problem.spring.web.advice.security.SecurityProblemSupport
 
 
@@ -31,6 +32,11 @@ class SecurityConfiguration(
     private val problemSupport: SecurityProblemSupport,
     private val lostCitiesUserDetailsService: LostCitiesUserDetailsService
 ) : WebSecurityConfigurerAdapter() {
+
+    @Bean
+    fun forwardedHeaderFilter(): ForwardedHeaderFilter? {
+        return ForwardedHeaderFilter()
+    }
 
     @Bean
     fun userDetailsService(authenticationManagerBuilder: AuthenticationManagerBuilder) {
