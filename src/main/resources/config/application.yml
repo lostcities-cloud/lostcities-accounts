@@ -1,6 +1,6 @@
 logging:
   level:
-    ROOT: debug
+    ROOT: info
     io.dereknelson.lostcities: error
 
 spring:
