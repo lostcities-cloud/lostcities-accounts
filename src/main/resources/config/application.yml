@@ -1,6 +1,6 @@
 logging:
   level:
-    ROOT: info
+    ROOT: debug
     io.dereknelson.lostcities: error
 
 spring:
@@ -68,17 +68,25 @@ spring:
 server:
   port: 8080
   forward-headers-strategy: framework
-
+  tomcat:
+    remoteip:
+      host-header:
 springdoc:
+
   api-docs.enabled: true
   swagger-ui:
     enabled: true
     disable-swagger-default-url: true
+    configUrl: /api/swagger-config
     urls:
-      - /api/accounts/api-docs
-      - /api/matches/api-docs
+      - url: /api/accounts/api-docs
+        name: Accounts api
+      - url: /api/matches/api-docs
+        name: Matches api
+
   packages-to-scan: io.dereknelson.lostcities.accounts.api
   show-login-endpoint: true
+  use-fqn: true
 
 # Properties to be exposed on the /info management endpoint
 info:

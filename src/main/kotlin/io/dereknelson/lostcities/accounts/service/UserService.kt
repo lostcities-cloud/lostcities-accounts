@@ -20,6 +20,7 @@ class UserService(
     private var passwordEncoder: PasswordEncoder,
     private var cacheManager: CacheManager
 ) {
+
     fun findRefByLogin(login: String): Optional<UserRef> {
         return userRepository.findOneByLogin(login)
             .map { UserRef(it.id, it.login, it.email) }

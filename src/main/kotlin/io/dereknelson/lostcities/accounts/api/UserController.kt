@@ -30,7 +30,7 @@ import javax.validation.Valid
 
 @Tag(name = "User actions")
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/accounts")
 class UserController (
     private var tokenProvider: TokenProvider,
     private var authenticationManagerBuilder: AuthenticationManagerBuilder,

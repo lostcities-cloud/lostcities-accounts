@@ -17,6 +17,8 @@ class CorsConfiguration {
     fun corsFilter(): CorsFilter {
         val source = UrlBasedCorsConfigurationSource()
 
+
+
         if (allowedOrigins.isNotEmpty()) {
             source.registerCorsConfiguration("/swagger-ui/**", corsConfiguration())
             source.registerCorsConfiguration("/api/**", corsConfiguration())
@@ -31,6 +33,7 @@ class CorsConfiguration {
 
     fun corsConfiguration(): CorsConfiguration {
         val config = CorsConfiguration();
+        config.allowedOriginPatterns = mutableListOf(allowedOrigins)
 
         config.allowCredentials = true
 

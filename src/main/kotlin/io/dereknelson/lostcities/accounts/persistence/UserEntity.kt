@@ -39,7 +39,7 @@ class UserEntity: AbstractAuditingEntity(), Serializable {
     var email: @Email @Size(min = 5, max = 254) String? = null
 
     @JsonIgnore
-    @Column(name = "password_hash", length = 60, nullable = false)
+    @Column(name = "password_hash", unique = false, length = 60, nullable = false)
     var password: @NotNull @Size(min = 60, max = 60) String? = null
 
     @Column(name = "first_name", length = 50)
