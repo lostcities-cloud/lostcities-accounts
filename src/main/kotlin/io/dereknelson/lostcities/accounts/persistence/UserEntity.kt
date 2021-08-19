@@ -18,10 +18,10 @@ import javax.validation.constraints.Size
 
 
 @Entity
-@Table(name = "user",
+@Table(name = "users",
     indexes = [
-        Index(name="user_login_index", columnList="login", unique=true),
-        Index(name="user_email_index", columnList="email", unique=true),
+        Index(name="users_login_index", columnList="login", unique=true),
+        Index(name="users_email_index", columnList="email", unique=true),
     ]
 )
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
@@ -71,8 +71,8 @@ class UserEntity: AbstractAuditingEntity(), Serializable {
     @JsonIgnore
     @ManyToMany(fetch=FetchType.EAGER)
     @JoinTable(
-        name = "user_authority",
-        joinColumns = [JoinColumn(name = "user_id", referencedColumnName = "id")],
+        name = "users_authority",
+        joinColumns = [JoinColumn(name = "users_id", referencedColumnName = "id")],
         inverseJoinColumns = [JoinColumn(name = "authority_name", referencedColumnName = "name")],
         foreignKey = ForeignKey(name="USER_AUTHORITY_FOREIGN_KEY")
     )
