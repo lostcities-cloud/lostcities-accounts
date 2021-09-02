@@ -74,7 +74,7 @@ class UserController (
     @PostMapping("/authenticate")
     fun authorize(@Valid @RequestBody loginDto: LoginDto): ResponseEntity<JwtTokenDto> {
         val authenticationToken = UsernamePasswordAuthenticationToken(
-            loginDto.username,
+            loginDto.login,
             loginDto.password
         )
 
