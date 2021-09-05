@@ -80,7 +80,7 @@ class UserController (
 
         val authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken)
         SecurityContextHolder.getContext().authentication = authentication
-        val userRef = userService.findRefByLogin(loginDto.username!!).get()
+        val userRef = userService.findRefByLogin(loginDto.login!!).get()
         val jwt = tokenProvider.createToken(authentication, userRef, loginDto.rememberMe)
         val httpHeaders = HttpHeaders()
         httpHeaders.add(JwtFilter.AUTHORIZATION_HEADER, "Bearer $jwt")
