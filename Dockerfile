@@ -4,6 +4,13 @@ WORKDIR /accounts
 
 COPY ./ ./
 
+ARG actor
+ARG token
+
+ENV GITHUB_ACTOR=$actor
+ENV GITHUB_TOKEN=$token
+
+
 RUN gradle clean build --no-daemon
 
 EXPOSE 8080
