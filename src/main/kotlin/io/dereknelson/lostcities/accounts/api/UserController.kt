@@ -72,7 +72,7 @@ class UserController (
 
     @Operation(summary = "Authenticate a user.")
     @PostMapping("/authenticate")
-    fun authorize(@Valid @RequestBody loginDto: LoginDto): ResponseEntity<JwtTokenDto> {
+    fun authorize(@Valid @RequestBody loginDto: LoginDto): ResponseEntity<AuthResponseDto> {
         val authenticationToken = UsernamePasswordAuthenticationToken(
             loginDto.login,
             loginDto.password
@@ -84,7 +84,7 @@ class UserController (
         val jwt = tokenProvider.createToken(authentication, userRef, loginDto.rememberMe)
         val httpHeaders = HttpHeaders()
         httpHeaders.add(JwtFilter.AUTHORIZATION_HEADER, "Bearer $jwt")
-        return ResponseEntity<JwtTokenDto>(JwtTokenDto(jwt), httpHeaders, HttpStatus.OK)
+        return ResponseEntity<AuthResponseDto>(AuthResponseDto(loginDto.login, jwt), httpHeaders, HttpStatus.OK)
     }
 
     @Operation(summary = "Activate a user.")

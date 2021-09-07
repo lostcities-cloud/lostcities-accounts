@@ -41,10 +41,10 @@ spring:
       path: /h2-console
 
   flyway:
-    enabled: false
+    enabled: true
     url: jdbc:postgresql://accounts-database:5432/lostcities-accounts
-    user: sa
-    password:
+    user: accounts
+    password: example
     baseline-version: 0
     table: SCHEMA_VERSION
     check-location: true
@@ -54,7 +54,7 @@ spring:
     database-platform: org.hibernate.dialect.PostgreSQLDialect
     show-sql: true
     hibernate:
-      ddl-auto: create-drop
+      ddl-auto: update
   # mail:
   #   host: localhost
   #   port: 25
