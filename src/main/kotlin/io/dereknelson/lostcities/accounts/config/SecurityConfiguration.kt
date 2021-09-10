@@ -4,6 +4,8 @@ import io.dereknelson.lostcities.accounts.service.LostCitiesUserDetailsService
 import io.dereknelson.lostcities.common.AuthoritiesConstants
 import io.dereknelson.lostcities.common.auth.JwtConfigurer
 import io.dereknelson.lostcities.common.library.TokenProvider
+import io.swagger.v3.oas.annotations.enums.SecuritySchemeType
+import io.swagger.v3.oas.annotations.security.SecurityScheme
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Import
 import org.springframework.http.HttpMethod
@@ -26,6 +28,7 @@ import org.zalando.problem.spring.web.advice.security.SecurityProblemSupport
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true, securedEnabled = true)
 @Import(SecurityProblemSupport::class)
+@SecurityScheme(name = "jwt_auth", type = SecuritySchemeType.HTTP, bearerFormat = "JWT", scheme = "bearer")
 class SecurityConfiguration(
     private val tokenProvider: TokenProvider,
     private val corsFilter: CorsFilter,

@@ -70,21 +70,18 @@ server:
   forward-headers-strategy: framework
 
 springdoc:
-
   api-docs.enabled: true
+  packages-to-scan: io.dereknelson.lostcities.accounts.api
+  show-login-endpoint: true
   swagger-ui:
     enabled: true
     disable-swagger-default-url: true
-    configUrl: /api/swagger-config
+    configUrl: lostcities.com/api/swagger-config
     urls:
-      - url: /api/accounts/api-docs
+      - url: lostcities.com/api/accounts/api-docs
         name: Accounts api
-      - url: /api/matches/api-docs
+      - url: lostcities.com/api/matches/api-docs
         name: Matches api
-
-  packages-to-scan: io.dereknelson.lostcities.accounts.api
-  show-login-endpoint: true
-  use-fqn: true
 
 # Properties to be exposed on the /info management endpoint
 info:

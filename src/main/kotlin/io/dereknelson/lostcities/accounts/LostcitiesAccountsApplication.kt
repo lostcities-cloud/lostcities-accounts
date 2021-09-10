@@ -19,7 +19,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories
 	"io.dereknelson.lostcities.common.library"
 )
 @SpringBootApplication(exclude=[ErrorMvcAutoConfiguration::class])
-@OpenAPIDefinition(servers = [Server(url="http://lostcities.com")])
+@OpenAPIDefinition(servers = [Server(url="lostcities.com")])
 class LostcitiesApplication
 
 fun main(args: Array<String>) {
