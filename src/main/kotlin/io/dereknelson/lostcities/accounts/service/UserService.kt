@@ -55,6 +55,7 @@ class UserService(
             registration,
             UserEntity::class.java
         )
+        userEntity.createdBy = Constants.SYSTEM_ACCOUNT
         userEntity.activated = true
         userEntity = userRepository.save(userEntity)
 
