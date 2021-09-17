@@ -6,8 +6,8 @@
 
 logging:
   level:
-    ROOT: info
-    io.dereknelson.lostcities: error
+    ROOT: debug
+    io.dereknelson.lostcities: debug
 
 spring:
   config:
@@ -29,20 +29,15 @@ spring:
       indent-output: true
   datasource:
     type: com.zaxxer.hikari.HikariDataSource
-    url: jdbc:postgresql://accounts-database:5432/lostcities-accounts
+    url: jdbc:postgresql://172.20.0.15:5432/lostcities-accounts
     username: accounts
     password: example
     hikari:
       poolName: Hikari
       auto-commit: true
-  h2:
-    console:
-      enabled: true
-      path: /h2-console
-
   flyway:
     enabled: true
-    url: jdbc:postgresql://accounts-database:5432/lostcities-accounts
+    url: jdbc:postgresql://172.20.0.15:5432/lostcities-accounts
     user: accounts
     password: example
     baseline-version: 0

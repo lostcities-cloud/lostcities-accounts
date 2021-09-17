@@ -3,6 +3,7 @@ package io.dereknelson.lostcities.accounts.config
 import io.dereknelson.lostcities.accounts.service.LostCitiesUserDetailsService
 import io.dereknelson.lostcities.common.AuthoritiesConstants
 import io.dereknelson.lostcities.common.auth.JwtConfigurer
+import io.dereknelson.lostcities.common.auth.JwtFilter
 import io.dereknelson.lostcities.common.library.TokenProvider
 import io.swagger.v3.oas.annotations.enums.SecuritySchemeType
 import io.swagger.v3.oas.annotations.security.SecurityScheme
@@ -23,6 +24,7 @@ import org.springframework.security.web.header.writers.ReferrerPolicyHeaderWrite
 import org.springframework.web.filter.CorsFilter
 import org.springframework.web.filter.ForwardedHeaderFilter
 import org.zalando.problem.spring.web.advice.security.SecurityProblemSupport
+import javax.servlet.Filter
 
 
 @EnableWebSecurity
@@ -66,7 +68,7 @@ class SecurityConfiguration(
             .and()
             .csrf()
             .disable()
-            //.addFilter(UsernamePasswordAuthenticationFilter::class.java)
+            .addFilterBefore(jwtFilter(), UsernamePasswordAuthenticationFilter::class.java)
             .exceptionHandling()
                 .authenticationEntryPoint(problemSupport)
                 .accessDeniedHandler(problemSupport)
@@ -107,6 +109,10 @@ class SecurityConfiguration(
         // @formatter:on
     }
 
+    private fun jwtFilter(): Filter {
+        return JwtFilter(tokenProvider)
+    }
+
     @Bean
     fun encoder(): PasswordEncoder {
         return BCryptPasswordEncoder()
@@ -115,5 +121,7 @@ class SecurityConfiguration(
     private fun securityConfigurerAdapter(): JwtConfigurer {
         return JwtConfigurer(tokenProvider)
     }
+
+
 
 }

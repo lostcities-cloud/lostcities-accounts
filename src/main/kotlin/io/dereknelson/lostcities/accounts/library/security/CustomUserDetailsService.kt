@@ -17,8 +17,8 @@ import java.util.stream.Collectors
 import org.springframework.security.core.userdetails.User
 
 @Component("userDetailsService")
-class CustomUserDetailsService(private val userRepository: UserRepository) : org.springframework.security.core.userdetails.UserDetailsService {
-    private val log = LoggerFactory.getLogger(UserDetailsService::class.java)
+class CustomUserDetailsService(private val userRepository: UserRepository) : UserDetailsService {
+    private val log = LoggerFactory.getLogger(CustomUserDetailsService::class.java)
 
     @Transactional
     override fun loadUserByUsername(login: String): UserDetails {
