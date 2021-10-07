@@ -1,10 +1,10 @@
 package io.dereknelson.lostcities.accounts.config
 
-import io.dereknelson.lostcities.accounts.service.LostCitiesUserDetailsService
+import io.dereknelson.lostcities.accounts.service.AuthUserDetailsService
 import io.dereknelson.lostcities.common.AuthoritiesConstants
 import io.dereknelson.lostcities.common.auth.JwtConfigurer
 import io.dereknelson.lostcities.common.auth.JwtFilter
-import io.dereknelson.lostcities.common.library.TokenProvider
+import io.dereknelson.lostcities.common.auth.TokenProvider
 import io.swagger.v3.oas.annotations.enums.SecuritySchemeType
 import io.swagger.v3.oas.annotations.security.SecurityScheme
 import org.springframework.context.annotation.Bean
@@ -35,7 +35,7 @@ class SecurityConfiguration(
     private val tokenProvider: TokenProvider,
     private val corsFilter: CorsFilter,
     private val problemSupport: SecurityProblemSupport,
-    private val lostCitiesUserDetailsService: LostCitiesUserDetailsService
+    private val lostCitiesUserDetailsService: AuthUserDetailsService
 ) : WebSecurityConfigurerAdapter() {
 
     @Bean
@@ -100,8 +100,6 @@ class SecurityConfiguration(
                 .antMatchers("/management/prometheus").permitAll()
                 .antMatchers("/management/**").hasAuthority(AuthoritiesConstants.ADMIN)
 
-            .and()
-                .httpBasic()
             .and()
                 .apply(securityConfigurerAdapter())
 

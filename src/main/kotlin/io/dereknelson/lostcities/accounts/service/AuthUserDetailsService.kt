@@ -8,14 +8,14 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException
 import org.springframework.stereotype.Service
 
 @Service
-class LostCitiesUserDetailsService(
+class AuthUserDetailsService(
     val userRepository: UserRepository
 ): UserDetailsService {
 
-    override fun loadUserByUsername(username: String): LostCitiesUserDetails {
+    override fun loadUserByUsername(username: String): AuthUserDetails {
         return userRepository.findUserForLogin(username)
             .map {
-                LostCitiesUserDetails(
+                AuthUserDetails(
                     id = it.id!!,
                     login = it.login!!,
                     email = it.email!!,

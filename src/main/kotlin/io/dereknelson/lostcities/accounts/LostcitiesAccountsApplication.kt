@@ -17,6 +17,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories
 	"io.dereknelson.lostcities.accounts",
 	"io.dereknelson.lostcities.accounts.config",
 	"io.dereknelson.lostcities.accounts.library",
+	"io.dereknelson.lostcities.common.auth",
 	"io.dereknelson.lostcities.common.library"
 )
 @SpringBootApplication(exclude=[ErrorMvcAutoConfiguration::class])
