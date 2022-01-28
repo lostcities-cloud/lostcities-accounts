@@ -87,6 +87,7 @@ class SecurityConfiguration(
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
             .and()
             .authorizeRequests()
+                .antMatchers("/swagger-ui/**").permitAll()
                 .antMatchers("/api/accounts/authenticate").permitAll()
                 .antMatchers("/api/accounts/register").permitAll()
                 .antMatchers("/api/accounts/activate").permitAll()
