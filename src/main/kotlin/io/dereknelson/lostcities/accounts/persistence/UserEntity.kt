@@ -32,7 +32,8 @@ class UserEntity : AbstractAuditingEntity(), Serializable {
     val id: Long? = null
 
     @Column(length = 50, unique = true, nullable = false)
-    var login: @NotNull @Pattern(regexp = Constants.LOGIN_REGEX) @Size(min = 1, max = 50) String? = null
+    var login: @NotNull @Pattern(regexp = Constants.LOGIN_REGEX) @Size(min = 1, max = 50) String? =
+        null
         set(username) { field = StringUtils.lowerCase(username, Locale.ENGLISH) }
 
     @Column(length = 254, unique = true)

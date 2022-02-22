@@ -27,13 +27,19 @@ class CustomUserDetailsService(private val userRepository: UserRepository) : Use
             return userRepository
                 .findOneWithAuthoritiesByEmailIgnoreCase(login)
                 .map { user -> createSpringSecurityUser(login, user) }
-                .orElseThrow { UsernameNotFoundException("User with email $login was not found in the database") }
+                .orElseThrow {
+                    UsernameNotFoundException(
+                        "User with email $login was not found in the database"
+                    )
+                }
         }
         val lowercaseLogin = login.lowercase(Locale.ENGLISH)
         return userRepository
             .findOneWithAuthoritiesByLogin(lowercaseLogin)
             .map { user -> createSpringSecurityUser(lowercaseLogin, user) }
-            .orElseThrow { UsernameNotFoundException("User $lowercaseLogin was not found in the database") }
+            .orElseThrow {
+                UsernameNotFoundException("User $lowercaseLogin was not found in the database")
+            }
     }
 
     private fun createSpringSecurityUser(

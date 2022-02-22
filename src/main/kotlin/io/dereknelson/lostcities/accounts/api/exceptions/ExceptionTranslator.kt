@@ -33,7 +33,9 @@ class ExceptionTranslator(private val env: Environment) : ProblemHandling, Secur
     /**
      * Post-process the Problem payload to add the message key for the front-end if needed.
      */
-    override fun process(entity: ResponseEntity<Problem>, request: NativeWebRequest): ResponseEntity<Problem>? {
+    override fun process(entity: ResponseEntity<Problem>, request: NativeWebRequest):
+        ResponseEntity<Problem>? {
+
         val problem: Problem = entity.body!!
         if (!(problem is ConstraintViolationProblem || problem is DefaultProblem)) {
             return entity
@@ -44,7 +46,10 @@ class ExceptionTranslator(private val env: Environment) : ProblemHandling, Secur
         val requestUri = if (nativeRequest != null) nativeRequest.requestURI else StringUtils.EMPTY
         val builder: ProblemBuilder = Problem
             .builder()
-            .withType(if (Problem.DEFAULT_TYPE == problem.type) ErrorConstants.DEFAULT_TYPE else problem.type)
+            .withType(
+                if (Problem.DEFAULT_TYPE == problem.type) ErrorConstants.DEFAULT_TYPE
+                else problem.type
+            )
             .withStatus(problem.status)
             .withTitle(problem.title)
             .with(PATH_KEY, requestUri)
@@ -109,7 +114,8 @@ class ExceptionTranslator(private val env: Environment) : ProblemHandling, Secur
         request: NativeWebRequest?
     ): ResponseEntity<Problem> {
         val problem: Problem =
-            Problem.builder().withStatus(Status.CONFLICT).with(MESSAGE_KEY, ErrorConstants.ERR_CONCURRENCY_FAILURE)
+            Problem.builder().withStatus(Status.CONFLICT)
+                .with(MESSAGE_KEY, ErrorConstants.ERR_CONCURRENCY_FAILURE)
                 .build()
         return create(ex!!, problem, request!!)
     }

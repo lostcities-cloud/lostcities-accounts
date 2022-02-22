@@ -61,7 +61,9 @@ class CacheConfiguration() {
                 Any::class.java, Any::class.java,
                 ResourcePoolsBuilder.heap(maxEntries)
             )
-                .withExpiry(ExpiryPolicyBuilder.timeToLiveExpiration(Duration.ofSeconds(timeToLiveSeconds)))
+                .withExpiry(
+                    ExpiryPolicyBuilder.timeToLiveExpiration(Duration.ofSeconds(timeToLiveSeconds))
+                )
                 .build()
         )
     }

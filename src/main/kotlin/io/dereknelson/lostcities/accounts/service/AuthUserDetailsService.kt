@@ -19,7 +19,8 @@ class AuthUserDetailsService(
                     login = it.login!!,
                     email = it.email!!,
                     authorities = it.authorities
-                        .map { authorityEntity -> SimpleGrantedAuthority(authorityEntity.name) }.toSet(),
+                        .map { authorityEntity -> SimpleGrantedAuthority(authorityEntity.name) }
+                        .toSet(),
                     password = it.password!!,
                     accountNonExpired = true,
                     accountNonLocked = true,

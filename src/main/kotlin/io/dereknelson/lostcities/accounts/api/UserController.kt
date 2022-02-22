@@ -78,13 +78,21 @@ class UserController(
             loginDto.password
         )
 
-        val authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken)
+        val authentication = authenticationManagerBuilder
+            .getObject()
+            .authenticate(authenticationToken)
+
         SecurityContextHolder.getContext().authentication = authentication
         val userRef = userService.findRefByLogin(loginDto.login!!).get()
         val jwt = tokenProvider.createToken(authentication, userRef, loginDto.rememberMe)
         val httpHeaders = HttpHeaders()
         httpHeaders.add(JwtFilter.AUTHORIZATION_HEADER, "Bearer $jwt")
-        return ResponseEntity<AuthResponseDto>(AuthResponseDto(loginDto.login, jwt), httpHeaders, HttpStatus.OK)
+
+        return ResponseEntity<AuthResponseDto>(
+            AuthResponseDto(loginDto.login, jwt),
+            httpHeaders,
+            HttpStatus.OK
+        )
     }
 
     @Operation(summary = "Activate a user.")

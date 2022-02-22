@@ -27,7 +27,14 @@ class UserService(
 
     fun findById(id: Long): Optional<User> {
         return userRepository.findById(id)
-            .map { User(id = it.id, login = it.login!!, email = it.email!!, langKey = it.langKey ?: Constants.DEFAULT_LANGUAGE) }
+            .map {
+                User(
+                    id = it.id,
+                    login = it.login!!,
+                    email = it.email!!,
+                    langKey = it.langKey ?: Constants.DEFAULT_LANGUAGE
+                )
+            }
     }
 
     fun findAllById(id: Iterable<Long>): Collection<User> {
@@ -76,9 +83,12 @@ class UserService(
     }
 
     private fun clearUserCaches(user: UserEntity) {
-        Objects.requireNonNull(cacheManager.getCache(UserRepository.USERS_BY_LOGIN_CACHE))!!.evict(user.login!!)
+        Objects.requireNonNull(cacheManager.getCache(UserRepository.USERS_BY_LOGIN_CACHE))!!
+            .evict(user.login!!)
+
         if (user.email != null) {
-            Objects.requireNonNull(cacheManager.getCache(UserRepository.USERS_BY_EMAIL_CACHE))!!.evict(user.email!!)
+            Objects.requireNonNull(cacheManager.getCache(UserRepository.USERS_BY_EMAIL_CACHE))!!
+                .evict(user.email!!)
         }
     }
 }
