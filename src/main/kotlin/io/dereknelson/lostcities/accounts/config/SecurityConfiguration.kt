@@ -26,7 +26,6 @@ import org.springframework.web.filter.ForwardedHeaderFilter
 import org.zalando.problem.spring.web.advice.security.SecurityProblemSupport
 import javax.servlet.Filter
 
-
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true, securedEnabled = true)
 @Import(SecurityProblemSupport::class)
@@ -70,41 +69,40 @@ class SecurityConfiguration(
             .disable()
             .addFilterBefore(jwtFilter(), UsernamePasswordAuthenticationFilter::class.java)
             .exceptionHandling()
-                .authenticationEntryPoint(problemSupport)
-                .accessDeniedHandler(problemSupport)
+            .authenticationEntryPoint(problemSupport)
+            .accessDeniedHandler(problemSupport)
             .and()
-                .headers()
-                .contentSecurityPolicy("default-src 'self'; frame-src 'self' data:; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://storage.googleapis.com; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self' data:")
+            .headers()
+            .contentSecurityPolicy("default-src 'self'; frame-src 'self' data:; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://storage.googleapis.com; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self' data:")
             .and()
-                .referrerPolicy(ReferrerPolicyHeaderWriter.ReferrerPolicy.STRICT_ORIGIN_WHEN_CROSS_ORIGIN)
+            .referrerPolicy(ReferrerPolicyHeaderWriter.ReferrerPolicy.STRICT_ORIGIN_WHEN_CROSS_ORIGIN)
             .and()
-                .featurePolicy("geolocation 'none'; midi 'none'; sync-xhr 'none'; microphone 'none'; camera 'none'; magnetometer 'none'; gyroscope 'none'; speaker 'none'; fullscreen 'self'; payment 'none'")
+            .featurePolicy("geolocation 'none'; midi 'none'; sync-xhr 'none'; microphone 'none'; camera 'none'; magnetometer 'none'; gyroscope 'none'; speaker 'none'; fullscreen 'self'; payment 'none'")
             .and()
-                .frameOptions()
-                .deny()
+            .frameOptions()
+            .deny()
             .and()
-                .sessionManagement()
-                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+            .sessionManagement()
+            .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
             .and()
             .authorizeRequests()
-                .antMatchers("/swagger-ui/**").permitAll()
-                .antMatchers("/api/accounts/authenticate").permitAll()
-                .antMatchers("/api/accounts/register").permitAll()
-                .antMatchers("/api/accounts/activate").permitAll()
-                .antMatchers("/api/accounts/reset-password/init").permitAll()
-                .antMatchers("/api/accounts/reset-password/finish").permitAll()
-                .antMatchers("/api/admin/**").hasAuthority(AuthoritiesConstants.ADMIN)
-                .antMatchers("/api/**").authenticated()
-                .antMatchers("/management/health").permitAll()
-                .antMatchers("/management/health/**").permitAll()
-                .antMatchers("/management/info").permitAll()
-                .antMatchers("/management/prometheus").permitAll()
-                .antMatchers("/management/**").hasAuthority(AuthoritiesConstants.ADMIN)
-
+            .antMatchers("/swagger-ui/**").permitAll()
+            .antMatchers("/api/accounts/authenticate").permitAll()
+            .antMatchers("/api/accounts/register").permitAll()
+            .antMatchers("/api/accounts/activate").permitAll()
+            .antMatchers("/api/accounts/reset-password/init").permitAll()
+            .antMatchers("/api/accounts/reset-password/finish").permitAll()
+            .antMatchers("/api/admin/**").hasAuthority(AuthoritiesConstants.ADMIN)
+            .antMatchers("/api/**").authenticated()
+            .antMatchers("/management/health").permitAll()
+            .antMatchers("/management/health/**").permitAll()
+            .antMatchers("/management/info").permitAll()
+            .antMatchers("/management/prometheus").permitAll()
+            .antMatchers("/management/**").hasAuthority(AuthoritiesConstants.ADMIN)
             .and()
-                .apply(securityConfigurerAdapter())
+            .apply(securityConfigurerAdapter())
 
-        http.headers().cacheControl();
+        http.headers().cacheControl()
         // @formatter:on
     }
 
@@ -120,7 +118,4 @@ class SecurityConfiguration(
     private fun securityConfigurerAdapter(): JwtConfigurer {
         return JwtConfigurer(tokenProvider)
     }
-
-
-
 }

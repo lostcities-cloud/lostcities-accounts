@@ -1,11 +1,10 @@
 package io.dereknelson.lostcities.accounts
 
 import io.dereknelson.lostcities.accounts.api.RegistrationDto
-import io.dereknelson.lostcities.accounts.service.Registration
-import io.dereknelson.lostcities.common.model.User
-
 import io.dereknelson.lostcities.accounts.persistence.AuthorityEntity
+import io.dereknelson.lostcities.accounts.service.Registration
 import io.dereknelson.lostcities.common.auth.entity.UserRef
+import io.dereknelson.lostcities.common.model.User
 import org.modelmapper.ModelMapper
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
@@ -21,7 +20,7 @@ class ModelMapperConfiguration {
         val modelMapper = ModelMapper()
 
         modelMapper.addConverter({ context ->
-            if(context.source == null) {
+            if (context.source == null) {
                 null
             } else {
                 val src: UserRef = context.source as UserRef
@@ -35,7 +34,7 @@ class ModelMapperConfiguration {
         }, UserRef::class.java, User::class.java)
 
         modelMapper.addConverter({ context ->
-            if(context.source == null) {
+            if (context.source == null) {
                 null
             } else {
                 val src: Timestamp = context.source as Timestamp
@@ -50,13 +49,13 @@ class ModelMapperConfiguration {
             val src = context.source as RegistrationDto
 
             Registration(
-                login=src.login,
-                email=src.email,
-                password=src.password,
-                firstName=src.firstName,
-                lastName=src.lastName,
-                langKey=src.langKey,
-                authorities=src.authorities.map { AuthorityEntity(name=it) }.toSet(),
+                login = src.login,
+                email = src.email,
+                password = src.password,
+                firstName = src.firstName,
+                lastName = src.lastName,
+                langKey = src.langKey,
+                authorities = src.authorities.map { AuthorityEntity(name = it) }.toSet(),
             )
         }, RegistrationDto::class.java, Registration::class.java)
 

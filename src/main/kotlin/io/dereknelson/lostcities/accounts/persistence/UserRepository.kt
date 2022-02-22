@@ -41,5 +41,4 @@ interface UserRepository : JpaRepository<UserEntity, Long> {
     fun findOneWithAuthoritiesByEmailIgnoreCase(email: String?): Optional<UserEntity>
 
     fun findAllByLoginNot(pageable: Pageable?, login: String?): Page<UserEntity>
-
 }

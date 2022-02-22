@@ -14,7 +14,7 @@ import javax.validation.constraints.Size
 @Entity
 @Table(name = "authority")
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-data class AuthorityEntity (
+data class AuthorityEntity(
     @Id
     @Column(length = 50)
     var name: @NotNull @Size(max = 50) String
@@ -36,8 +36,8 @@ data class AuthorityEntity (
     // prettier-ignore
     override fun toString(): String {
         return "Authority{" +
-                "name='" + name + '\'' +
-                "}"
+            "name='" + name + '\'' +
+            "}"
     }
 
     companion object {

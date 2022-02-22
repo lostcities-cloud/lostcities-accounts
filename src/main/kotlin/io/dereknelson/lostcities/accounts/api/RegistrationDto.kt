@@ -1,7 +1,7 @@
 package io.dereknelson.lostcities.accounts.api
 
-import io.dereknelson.lostcities.common.Constants
 import io.dereknelson.lostcities.common.AuthoritiesConstants
+import io.dereknelson.lostcities.common.Constants
 import io.swagger.v3.oas.annotations.media.Schema
 import javax.validation.constraints.Email
 import javax.validation.constraints.NotNull
@@ -9,7 +9,7 @@ import javax.validation.constraints.Pattern
 import javax.validation.constraints.Size
 
 @Schema(description = "Registration")
-data class RegistrationDto (
+data class RegistrationDto(
 
     @Schema(example = "ttesterson", required = true)
     var login: @NotNull @Pattern(regexp = Constants.LOGIN_REGEX) @Size(min = 1, max = 50) String,

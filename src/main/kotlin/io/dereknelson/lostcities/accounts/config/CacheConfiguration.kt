@@ -1,9 +1,9 @@
 package io.dereknelson.lostcities.accounts.config
 
-import io.dereknelson.lostcities.accounts.persistence.UserRepository
+import io.dereknelson.lostcities.accounts.library.cache.PrefixedKeyGenerator
 import io.dereknelson.lostcities.accounts.persistence.AuthorityEntity
 import io.dereknelson.lostcities.accounts.persistence.UserEntity
-import io.dereknelson.lostcities.accounts.library.cache.PrefixedKeyGenerator
+import io.dereknelson.lostcities.accounts.persistence.UserRepository
 import org.ehcache.config.builders.CacheConfigurationBuilder
 import org.ehcache.config.builders.ExpiryPolicyBuilder
 import org.ehcache.config.builders.ResourcePoolsBuilder
@@ -17,7 +17,6 @@ import org.springframework.cache.interceptor.KeyGenerator
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import java.time.Duration
-
 
 @Configuration
 @EnableCaching
@@ -62,8 +61,8 @@ class CacheConfiguration() {
                 Any::class.java, Any::class.java,
                 ResourcePoolsBuilder.heap(maxEntries)
             )
-            .withExpiry(ExpiryPolicyBuilder.timeToLiveExpiration(Duration.ofSeconds(timeToLiveSeconds)))
-            .build()
+                .withExpiry(ExpiryPolicyBuilder.timeToLiveExpiration(Duration.ofSeconds(timeToLiveSeconds)))
+                .build()
         )
     }
 }

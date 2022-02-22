@@ -1,18 +1,16 @@
 package io.dereknelson.lostcities.accounts.api
 
-import io.dereknelson.lostcities.common.model.User
+import io.dereknelson.lostcities.accounts.persistence.AuthorityEntity
 import io.dereknelson.lostcities.accounts.service.Registration
 import io.dereknelson.lostcities.accounts.service.UserService
-import io.dereknelson.lostcities.accounts.persistence.AuthorityEntity
 import io.dereknelson.lostcities.common.AuthoritiesConstants
 import io.dereknelson.lostcities.common.auth.JwtFilter
 import io.dereknelson.lostcities.common.auth.TokenProvider
-
+import io.dereknelson.lostcities.common.model.User
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.responses.ApiResponse
 import io.swagger.v3.oas.annotations.responses.ApiResponses
 import io.swagger.v3.oas.annotations.tags.Tag
-
 import org.modelmapper.ModelMapper
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -31,25 +29,27 @@ import javax.validation.Valid
 @Tag(name = "User actions")
 @RestController
 @RequestMapping("/api/accounts")
-class UserController (
+class UserController(
     private var tokenProvider: TokenProvider,
     private var authenticationManagerBuilder: AuthenticationManagerBuilder,
     private var userService: UserService,
-    private var modelMapper : ModelMapper
+    private var modelMapper: ModelMapper
 ) {
 
     private val log: Logger = LoggerFactory.getLogger(UserController::class.java)
 
     @Operation(summary = "Register a new user.")
-    @ApiResponses(value = [
-        ApiResponse(responseCode="200", description=""),
-        ApiResponse(responseCode="409", description="User already exists.")
-    ])
+    @ApiResponses(
+        value = [
+            ApiResponse(responseCode = "200", description = ""),
+            ApiResponse(responseCode = "409", description = "User already exists.")
+        ]
+    )
     @PostMapping("/register")
     @ResponseStatus(HttpStatus.CREATED)
-    fun register(@RequestBody registrationDto : RegistrationDto): UserDto? {
+    fun register(@RequestBody registrationDto: RegistrationDto): UserDto? {
         val registration = modelMapper.map(registrationDto, Registration::class.java)
-        registration.authorities = setOf(AuthorityEntity(name= AuthoritiesConstants.USER))
+        registration.authorities = setOf(AuthorityEntity(name = AuthoritiesConstants.USER))
         val user = userService.register(registration)
 
         return UserDto(user.id, user.login, user.email, user.langKey)
@@ -57,9 +57,9 @@ class UserController (
 
     @Operation(summary = "Find a user.")
     @GetMapping("/user/{id}")
-    fun findUserById(@PathVariable  id: Long) : UserDto? {
+    fun findUserById(@PathVariable id: Long): UserDto? {
         return userService.findById(id)
-            .map { UserDto(id=it.id, login=it.login, email=it.email, langKey=it.langKey) }
+            .map { UserDto(id = it.id, login = it.login, email = it.email, langKey = it.langKey) }
             .orElseThrow { ResponseStatusException(HttpStatus.NOT_FOUND) }
     }
 
@@ -89,10 +89,8 @@ class UserController (
 
     @Operation(summary = "Activate a user.")
     @GetMapping("/activate")
-    fun activateAccount(@RequestParam(value = "key", required=true) key: String) {
+    fun activateAccount(@RequestParam(value = "key", required = true) key: String) {
         val user: Optional<User> = userService.activateRegistration(key)
         user.orElseThrow { InvalidActivationKeyException() }
     }
-
 }
-

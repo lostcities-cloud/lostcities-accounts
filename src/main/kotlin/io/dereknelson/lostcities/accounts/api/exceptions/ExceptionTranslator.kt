@@ -72,18 +72,18 @@ class ExceptionTranslator(private val env: Environment) : ProblemHandling, Secur
             .fieldErrors
             .stream()
             .map { f: FieldError ->
-                    val code : String = if (StringUtils.isNotBlank(f.defaultMessage))
-                        f.defaultMessage!!
-                    else
-                        f.code!!
+                val code: String = if (StringUtils.isNotBlank(f.defaultMessage))
+                    f.defaultMessage!!
+                else
+                    f.code!!
 
-                    FieldError(
-                        f.objectName.replaceFirst("DTO$".toRegex(), ""),
-                        f.field,
-                        code
-                    )
-                }
-                .collect(Collectors.toList())
+                FieldError(
+                    f.objectName.replaceFirst("DTO$".toRegex(), ""),
+                    f.field,
+                    code
+                )
+            }
+            .collect(Collectors.toList())
         val problem: Problem = Problem
             .builder()
             .withType(ErrorConstants.CONSTRAINT_VIOLATION_TYPE)
@@ -94,7 +94,6 @@ class ExceptionTranslator(private val env: Environment) : ProblemHandling, Secur
             .build()
         return create(ex, problem, request)
     }
-
 
     @ExceptionHandler
     fun handleInvalidPasswordException(
@@ -141,8 +140,8 @@ class ExceptionTranslator(private val env: Environment) : ProblemHandling, Secur
                     .withDetail("Failure during data access")
                     .withCause(
                         Optional.ofNullable(throwable.cause)
-                            .filter{ isCausalChainsEnabled }
-                            .map{ this.toProblem(it) }
+                            .filter { isCausalChainsEnabled }
+                            .map { this.toProblem(it) }
                             .orElse(null)
                     )
             }

@@ -1,12 +1,11 @@
 package io.dereknelson.lostcities.accounts.service
 
-import io.dereknelson.lostcities.accounts.persistence.UserRepository
-import io.dereknelson.lostcities.common.model.User
 import io.dereknelson.lostcities.accounts.persistence.UserEntity
+import io.dereknelson.lostcities.accounts.persistence.UserRepository
 import io.dereknelson.lostcities.accounts.service.exceptions.UserAlreadyExistsException
 import io.dereknelson.lostcities.common.Constants
 import io.dereknelson.lostcities.common.auth.entity.UserRef
-
+import io.dereknelson.lostcities.common.model.User
 import org.modelmapper.ModelMapper
 import org.springframework.cache.CacheManager
 import org.springframework.security.crypto.password.PasswordEncoder
@@ -16,7 +15,7 @@ import java.util.*
 @Service
 class UserService(
     private var modelMapper: ModelMapper,
-    private var userRepository : UserRepository,
+    private var userRepository: UserRepository,
     private var passwordEncoder: PasswordEncoder,
     private var cacheManager: CacheManager
 ) {
@@ -28,8 +27,7 @@ class UserService(
 
     fun findById(id: Long): Optional<User> {
         return userRepository.findById(id)
-            .map { User(id=it.id, login=it.login!!, email=it.email!!, langKey=it.langKey ?: Constants.DEFAULT_LANGUAGE) }
-
+            .map { User(id = it.id, login = it.login!!, email = it.email!!, langKey = it.langKey ?: Constants.DEFAULT_LANGUAGE) }
     }
 
     fun findAllById(id: Iterable<Long>): Collection<User> {
@@ -60,9 +58,9 @@ class UserService(
         userEntity = userRepository.save(userEntity)
 
         return User(
-            id=userEntity.id,
-            login=userEntity.login!!,
-            email=userEntity.email!!
+            id = userEntity.id,
+            login = userEntity.login!!,
+            email = userEntity.email!!
         )
     }
 
@@ -73,7 +71,7 @@ class UserService(
                 user.activated = true
                 user.activationKey = null
                 clearUserCaches(user)
-                User(id=user.id, login=user.login!!, user.email!!, user.langKey!!)
+                User(id = user.id, login = user.login!!, user.email!!, user.langKey!!)
             }
     }
 

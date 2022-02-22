@@ -16,16 +16,16 @@ import javax.validation.constraints.NotNull
 import javax.validation.constraints.Pattern
 import javax.validation.constraints.Size
 
-
 @Entity
-@Table(name = "users",
+@Table(
+    name = "users",
     indexes = [
-        Index(name="users_login_index", columnList="login", unique=true),
-        Index(name="users_email_index", columnList="email", unique=true),
+        Index(name = "users_login_index", columnList = "login", unique = true),
+        Index(name = "users_email_index", columnList = "email", unique = true),
     ]
 )
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-class UserEntity: AbstractAuditingEntity(), Serializable {
+class UserEntity : AbstractAuditingEntity(), Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequenceGenerator")
     @SequenceGenerator(name = "sequenceGenerator")
@@ -33,7 +33,7 @@ class UserEntity: AbstractAuditingEntity(), Serializable {
 
     @Column(length = 50, unique = true, nullable = false)
     var login: @NotNull @Pattern(regexp = Constants.LOGIN_REGEX) @Size(min = 1, max = 50) String? = null
-        set(username) {field = StringUtils.lowerCase(username, Locale.ENGLISH)}
+        set(username) { field = StringUtils.lowerCase(username, Locale.ENGLISH) }
 
     @Column(length = 254, unique = true)
     var email: @Email @Size(min = 5, max = 254) String? = null
@@ -69,12 +69,12 @@ class UserEntity: AbstractAuditingEntity(), Serializable {
     var resetDate: Instant? = null
 
     @JsonIgnore
-    @ManyToMany(fetch=FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
         name = "users_authority",
         joinColumns = [JoinColumn(name = "users_id", referencedColumnName = "id")],
         inverseJoinColumns = [JoinColumn(name = "authority_name", referencedColumnName = "name")],
-        foreignKey = ForeignKey(name="USER_AUTHORITY_FOREIGN_KEY")
+        foreignKey = ForeignKey(name = "USER_AUTHORITY_FOREIGN_KEY")
     )
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     @BatchSize(size = 20)
@@ -96,15 +96,15 @@ class UserEntity: AbstractAuditingEntity(), Serializable {
     // prettier-ignore
     override fun toString(): String {
         return "User{" +
-                "login='" + login + '\'' +
-                ", firstName='" + firstName + '\'' +
-                ", lastName='" + lastName + '\'' +
-                ", email='" + email + '\'' +
-                ", imageUrl='" + imageUrl + '\'' +
-                ", activated='" + activated + '\'' +
-                ", langKey='" + langKey + '\'' +
-                ", activationKey='" + activationKey + '\'' +
-                "}"
+            "login='" + login + '\'' +
+            ", firstName='" + firstName + '\'' +
+            ", lastName='" + lastName + '\'' +
+            ", email='" + email + '\'' +
+            ", imageUrl='" + imageUrl + '\'' +
+            ", activated='" + activated + '\'' +
+            ", langKey='" + langKey + '\'' +
+            ", activationKey='" + activationKey + '\'' +
+            "}"
     }
 
     companion object {

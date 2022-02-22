@@ -1,12 +1,13 @@
 package io.dereknelson.lostcities.accounts.library.security
 
-import io.dereknelson.lostcities.accounts.service.exceptions.UserNotActivatedException
-import io.dereknelson.lostcities.accounts.persistence.UserRepository
 import io.dereknelson.lostcities.accounts.persistence.UserEntity
+import io.dereknelson.lostcities.accounts.persistence.UserRepository
+import io.dereknelson.lostcities.accounts.service.exceptions.UserNotActivatedException
 import org.hibernate.validator.internal.constraintvalidators.hv.EmailValidator
 import org.slf4j.LoggerFactory
 import org.springframework.security.core.GrantedAuthority
 import org.springframework.security.core.authority.SimpleGrantedAuthority
+import org.springframework.security.core.userdetails.User
 import org.springframework.security.core.userdetails.UserDetails
 import org.springframework.security.core.userdetails.UserDetailsService
 import org.springframework.security.core.userdetails.UsernameNotFoundException
@@ -14,7 +15,6 @@ import org.springframework.stereotype.Component
 import org.springframework.transaction.annotation.Transactional
 import java.util.*
 import java.util.stream.Collectors
-import org.springframework.security.core.userdetails.User
 
 @Component("userDetailsService")
 class CustomUserDetailsService(private val userRepository: UserRepository) : UserDetailsService {

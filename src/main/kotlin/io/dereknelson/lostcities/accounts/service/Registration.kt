@@ -6,7 +6,7 @@ import java.util.*
 import javax.validation.constraints.NotNull
 import javax.validation.constraints.Size
 
-data class Registration (
+data class Registration(
     val login: String,
     val email: String,
     var password: @NotNull @Size(min = 60, max = 60) String,

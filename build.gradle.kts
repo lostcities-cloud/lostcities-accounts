@@ -35,6 +35,8 @@ repositories {
 
 extra["snippetsDir"] = file("build/generated-snippets")
 
+val ktlint by configurations.creating
+
 dependencies {
 	implementation("io.dereknelson.lostcities-cloud:lostcities-common:1.0-SNAPSHOT")
 	implementation("org.apache.commons:commons-lang3:3.12.0")
@@ -85,6 +87,12 @@ dependencies {
 	implementation("org.springframework.boot:spring-boot-devtools")
 	runtimeOnly("org.postgresql:postgresql")
 
+	ktlint("com.pinterest:ktlint:0.44.0") {
+		attributes {
+			attribute(Bundling.BUNDLING_ATTRIBUTE, objects.named(Bundling.EXTERNAL))
+		}
+	}
+
 	annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
 
 	testImplementation("org.junit.jupiter:junit-jupiter:5.6.2")
@@ -95,6 +103,29 @@ dependencies {
 	testImplementation("org.springframework.security:spring-security-test")
 	testImplementation("org.mockito.kotlin:mockito-kotlin:3.2.0")
 	testImplementation("org.assertj:assertj-core:3.19.0")
+}
+
+val outputDir = "${project.buildDir}/reports/ktlint/"
+val inputFiles = project.fileTree(mapOf("dir" to "src", "include" to "**/*.kt"))
+
+val ktlintCheck by tasks.creating(JavaExec::class) {
+	inputs.files(inputFiles)
+	outputs.dir(outputDir)
+
+	description = "Check Kotlin code style."
+	classpath = ktlint
+	mainClass.set("com.pinterest.ktlint.Main")
+	args = listOf("src/**/*.kt")
+}
+
+val ktlintFormat by tasks.creating(JavaExec::class) {
+	inputs.files(inputFiles)
+	outputs.dir(outputDir)
+	description = "Fix Kotlin code style deviations."
+	classpath = ktlint
+	mainClass.set("com.pinterest.ktlint.Main")
+	args = listOf("-F", "src/**/*.kt")
+	jvmArgs("--add-opens", "java.base/java.lang=ALL-UNNAMED")
 }
 
 tasks.bootRun {

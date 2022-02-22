@@ -2,7 +2,6 @@ package io.dereknelson.lostcities.accounts.service
 
 import org.springframework.security.core.GrantedAuthority
 import org.springframework.security.core.userdetails.User
-import io.dereknelson.lostcities.common.model.User as CommonUser
 
 class AuthUserDetails(
     val id: Long,
@@ -14,4 +13,4 @@ class AuthUserDetails(
     val accountNonLocked: Boolean,
     val credentialsNonExpired: Boolean,
     val enabled: Boolean
-): User(login, password, authorities)
+) : User(login, password, authorities)
