@@ -39,6 +39,7 @@ extra["snippetsDir"] = file("build/generated-snippets")
 val ktlint by configurations.creating
 
 dependencies {
+    runtimeOnly("io.micrometer:micrometer-registry-prometheus")
 	implementation("io.dereknelson.lostcities-cloud:lostcities-common:1.0-SNAPSHOT")
 	implementation("org.apache.commons:commons-lang3:3.12.0")
 
