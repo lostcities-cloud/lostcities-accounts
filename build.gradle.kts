@@ -51,8 +51,6 @@ dependencies {
 	implementation("org.springframework.boot:spring-boot-starter-mail")
 	implementation("org.springframework.boot:spring-boot-starter-security")
 	implementation("org.springframework.boot:spring-boot-starter-validation")
-	//implementation("org.springframework.boot:spring-boot-starter-websocket")
-	//implementation("org.springframework.boot:thymeleaf-extras-springsecurity5")
 
 	implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
 	implementation("com.fasterxml.jackson.datatype:jackson-datatype-hppc")
