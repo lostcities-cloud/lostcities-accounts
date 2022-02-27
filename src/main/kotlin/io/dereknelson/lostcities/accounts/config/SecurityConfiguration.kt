@@ -64,6 +64,7 @@ class SecurityConfiguration(
             .antMatchers("/test/**")
     }
 
+
     @Throws(Exception::class)
     override fun configure(http: HttpSecurity) {
         /* ktlint-disable max_line_length */
@@ -85,10 +86,6 @@ class SecurityConfiguration(
                 ReferrerPolicyHeaderWriter.ReferrerPolicy.STRICT_ORIGIN_WHEN_CROSS_ORIGIN
             )
             .and()
-            .featurePolicy("geolocation 'none'; midi 'none'; sync-xhr 'none'; microphone 'none'; camera 'none'; magnetometer 'none'; gyroscope 'none'; speaker 'none'; fullscreen 'self'; payment 'none'") // ktlint-disable
-            .and()
-            .frameOptions()
-            .deny()
             .and()
             .sessionManagement()
             .sessionCreationPolicy(SessionCreationPolicy.STATELESS)

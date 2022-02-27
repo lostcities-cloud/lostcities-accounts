@@ -2,14 +2,14 @@ import org.springframework.boot.gradle.tasks.bundling.BootBuildImage
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-	id("org.springframework.boot") version "2.4.9"
+	id("org.springframework.boot") version "2.6.3"
 	id("io.spring.dependency-management") version "1.0.11.RELEASE"
 	id("org.asciidoctor.convert") version "1.5.8"
 	//id("com.gorylenko.gradle-git-properties") version "2.3.1-rc1"
 
-	kotlin("jvm") version "1.5.0-RC"
-	kotlin("plugin.spring") version "1.5.0-RC"
-	kotlin("plugin.jpa") version "1.5.0-RC"
+	kotlin("jvm") version "1.6.10"
+	kotlin("plugin.spring") version "1.6.10"
+	kotlin("plugin.jpa") version "1.6.10"
 }
 
 group = "io.dereknelson"
@@ -76,8 +76,6 @@ dependencies {
 	implementation("io.jsonwebtoken:jjwt-api:0.11.2")
 	implementation("io.jsonwebtoken:jjwt-impl:0.11.2")
 	implementation("io.jsonwebtoken:jjwt-jackson:0.11.2")
-
-	implementation("org.springframework.kafka:spring-kafka:2.7.2")
 
 	implementation("org.hibernate:hibernate-jcache")
 	implementation("org.ehcache.modules:ehcache-107:3.9.2")
@@ -146,6 +144,12 @@ tasks.getByName<BootBuildImage>("bootBuildImage") {
     imageName = "dereknelson.io/library/${project.name}"
     environment = mapOf("BP_JVM_VERSION" to "17.*")
     builder = "paketobuildpacks/builder:base"
+    buildpacks = listOf(
+        "gcr.io/paketo-buildpacks/eclipse-openj9",
+        "paketo-buildpacks/java",
+        "gcr.io/paketo-buildpacks/spring-boot"
+
+    )
 }
 
 tasks.withType<Test> {
