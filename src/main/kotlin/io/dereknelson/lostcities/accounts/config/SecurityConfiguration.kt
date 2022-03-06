@@ -64,7 +64,6 @@ class SecurityConfiguration(
             .antMatchers("/test/**")
     }
 
-
     @Throws(Exception::class)
     override fun configure(http: HttpSecurity) {
         /* ktlint-disable max_line_length */
