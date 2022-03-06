@@ -8,6 +8,8 @@ logging:
   level:
     ROOT: error
     io.dereknelson.lostcities: debug
+    org.hibernate: error
+    org.springframework.web.filter.CommonsRequestLoggingFilter: error
 
 spring:
   config:
@@ -29,17 +31,17 @@ spring:
       indent-output: true
   datasource:
     type: com.zaxxer.hikari.HikariDataSource
-    url: jdbc:postgresql://172.20.0.15:5432/lostcities-accounts
-    username: accounts
-    password: example
+    url: ${sm://accounts_database_url}
+    username: ${sm://accounts_database_user}
+    password: ${sm://accounts_database_password}
     hikari:
       poolName: Hikari
       auto-commit: true
   flyway:
-    enabled: true
-    url: jdbc:postgresql://172.20.0.15:5432/lostcities-accounts
-    user: accounts
-    password: example
+    enabled: false
+    url: ${sm://accounts_database_url}
+    user: ${sm://accounts_database_user}
+    password: ${sm://accounts_database_password}
     baseline-version: 0
     table: SCHEMA_VERSION
     check-location: true
@@ -47,10 +49,14 @@ spring:
     locations: classpath:db/migration
   jpa:
     database-platform: org.hibernate.dialect.PostgreSQLDialect
-    show-sql: true
+    show-sql: false
     hibernate:
       ddl-auto: update
-
+  cloud.gcp.secretsmanager:
+    enabled: true
+    bootstrap: true
+    credentials.encoded-key: ${SECRET_MANAGER_KEY:""}
+    project-id: lostcities-cloud
 
 
 
