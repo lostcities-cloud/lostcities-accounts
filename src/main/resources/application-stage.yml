@@ -1,0 +1,17 @@
+spring:
+  application.name: accounts-stage
+  jpa:
+    hibernate.ddl-auto: update
+    show-sql: true
+  jackson.serialization.indent-output: true
+  datasource:
+    type: com.zaxxer.hikari.HikariDataSource
+    driver-class-name: org.postgresql.Driver
+    url: ${sm://accounts_database_url}
+    username: ${sm://accounts_database_user}
+    password: ${sm://accounts_database_password}
+  flyway:
+    enabled: false
+    url: ${spring.datasource.url}
+    user: ${spring.datasource.username}
+    password: ${spring.datasource.password}

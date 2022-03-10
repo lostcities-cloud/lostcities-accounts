@@ -13,7 +13,7 @@ plugins {
 }
 
 group = "io.dereknelson"
-version = "0.0.1-SNAPSHOT"
+version = "0.0.2-SNAPSHOT"
 java.sourceCompatibility = JavaVersion.VERSION_16
 
 configurations {
@@ -146,7 +146,7 @@ tasks.withType<KotlinCompile> {
 }
 
 tasks.getByName<BootBuildImage>("bootBuildImage") {
-    imageName = "ghcr.io/lostcities-cloud/${project.name}:latest"
+    imageName = "ghcr.io/lostcities-cloud/${project.name}:${version}"
     isPublish = true
     environment = mapOf(
         "BP_JVM_VERSION" to "17.*",

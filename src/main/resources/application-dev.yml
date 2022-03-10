@@ -1,0 +1,17 @@
+spring:
+  application.name: accounts-dev
+  jpa:
+    hibernate.ddl-auto: update
+    show-sql: true
+  jackson.serialization.indent-output: true
+  datasource:
+    type: com.zaxxer.hikari.HikariDataSource
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://172.20.0.15:5432/lostcities-accounts
+    username: accounts
+    password: example
+  flyway:
+    enabled: false
+    url: ${spring.datasource.url}
+    user: ${spring.datasource.username}
+    password: ${spring.datasource.password}
