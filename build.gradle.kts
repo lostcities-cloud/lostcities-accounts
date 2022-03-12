@@ -2,7 +2,7 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import org.springframework.boot.gradle.tasks.bundling.BootBuildImage
 
 plugins {
-    id("org.springframework.boot") version "2.5.8"
+    id("org.springframework.boot") version "2.6.3"
 	id("io.spring.dependency-management") version "1.0.11.RELEASE"
 	id("org.asciidoctor.convert") version "1.5.8"
 	//id("com.gorylenko.gradle-git-properties") version "2.3.1-rc1"
@@ -56,8 +56,8 @@ dependencies {
 	implementation("org.springframework.boot:spring-boot-starter-validation")
 
 
-    implementation("com.google.cloud:spring-cloud-gcp-starter:2.0.8")
-    implementation("com.google.cloud:spring-cloud-gcp-starter-secretmanager:2.0.8")
+    implementation("com.google.cloud:spring-cloud-gcp-starter:3.0.0")
+    implementation("com.google.cloud:spring-cloud-gcp-starter-secretmanager:3.0.0")
 
 	implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
 	implementation("com.fasterxml.jackson.datatype:jackson-datatype-hppc")

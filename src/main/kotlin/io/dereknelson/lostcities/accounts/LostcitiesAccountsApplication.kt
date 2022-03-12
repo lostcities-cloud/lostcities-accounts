@@ -2,6 +2,7 @@ package io.dereknelson.lostcities.accounts
 
 import io.swagger.v3.oas.annotations.OpenAPIDefinition
 import io.swagger.v3.oas.annotations.servers.Server
+import io.undertow.UndertowOptions
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.autoconfigure.web.servlet.error.ErrorMvcAutoConfiguration
 import org.springframework.boot.runApplication
@@ -20,17 +21,19 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories
 )
 @SpringBootApplication(exclude = [ErrorMvcAutoConfiguration::class])
 @OpenAPIDefinition(servers = [Server(url = "lostcities.com")])
-class LostcitiesApplication
+class LostcitiesAccountsApplication
 
 fun main(args: Array<String>) {
-    runApplication<LostcitiesApplication>(*args)
+    runApplication<LostcitiesAccountsApplication>(*args)
 }
 
 @Bean
 fun embeddedServletContainerFactory(): UndertowServletWebServerFactory {
     val factory = UndertowServletWebServerFactory()
-    // factory.addBuilderCustomizers( { it.} )
-    // { builder -> builder.setServerOption(UndertowOptions.ENABLE_HTTP2, true) },
-    // { builder -> builder.addHttpListener(port, host) }
+
+    factory.addBuilderCustomizers({
+            builder -> builder.setServerOption(UndertowOptions.ENABLE_HTTP2, true)
+    })
+
     return factory
 }

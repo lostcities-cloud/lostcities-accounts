@@ -15,3 +15,8 @@ spring:
     url: ${spring.datasource.url}
     user: ${spring.datasource.username}
     password: ${spring.datasource.password}
+
+spring.cloud.gcp.secretmanager.enabled: false
+
+server:
+  port: 8090
