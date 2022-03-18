@@ -1,7 +1,7 @@
 spring:
   application.name: accounts-dev
   jpa:
-    hibernate.ddl-auto: update
+    hibernate.ddl-auto: none
     show-sql: true
   jackson.serialization.indent-output: true
   datasource:
@@ -11,7 +11,7 @@ spring:
     username: accounts
     password: example
   flyway:
-    enabled: false
+    enabled: true
     url: ${spring.datasource.url}
     user: ${spring.datasource.username}
     password: ${spring.datasource.password}

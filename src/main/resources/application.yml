@@ -21,7 +21,7 @@ spring:
         jdbc.time_zone: UTC
         cache.use_second_level_cache: true
         cache.use_query_cache: false
-        generate_statistics: true
+        generate_statistics: false
         jdbc.batch_size: 25
         order_inserts: true
         order_updates: true
