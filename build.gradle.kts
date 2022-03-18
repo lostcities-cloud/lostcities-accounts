@@ -134,7 +134,7 @@ val ktlintFormat by tasks.creating(JavaExec::class) {
 
 tasks.bootRun {
 	if (project.hasProperty("debug_jvm")) {
-		jvmArgs("-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005")
+		jvmArgs("-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5905")
 	}
 }
 
