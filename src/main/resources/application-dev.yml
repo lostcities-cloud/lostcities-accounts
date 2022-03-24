@@ -1,5 +1,6 @@
 spring:
-  application.name: accounts-dev
+  application.name: accounts
+  devtools.restart.enabled: true
   jpa:
     hibernate.ddl-auto: none
     show-sql: true
@@ -20,3 +21,19 @@ spring.cloud.gcp.secretmanager.enabled: false
 
 server:
   port: 8090
+
+logging:
+  level:
+    ROOT: error
+    org.springframework.aop.interceptor.PerformanceMonitorInterceptor: TRACE
+    io.dereknelson.lostcities: debug
+  pattern:
+    console: "%d %-5level %logger : %msg%n"
+    file: '%d{"yyyy-MM-dd''T''HH:mm:ss,SSS"} application=${spring.application.name} profiles=${spring.profiles.active} %-5level [%thread] %logger : %msg%n'
+    dateformat: yyyy-MM-dd'T'HH:mm:ssxxx
+  file:
+    name: ${user.home}/Logs/${spring.application.name}-dev.log
+  logback:
+    rollingpolicy:
+      max-file-size: 10MB
+      max-history: 10
