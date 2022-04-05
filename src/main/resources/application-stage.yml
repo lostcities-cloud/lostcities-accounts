@@ -15,8 +15,6 @@ spring:
     url: ${spring.datasource.url}
     user: ${spring.datasource.username}
     password: ${spring.datasource.password}
-  cloud.gcp.secretmanager:
-    enabled: true
-    bootstrap: false
-    credentials.encoded-key: ${SECRET_MANAGER_KEY:""}
-    project-id: lostcities-cloud
+  cloud:
+    consul:
+      enabled: false
