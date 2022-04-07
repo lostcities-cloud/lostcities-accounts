@@ -5,6 +5,8 @@ plugins {
     id("org.springframework.boot") version "2.6.3"
 	id("io.spring.dependency-management") version "1.0.11.RELEASE"
 	id("org.asciidoctor.convert") version "1.5.8"
+    id("org.jetbrains.dokka") version "1.6.10"
+
 	//id("com.gorylenko.gradle-git-properties") version "2.3.1-rc1"
 
 	kotlin("jvm") version "1.6.10"
@@ -98,6 +100,7 @@ dependencies {
 			attribute(Bundling.BUNDLING_ATTRIBUTE, objects.named(Bundling.EXTERNAL))
 		}
 	}
+    dokkaHtmlPlugin("org.jetbrains.dokka:kotlin-as-java-plugin:1.6.10")
 
 	annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
 

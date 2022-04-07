@@ -2,7 +2,7 @@ spring:
   application.name: accounts
   devtools.restart.enabled: true
   jpa:
-    hibernate.ddl-auto: none
+    hibernate.ddl-auto: update
     show-sql: true
   jackson.serialization.indent-output: true
   datasource:
@@ -12,23 +12,12 @@ spring:
     username: accounts
     password: example
   flyway:
-    enabled: true
-    url: ${spring.datasource.url}
-    user: ${spring.datasource.username}
-    password: ${spring.datasource.password}
+    enabled: false
+    url: jdbc:postgresql://172.20.0.15:5432/lostcities-accounts
+    user: accounts
+    password: example
   cloud:
-    consul:
-      host: localhost
-      port: 8500
-      discovery:
-        healthCheckPath: ${server.servlet.context-path}/actuator/health
-        healthCheckInterval: 15s
-        metadata:
-          application: accounts
-        tags: urlprefix-${server.servlet.context-path}
-        acl-token: b33bb520-ee21-9897-b223-da969dea60e3
-server:
-  port: 8090
+    consul.enabled: false
 
 logging:
   level:
@@ -45,3 +34,6 @@ logging:
     rollingpolicy:
       max-file-size: 10MB
       max-history: 10
+
+server:
+  port: 8090

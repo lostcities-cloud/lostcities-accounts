@@ -42,15 +42,12 @@ spring:
     driver-class-name: org.postgresql.Driver
   messages:
     basename: i18n/messages
-
   main:
     allow-bean-definition-overriding: true
     lazy-initialization: true
-
-  output.ansi.console-available: true
-
-#spring.cloud.gcp.config.enabled: false
-#spring.cloud.gcp.secretmanager.enabled: false
+  output.ansi:
+    enabled: DETECT
+    console-available: true
 
 server:
   port: 8080
