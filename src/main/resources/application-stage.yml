@@ -11,10 +11,26 @@ spring:
     username: ${sm://accounts_database_user}
     password: ${sm://accounts_database_password}
   flyway:
-    enabled: false
-    url: ${spring.datasource.url}
-    user: ${spring.datasource.username}
-    password: ${spring.datasource.password}
+    enabled: true
+    url: ${sm://accounts_database_url}
+    user: ${sm://accounts_database_user}
+    password: ${sm://accounts_database_password}
   cloud:
     consul:
       enabled: false
+
+server:
+  port: 8090
+
+
+logging:
+  pattern:
+    console: "%d %-5level %logger : %msg%n"
+    file: '%d{"yyyy-MM-dd''T''HH:mm:ss,SSS"} application=${spring.application.name} profiles=${spring.profiles.active} %-5level [%thread] %logger : %msg%n'
+    dateformat: yyyy-MM-dd'T'HH:mm:ssxxx
+  file:
+    name: /root/Logs/${spring.application.name}-stage.log
+  logback:
+    rollingpolicy:
+      max-file-size: 10MB
+      max-history: 10

@@ -5,9 +5,6 @@ create table authority
             primary key
 );
 
-alter table authority
-    owner to accounts;
-
 create table users
 (
     id                 bigint      not null
@@ -34,9 +31,6 @@ create table users
     reset_key          varchar(20)
 );
 
-alter table users
-    owner to accounts;
-
 create table users_authority
 (
     users_id       bigint      not null
@@ -48,6 +42,3 @@ create table users_authority
     constraint users_authority_pkey
         primary key (users_id, authority_name)
 );
-
-alter table users_authority
-    owner to accounts;
