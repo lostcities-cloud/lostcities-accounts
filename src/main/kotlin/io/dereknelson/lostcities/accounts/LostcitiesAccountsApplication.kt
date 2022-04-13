@@ -32,7 +32,8 @@ fun embeddedServletContainerFactory(): UndertowServletWebServerFactory {
     val factory = UndertowServletWebServerFactory()
 
     factory.addBuilderCustomizers({
-            builder -> builder.setServerOption(UndertowOptions.ENABLE_HTTP2, true)
+            builder ->
+        builder.setServerOption(UndertowOptions.ENABLE_HTTP2, true)
     })
 
     return factory
