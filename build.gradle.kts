@@ -7,7 +7,7 @@ plugins {
 	id("org.asciidoctor.convert") version "1.5.8"
     id("org.jetbrains.dokka") version "1.6.10"
     id("com.google.cloud.tools.jib") version "3.2.1"
-	id("com.gorylenko.gradle-git-properties") version "2.3.1-rc1"
+	// id("com.gorylenko.gradle-git-properties") version "2.3.1-rc1"
 
 	kotlin("jvm") version "1.6.10"
 	kotlin("plugin.spring") version "1.6.10"
@@ -28,8 +28,8 @@ repositories {
 	maven {
 		url = uri("https://maven.pkg.github.com/lostcities-cloud/lostcities-common")
 		credentials {
-			username = System.getenv("GITHUB_ACTOR")
-			password = System.getenv("GITHUB_TOKEN")
+			username = System.getenv("GH_ACTOR")
+			password = System.getenv("GH_TOKEN")
 		}
 	}
 	mavenCentral()
