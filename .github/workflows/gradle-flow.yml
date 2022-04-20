@@ -21,7 +21,7 @@ jobs:
       - name: Run Ktlint
         uses: gradle/gradle-build-action@0d13054264b0bb894ded474f08ebb30921341cee
         with:
-          arguments: ktlintCheck      
+          arguments: ktlintCheck
       - name: Assemble
         uses: gradle/gradle-build-action@0d13054264b0bb894ded474f08ebb30921341cee
         with:
@@ -44,7 +44,7 @@ jobs:
         with:
           arguments: dokkaHtml
       - name: Deploy 🚀
-        uses: JamesIves/github-pages-deploy-action@3.5.9
+        uses: JamesIves/github-pages-deploy-action@v4.3.0
         with:
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
           BRANCH: gh-pages
