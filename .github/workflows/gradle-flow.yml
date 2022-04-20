@@ -2,6 +2,10 @@ name: Building application
 
 on: [push]
 
+env:
+  GH_ACTOR: ${{ secrets.GH_ACTOR }}
+  GH_TOKEN: ${{ secrets.GH_TOKEN }}
+
 jobs:
   build:
     runs-on: ubuntu-latest
