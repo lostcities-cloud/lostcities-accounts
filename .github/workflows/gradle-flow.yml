@@ -1,4 +1,4 @@
-name: Java CI
+name: Building application
 
 on: [push]
 
@@ -42,7 +42,7 @@ jobs:
       - name: Deploy 🚀
         uses: JamesIves/github-pages-deploy-action@3.5.9
         with:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
           BRANCH: gh-pages
           CLEAN: true
           FOLDER: build/dokka/html
