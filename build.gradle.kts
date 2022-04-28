@@ -2,12 +2,12 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import org.springframework.boot.gradle.tasks.bundling.BootBuildImage
 
 plugins {
-    id("org.springframework.boot") version "2.6.3"
+    id("org.springframework.boot") version "2.6.6"
 	id("io.spring.dependency-management") version "1.0.11.RELEASE"
-	id("org.asciidoctor.convert") version "1.5.8"
     id("org.jetbrains.dokka") version "1.6.10"
     id("com.google.cloud.tools.jib") version "3.2.1"
-	// id("com.gorylenko.gradle-git-properties") version "2.3.1-rc1"
+    //id("org.springframework.experimental.aot") version "0.11.4"
+    id("com.gorylenko.gradle-git-properties") version "2.4.0"
 
 	kotlin("jvm") version "1.6.10"
 	kotlin("plugin.spring") version "1.6.10"
@@ -63,7 +63,7 @@ dependencies {
     implementation("com.google.cloud:spring-cloud-gcp-starter:3.0.0")
     implementation("com.google.cloud:spring-cloud-gcp-starter-secretmanager:3.0.0")
 
-	implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
+	implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.13.2")
 	implementation("com.fasterxml.jackson.datatype:jackson-datatype-hppc")
 	implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310")
 	implementation("com.fasterxml.jackson.module:jackson-module-jaxb-annotations")
@@ -156,6 +156,7 @@ jib {
 	}
 	to {
 		image = "ghcr.io/lostcities-cloud/${project.name}:latest"
+
 		auth {
 			username = System.getenv("GH_ACTOR")
     		password = System.getenv("GH_TOKEN")
@@ -167,13 +168,3 @@ tasks.withType<Test> {
 	useJUnitPlatform()
 }
 
-val snippetsDir by extra { file("build/generated-snippets") }
-
-tasks.test {
-	outputs.dir(snippetsDir)
-}
-
-tasks.asciidoctor {
-	inputs.dir(snippetsDir)
-	dependsOn(tasks.test)
-}
