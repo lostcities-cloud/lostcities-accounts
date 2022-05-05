@@ -28,7 +28,7 @@ import javax.validation.constraints.Size
 class UserEntity : AbstractAuditingEntity(), Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequenceGenerator")
-    @SequenceGenerator(name = "sequenceGenerator")
+    @SequenceGenerator(name = "sequenceGenerator", initialValue=3)
     val id: Long? = null
 
     @Column(length = 50, unique = true, nullable = false)
