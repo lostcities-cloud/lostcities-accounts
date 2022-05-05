@@ -49,10 +49,7 @@ dependencies {
 	implementation("io.dereknelson.lostcities-cloud:lostcities-common:1.0-SNAPSHOT")
 	implementation("org.apache.commons:commons-lang3:3.12.0")
 
-	implementation("org.springframework.boot:spring-boot-starter-web") {
-		exclude(module="spring-boot-starter-tomcat")
-	}
-
+	implementation("org.springframework.boot:spring-boot-starter-web")
 	implementation("org.springframework.boot:spring-boot-starter-actuator")
 	implementation("org.springframework.boot:spring-boot-starter-data-jpa")
 	implementation("org.springframework.boot:spring-boot-starter-mail")
