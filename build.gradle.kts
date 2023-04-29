@@ -28,8 +28,8 @@ repositories {
 	maven {
 		url = uri("https://maven.pkg.github.com/lostcities-cloud/lostcities-common")
 		credentials {
-			username = System.getenv("GH_ACTOR")
-			password = System.getenv("GH_TOKEN")
+			username = System.getenv("GITHUB_ACTOR")
+			password = System.getenv("GITHUB_TOKEN")
 		}
 	}
 	mavenCentral()

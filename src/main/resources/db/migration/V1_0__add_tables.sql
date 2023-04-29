@@ -1,4 +1,4 @@
-create table authority
+/*create table authority
 (
     name varchar(50) not null
         constraint authority_pkey
@@ -42,3 +42,4 @@ create table users_authority
     constraint users_authority_pkey
         primary key (users_id, authority_name)
 );
+*/
