@@ -23,7 +23,7 @@ import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.web.bind.annotation.*
 import org.springframework.web.server.ResponseStatusException
 import java.util.*
-import javax.servlet.http.HttpServletRequest
+import jakarta.servlet.http.HttpServletRequest
 import javax.validation.Valid
 
 @Tag(name = "User actions")
@@ -44,6 +44,7 @@ class UserController(
             ApiResponse(responseCode = "409", description = "User already exists.")
         ]
     )
+
     @PostMapping("/register")
     @ResponseStatus(HttpStatus.CREATED)
     fun register(@RequestBody registrationDto: RegistrationDto): UserDto? {

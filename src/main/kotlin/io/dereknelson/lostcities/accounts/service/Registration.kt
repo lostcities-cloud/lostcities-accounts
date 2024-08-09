@@ -3,8 +3,8 @@ package io.dereknelson.lostcities.accounts.service
 import io.dereknelson.lostcities.accounts.persistence.AuthorityEntity
 import io.dereknelson.lostcities.common.Constants
 import java.util.*
-import javax.validation.constraints.NotNull
-import javax.validation.constraints.Size
+import jakarta.validation.constraints.NotNull
+import jakarta.validation.constraints.Size
 
 data class Registration(
     val login: String,

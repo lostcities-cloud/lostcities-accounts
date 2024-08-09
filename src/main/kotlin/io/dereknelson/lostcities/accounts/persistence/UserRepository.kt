@@ -21,9 +21,6 @@ interface UserRepository : JpaRepository<UserEntity, Long> {
 
     fun findOneByActivationKey(activationKey: String?): Optional<UserEntity>
 
-    fun findAllByActivatedIsFalseAndActivationKeyIsNotNullAndCreatedDateBefore(dateTime: Instant):
-        List<User>
-
     fun findOneByResetKey(resetKey: String): Optional<User>
 
     fun findOneByEmailIgnoreCase(email: String): Optional<User>

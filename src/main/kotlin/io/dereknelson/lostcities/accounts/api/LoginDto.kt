@@ -7,10 +7,10 @@ import javax.validation.constraints.Size
 @Schema(description = "Login")
 class LoginDto(
     @Schema(example = "ttesterson", required = true)
-    val login: @NotNull @Size(min = 1, max = 50) String? = null,
+    val login: String? = null,
 
     @Schema(example = "test@example.com", required = true)
-    val password: @NotNull @Size(min = 4, max = 100) String? = null,
+    val password: String? = null,
 
     @Schema(example = "test@example.com", required = false, defaultValue = "false")
     val rememberMe: Boolean = false

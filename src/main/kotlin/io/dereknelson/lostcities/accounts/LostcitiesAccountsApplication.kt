@@ -9,7 +9,7 @@ import org.springframework.boot.runApplication
 import org.springframework.context.annotation.ComponentScan
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories
 
-@EnableJpaRepositories
+@SpringBootApplication(exclude = [ErrorMvcAutoConfiguration::class])
 @ComponentScan(
     "io.dereknelson.lostcities.accounts",
     "io.dereknelson.lostcities.accounts.config",
@@ -17,7 +17,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories
     "io.dereknelson.lostcities.common.auth",
     "io.dereknelson.lostcities.common.library"
 )
-@SpringBootApplication(exclude = [ErrorMvcAutoConfiguration::class])
+@EnableJpaRepositories
 @OpenAPIDefinition(servers = [Server(url = "lostcities.com")])
 class LostcitiesAccountsApplication
 

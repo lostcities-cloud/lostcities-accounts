@@ -10,11 +10,11 @@ import org.hibernate.annotations.CacheConcurrencyStrategy
 import java.io.Serializable
 import java.time.Instant
 import java.util.*
-import javax.persistence.*
-import javax.validation.constraints.Email
-import javax.validation.constraints.NotNull
-import javax.validation.constraints.Pattern
-import javax.validation.constraints.Size
+import jakarta.persistence.*
+import jakarta.validation.constraints.Email
+import jakarta.validation.constraints.NotNull
+import jakarta.validation.constraints.Pattern
+import jakarta.validation.constraints.Size
 
 @Entity
 @Table(
@@ -70,12 +70,13 @@ class UserEntity : AbstractAuditingEntity(), Serializable {
     var resetDate: Instant? = null
 
     @JsonIgnore
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.EAGER, cascade = [CascadeType.PERSIST])
     @JoinTable(
         name = "users_authority",
         joinColumns = [JoinColumn(name = "users_id", referencedColumnName = "id")],
         inverseJoinColumns = [JoinColumn(name = "authority_name", referencedColumnName = "name")],
-        foreignKey = ForeignKey(name = "USER_AUTHORITY_FOREIGN_KEY")
+        foreignKey = ForeignKey(name = "USER_AUTHORITY_FOREIGN_KEY"),
+
     )
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     @BatchSize(size = 20)

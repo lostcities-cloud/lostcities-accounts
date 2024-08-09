@@ -1,32 +1,38 @@
 spring:
   application.name: accounts
   devtools.restart.enabled: true
+
   jpa:
-    hibernate:
-      ddl-auto: update
-
+    hibernate.ddl-auto: update
     show-sql: true
-
-  jackson.serialization.indent-output: true
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
   datasource:
-    #type: com.zaxxer.hikari.HikariDataSource
+    type: com.zaxxer.hikari.HikariDataSource
     driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://accounts-database:5432/lostcities-accounts
+
+    url: jdbc:postgresql://127.0.0.1:5432/lostcities-accounts
     username: accounts
     password: example
+
   flyway:
-    enabled: true
-    url: jdbc:postgresql://accounts-database:5432/lostcities-accounts
-    user: accounts
+    enabled: false
+
+    #url: jdbc:postgresql://127.0.0.1:5432/lostcities-accounts
+    #user: accounts
     password: example
-  cloud:
-    consul.enabled: false
+    baseline-on-migrate: true
+    baseline-version: 0
+    validate-on-migrate: false
+
 
 logging:
   level:
     ROOT: error
     org.springframework.aop.interceptor.PerformanceMonitorInterceptor: TRACE
+    org.flywaydb: debug
+    org.springframework.security: debug
     io.dereknelson.lostcities: debug
+
   pattern:
     console: "%d %-5level %logger : %msg%n"
     file: '%d{"yyyy-MM-dd''T''HH:mm:ss,SSS"} application=${spring.application.name} profiles=${spring.profiles.active} %-5level [%thread] %logger : %msg%n'

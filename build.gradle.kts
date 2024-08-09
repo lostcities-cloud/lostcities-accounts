@@ -1,22 +1,23 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
-import org.springframework.boot.gradle.tasks.bundling.BootBuildImage
+
 
 plugins {
-    id("org.springframework.boot") version "2.6.6"
-	id("io.spring.dependency-management") version "1.0.11.RELEASE"
+    id("org.springframework.boot") version "3.1.+"
+	id("io.spring.dependency-management") version "1.1.4"
     id("org.jetbrains.dokka") version "1.6.10"
     id("com.google.cloud.tools.jib") version "3.2.1"
     //id("org.springframework.experimental.aot") version "0.11.4"
     id("com.gorylenko.gradle-git-properties") version "2.4.0"
 
-	kotlin("jvm") version "1.6.10"
-	kotlin("plugin.spring") version "1.6.10"
-	kotlin("plugin.jpa") version "1.6.10"
+	kotlin("jvm") version "2.0.+"
+	kotlin("plugin.spring") version "2.0.+"
+	kotlin("plugin.jpa") version "2.0.+"
+    kotlin("plugin.noarg") version "2.0.+"
+
 }
 
 group = "io.dereknelson"
 version = "0.0.2-SNAPSHOT"
-java.sourceCompatibility = JavaVersion.VERSION_16
 
 configurations {
 	compileOnly {
@@ -41,12 +42,19 @@ extra["snippetsDir"] = file("build/generated-snippets")
 val ktlint by configurations.creating
 
 dependencies {
+
+    runtimeOnly("org.springframework.boot:spring-boot-properties-migrator")
     runtimeOnly("io.micrometer:micrometer-registry-prometheus")
-    implementation("org.hibernate:hibernate-micrometer")
+    compileOnly("org.springframework.boot:spring-boot-starter-undertow")
+
+    implementation("org.hibernate:hibernate-core:6.4.4.Final")
+    implementation("org.hibernate:hibernate-micrometer:6.4.4.Final")
+    implementation("org.hibernate:hibernate-jcache:6.4.4.Final")
+    implementation("org.ehcache.modules:ehcache-107:3.9.2")
+    implementation("org.ehcache:ehcache:3.9.2")
 
     implementation("org.springframework.boot:spring-boot-devtools")
-
-	implementation("io.dereknelson.lostcities-cloud:lostcities-common:1.0-SNAPSHOT")
+    implementation(project(":lostcities-common"))
 	implementation("org.apache.commons:commons-lang3:3.12.0")
 
 	implementation("org.springframework.boot:spring-boot-starter-web")
@@ -55,10 +63,6 @@ dependencies {
 	implementation("org.springframework.boot:spring-boot-starter-mail")
 	implementation("org.springframework.boot:spring-boot-starter-security")
 	implementation("org.springframework.boot:spring-boot-starter-validation")
-
-    implementation("org.springframework.cloud:spring-cloud-starter-consul-discovery:3.1.0")
-    implementation("com.google.cloud:spring-cloud-gcp-starter:3.0.0")
-    implementation("com.google.cloud:spring-cloud-gcp-starter-secretmanager:3.0.0")
 
 	implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.13.2")
 	implementation("com.fasterxml.jackson.datatype:jackson-datatype-hppc")
@@ -72,20 +76,17 @@ dependencies {
 	implementation("org.zalando:problem-spring-web:0.21.0")
 
 	// implementation("org.springdoc:springdoc-openapi-core:1.5.10")
-	implementation("org.springdoc:springdoc-openapi-webmvc-core:1.5.10")
-	implementation("org.springdoc:springdoc-openapi-ui:1.5.10")
-	implementation("org.springdoc:springdoc-openapi-kotlin:1.5.10")
+	implementation("org.springdoc:springdoc-openapi-webmvc-core:1.7.0")
+	implementation("org.springdoc:springdoc-openapi-ui:1.7.0")
+	implementation("org.springdoc:springdoc-openapi-kotlin:1.7.0")
 
 	implementation("org.modelmapper:modelmapper:2.4.1")
-	implementation("org.flywaydb:flyway-core")
+    runtimeOnly("org.flywaydb:flyway-core:10.8.1")
+    runtimeOnly("org.flywaydb:flyway-database-postgresql:10.8.1")
 
 	implementation("io.jsonwebtoken:jjwt-api:0.11.2")
 	implementation("io.jsonwebtoken:jjwt-impl:0.11.2")
 	implementation("io.jsonwebtoken:jjwt-jackson:0.11.2")
-
-	implementation("org.hibernate:hibernate-jcache")
-	implementation("org.ehcache.modules:ehcache-107:3.9.2")
-	implementation("org.ehcache:ehcache:3.9.2")
 
 	implementation("org.jetbrains.kotlin:kotlin-reflect")
 	implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
@@ -134,22 +135,31 @@ val ktlintFormat by tasks.creating(JavaExec::class) {
 	jvmArgs("--add-opens", "java.base/java.lang=ALL-UNNAMED")
 }
 
-tasks.bootRun {
-	if (project.hasProperty("debug_jvm")) {
-		jvmArgs("-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5905")
-	}
+noArg {
+    annotation("jakarta.persistence.Entity")
 }
 
-tasks.withType<KotlinCompile> {
-	kotlinOptions {
-		freeCompilerArgs = listOf("-Xjsr305=strict")
-		jvmTarget = "16"
-	}
+tasks.withType<KotlinCompile>() {
+
+    kotlinOptions {
+        jvmTarget = "21"
+        apiVersion = "2.0"
+        languageVersion = "2.0"
+    }
+
+    // you can also add additional compiler args,
+    // like opting in to experimental features
+}
+
+tasks.named("compileKotlin", org.jetbrains.kotlin.gradle.tasks.KotlinCompilationTask::class.java) {
+    compilerOptions {
+        freeCompilerArgs.addAll("-Xjsr305=strict")
+    }
 }
 
 jib {
 	from {
-		image = "registry://adoptopenjdk/openjdk16-openj9:alpine-slim"
+		image = "registry://adoptopenjdk/openjdk21-openj9:alpine-slim"
 	}
 	to {
 		image = "ghcr.io/lostcities-cloud/${project.name}:latest"

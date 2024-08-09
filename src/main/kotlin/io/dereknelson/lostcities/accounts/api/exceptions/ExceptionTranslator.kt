@@ -20,7 +20,7 @@ import org.zalando.problem.spring.web.advice.validation.ConstraintViolationProbl
 import java.net.URI
 import java.util.*
 import java.util.stream.Collectors
-import javax.servlet.http.HttpServletRequest
+import jakarta.servlet.http.HttpServletRequest
 
 /**
  * Controller advice to translate the server side exceptions to client-friendly json structures.
@@ -60,7 +60,7 @@ class ExceptionTranslator(private val env: Environment) : ProblemHandling, Secur
         } else {
             builder.withCause((problem as DefaultProblem).cause).withDetail(problem.detail)
                 .withInstance(problem.instance)
-            problem.parameters.forEach { (key: String?, value: Any?) -> builder.with(key, value) }
+            problem.parameters.forEach { (key: String, value: Any) -> builder.with(key, value) }
             if (!problem.parameters.containsKey(MESSAGE_KEY) && problem.status != null) {
                 builder.with(MESSAGE_KEY, "error.http." + problem.status!!.statusCode)
             }
