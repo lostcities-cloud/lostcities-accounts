@@ -3,9 +3,10 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
     id("org.springframework.boot") version "3.1.+"
+    // id("org.graalvm.buildtools.native") version "0.10.+"
 	id("io.spring.dependency-management") version "1.1.4"
     id("org.jetbrains.dokka") version "1.6.10"
-    id("com.google.cloud.tools.jib") version "3.2.1"
+    id("com.google.cloud.tools.jib") version "3.4.3"
     //id("org.springframework.experimental.aot") version "0.11.4"
     id("com.gorylenko.gradle-git-properties") version "2.4.0"
 
@@ -141,14 +142,14 @@ noArg {
 
 tasks.withType<KotlinCompile>() {
 
-    kotlinOptions {
-        jvmTarget = "21"
-        apiVersion = "2.0"
-        languageVersion = "2.0"
-    }
+    compilerOptions {
+        apiVersion.set(org.jetbrains.kotlin.gradle.dsl.KotlinVersion.KOTLIN_2_0)
+        languageVersion.set(org.jetbrains.kotlin.gradle.dsl.KotlinVersion.KOTLIN_2_0)
 
-    // you can also add additional compiler args,
-    // like opting in to experimental features
+        freeCompilerArgs.addAll(listOf(
+            "-Xjsr305=strict", "-opt-in=kotlin.RequiresOptIn"
+        ))
+    }
 }
 
 tasks.named("compileKotlin", org.jetbrains.kotlin.gradle.tasks.KotlinCompilationTask::class.java) {
@@ -159,7 +160,7 @@ tasks.named("compileKotlin", org.jetbrains.kotlin.gradle.tasks.KotlinCompilation
 
 jib {
 	from {
-		image = "registry://adoptopenjdk/openjdk21-openj9:alpine-slim"
+		image = "registry://amd64/eclipse-temurin:21-alpine"
 	}
 	to {
 		image = "ghcr.io/lostcities-cloud/${project.name}:latest"
