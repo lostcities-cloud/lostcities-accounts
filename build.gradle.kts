@@ -42,6 +42,12 @@ extra["snippetsDir"] = file("build/generated-snippets")
 
 val ktlint by configurations.creating
 
+dependencyManagement {
+    imports {
+        mavenBom("org.springframework.cloud:spring-cloud-dependencies:2022.0.5")
+    }
+}
+
 dependencies {
 
     runtimeOnly("org.springframework.boot:spring-boot-properties-migrator")
