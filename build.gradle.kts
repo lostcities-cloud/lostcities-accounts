@@ -65,6 +65,9 @@ dependencies {
 	implementation("org.springframework.boot:spring-boot-starter-security")
 	implementation("org.springframework.boot:spring-boot-starter-validation")
 
+    implementation("org.springframework.cloud:spring-cloud-dependencies")
+    implementation("org.springframework.cloud:spring-cloud-starter-consul-discovery")
+
 	implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.13.2")
 	implementation("com.fasterxml.jackson.datatype:jackson-datatype-hppc")
 	implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310")
