@@ -2,17 +2,6 @@ spring:
   application.name: accounts
   devtools.restart.enabled: true
 
-  cloud:
-    consul:
-      host: localhost
-      port: 8500
-      discovery:
-        healthCheckPath: ${server.servlet.context-path}/actuator/health
-        healthCheckInterval: 15s
-        metadata:
-          application: ${spring.application.name}
-        tags: urlprefix-${server.servlet.context-path}
-
   jpa:
     hibernate.ddl-auto: update
     show-sql: true
@@ -21,7 +10,7 @@ spring:
     type: com.zaxxer.hikari.HikariDataSource
     driver-class-name: org.postgresql.Driver
 
-    url: jdbc:postgresql://postgres.service.consul:5432/lostcities-accounts
+    url: jdbc:postgresql://postgres.service.consul:5432/lostcities-accounts # postgres.service.consul
     username: accounts
     password: example
 
@@ -40,6 +29,8 @@ logging:
   level:
     ROOT: error
     org.springframework.aop.interceptor.PerformanceMonitorInterceptor: TRACE
+    org.springframework.web.filter.CommonsRequestLoggingFilter: DEBUG
+    org.springframework.cloud.consul: debug
     org.flywaydb: debug
     org.springframework.security: debug
     io.dereknelson.lostcities: debug
@@ -57,3 +48,12 @@ logging:
 
 server:
   port: 8090
+
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  server:
+    port: 4452
