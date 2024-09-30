@@ -44,6 +44,7 @@ val ktlint by configurations.creating
 
 dependencyManagement {
     imports {
+        mavenBom(org.springframework.boot.gradle.plugin.SpringBootPlugin.BOM_COORDINATES)
         mavenBom("org.springframework.cloud:spring-cloud-dependencies:2022.0.5")
     }
 }
@@ -122,7 +123,7 @@ dependencies {
 	testImplementation("org.assertj:assertj-core:3.19.0")
 }
 
-val outputDir = "${project.buildDir}/reports/ktlint/"
+val outputDir = "${project.layout.buildDirectory}/reports/ktlint/"
 val inputFiles = project.fileTree(mapOf("dir" to "src", "include" to "**/*.kt"))
 
 val ktlintCheck by tasks.creating(JavaExec::class) {
