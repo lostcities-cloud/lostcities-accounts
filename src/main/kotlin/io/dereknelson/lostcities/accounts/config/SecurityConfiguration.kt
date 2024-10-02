@@ -55,8 +55,6 @@ class SecurityConfiguration(
         return WebSecurityCustomizer { web: WebSecurity ->
             web
                 .ignoring()
-                .requestMatchers("/api/accounts/authenticate")
-                .requestMatchers("/api/accounts/register")
 
                 //.requestMatchers("/app/**/*.{js,html}")
                 //.requestMatchers("/i18n/**")
