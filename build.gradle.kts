@@ -83,9 +83,9 @@ dependencies {
 	implementation("org.zalando:problem-spring-web:0.21.0")
 
 	// implementation("org.springdoc:springdoc-openapi-core:1.5.10")
-	implementation("org.springdoc:springdoc-openapi-webmvc-core:1.7.0")
-	implementation("org.springdoc:springdoc-openapi-ui:1.7.0")
-	implementation("org.springdoc:springdoc-openapi-kotlin:1.7.0")
+	implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.6.0")
+	implementation("org.springdoc:springdoc-openapi-starter-webmvc-api:2.6.0")
+	implementation("org.springdoc:springdoc-openapi-kotlin:1.8.0")
 
 	implementation("org.modelmapper:modelmapper:2.4.1")
     runtimeOnly("org.flywaydb:flyway-core:10.8.1")

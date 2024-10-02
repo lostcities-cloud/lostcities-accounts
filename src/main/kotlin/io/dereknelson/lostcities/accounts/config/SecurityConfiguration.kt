@@ -2,7 +2,6 @@ package io.dereknelson.lostcities.accounts.config
 
 import io.dereknelson.lostcities.accounts.service.AuthUserDetailsService
 import io.dereknelson.lostcities.common.AuthoritiesConstants
-import io.dereknelson.lostcities.common.auth.JwtConfigurer
 import io.dereknelson.lostcities.common.auth.JwtFilter
 import io.dereknelson.lostcities.common.auth.TokenProvider
 import io.swagger.v3.oas.annotations.enums.SecuritySchemeType
@@ -58,11 +57,10 @@ class SecurityConfiguration(
                 .ignoring()
                 .requestMatchers("/api/accounts/authenticate")
                 .requestMatchers("/api/accounts/register")
-                .requestMatchers("/**")
-                .requestMatchers("/**")
 
-                .requestMatchers("/app/**/*.{js,html}")
-                .requestMatchers("/i18n/**")
+                //.requestMatchers("/app/**/*.{js,html}")
+                //.requestMatchers("/i18n/**")
+                .requestMatchers("/actuator/health")
                 .requestMatchers("/content/**")
                 .requestMatchers("/h2-console/**")
                 .requestMatchers("/swagger-ui/**")
@@ -76,7 +74,7 @@ class SecurityConfiguration(
         // @formatter:off
 
         http
-            .csrf { it.init(http) }
+            .csrf { it.disable() }
             .cors { it.configure(http) }
             .addFilterBefore(jwtFilter(), UsernamePasswordAuthenticationFilter::class.java)
             .exceptionHandling {}
@@ -92,6 +90,7 @@ class SecurityConfiguration(
             .sessionManagement {
                 it.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
             }
+            .anonymous { it.configure(http) }
             .authorizeHttpRequests{ requests ->
                 requests
 
@@ -101,14 +100,16 @@ class SecurityConfiguration(
                     .requestMatchers(AntPathRequestMatcher("/api/accounts/reset-password/init")).permitAll()
                     .requestMatchers(AntPathRequestMatcher("/api/accounts/reset-password/finish")).permitAll()
                     .requestMatchers(AntPathRequestMatcher("/api/**")).authenticated()
-                    .requestMatchers(AntPathRequestMatcher("/swagger-ui/**")).permitAll()
+                    .requestMatchers(AntPathRequestMatcher("/actuator/swagger-ui/**")).permitAll()
+                    .requestMatchers(AntPathRequestMatcher("/actuator/openapi/**")).permitAll()
+                    .requestMatchers(AntPathRequestMatcher("/actuator/**")).permitAll()
                     .requestMatchers(AntPathRequestMatcher("/api/admin/**")).hasAuthority(AuthoritiesConstants.ADMIN)
 //
-                    .requestMatchers(AntPathRequestMatcher("/management/health")).permitAll()
-                    .requestMatchers(AntPathRequestMatcher("/management/health/**")).permitAll()
-                    .requestMatchers(AntPathRequestMatcher("/management/info")).permitAll()
-                    .requestMatchers(AntPathRequestMatcher("/management/prometheus")).permitAll()
-                    .requestMatchers(AntPathRequestMatcher("/management/**")).hasAuthority(AuthoritiesConstants.ADMIN)
+                    .requestMatchers(AntPathRequestMatcher("/actuator/health")).permitAll()
+                    .requestMatchers(AntPathRequestMatcher("/actuator/health/**")).permitAll()
+                    .requestMatchers(AntPathRequestMatcher("/actuator/info")).permitAll()
+                    .requestMatchers(AntPathRequestMatcher("/actuator/prometheus")).permitAll()
+                    //.requestMatchers(AntPathRequestMatcher("/management/**")).hasAuthority(AuthoritiesConstants.ADMIN)
                     .anyRequest().denyAll()
             }
             .addFilterBefore(jwtFilter(),  UsernamePasswordAuthenticationFilter::class.java)
