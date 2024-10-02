@@ -45,7 +45,6 @@ val ktlint by configurations.creating
 dependencyManagement {
     imports {
         mavenBom(org.springframework.boot.gradle.plugin.SpringBootPlugin.BOM_COORDINATES)
-        mavenBom("org.springframework.cloud:spring-cloud-dependencies:2022.0.5")
     }
 }
 
@@ -71,9 +70,6 @@ dependencies {
 	implementation("org.springframework.boot:spring-boot-starter-mail")
 	implementation("org.springframework.boot:spring-boot-starter-security")
 	implementation("org.springframework.boot:spring-boot-starter-validation")
-
-    implementation("org.springframework.cloud:spring-cloud-starter-consul-discovery")
-    implementation("org.springframework.cloud:spring-cloud-starter-consul-config")
 
 	implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.13.2")
 	implementation("com.fasterxml.jackson.datatype:jackson-datatype-hppc")
@@ -170,7 +166,7 @@ tasks.named("compileKotlin", org.jetbrains.kotlin.gradle.tasks.KotlinCompilation
 
 jib {
 	from {
-		image = "registry://amd64/eclipse-temurin:21-alpine"
+        image = "registry://bellsoft/liberica-openjdk-alpine:21.0.4-9-cds"
 	}
 	to {
 		image = "ghcr.io/lostcities-cloud/${project.name}:latest"
