@@ -6,8 +6,10 @@ import io.dereknelson.lostcities.common.auth.JwtFilter
 import io.dereknelson.lostcities.common.auth.TokenProvider
 import io.swagger.v3.oas.annotations.enums.SecuritySchemeType
 import io.swagger.v3.oas.annotations.security.SecurityScheme
+import io.swagger.v3.oas.models.PathItem
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
+import org.springframework.http.HttpMethod
 import org.springframework.security.authentication.AuthenticationManager
 import org.springframework.security.authentication.AuthenticationProvider
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider
@@ -25,6 +27,8 @@ import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.security.web.DefaultSecurityFilterChain
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter
 import org.springframework.security.web.header.writers.ReferrerPolicyHeaderWriter
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher.antMatcher
 import org.springframework.web.filter.ForwardedHeaderFilter
 import org.springframework.web.filter.GenericFilterBean
 
@@ -58,14 +62,11 @@ class SecurityConfiguration(
         return WebSecurityCustomizer { web: WebSecurity ->
             web
                 .ignoring()
+                .requestMatchers(antMatcher(HttpMethod.OPTIONS,"/**"))
                 .requestMatchers(
-                    "/authenticate",
-                    "/register",
-                    "/actuator/health",
+                    "/i18n/**",
                     "/content/**",
-                    "/h2-console/**",
                     "/swagger-ui/**",
-                    "/test/**",
                 )
         }
     }
@@ -78,7 +79,7 @@ class SecurityConfiguration(
         http
             .csrf { it.disable() }
             .cors { it.configure(http) }
-            //.addFilterBefore(jwtFilter(), UsernamePasswordAuthenticationFilter::class.java)
+            .addFilterBefore(jwtFilter(), UsernamePasswordAuthenticationFilter::class.java)
             .exceptionHandling {}
             .headers { headersConfigurer ->
                 headersConfigurer.contentSecurityPolicy {
@@ -109,12 +110,9 @@ class SecurityConfiguration(
                         "/actuator/info",
                         "/actuator/prometheus"
                     ).permitAll()
-                    .requestMatchers("/api/**").authenticated()
                     .requestMatchers("/api/admin/**").hasAuthority(AuthoritiesConstants.ADMIN)
-                    .anyRequest().denyAll()
+                    .anyRequest().authenticated()
             }
-            .addFilterBefore(jwtFilter(),  UsernamePasswordAuthenticationFilter::class.java)
-
 
         /* ktlint-enable max_line_length */
         // @formatter:on
