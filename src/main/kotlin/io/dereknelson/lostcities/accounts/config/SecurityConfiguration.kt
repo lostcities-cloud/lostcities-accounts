@@ -8,7 +8,11 @@ import io.swagger.v3.oas.annotations.enums.SecuritySchemeType
 import io.swagger.v3.oas.annotations.security.SecurityScheme
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
+import org.springframework.security.authentication.AuthenticationManager
+import org.springframework.security.authentication.AuthenticationProvider
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.config.annotation.web.builders.WebSecurity
@@ -21,7 +25,6 @@ import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.security.web.DefaultSecurityFilterChain
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter
 import org.springframework.security.web.header.writers.ReferrerPolicyHeaderWriter
-import org.springframework.security.web.util.matcher.AntPathRequestMatcher
 import org.springframework.web.filter.ForwardedHeaderFilter
 import org.springframework.web.filter.GenericFilterBean
 
@@ -55,14 +58,15 @@ class SecurityConfiguration(
         return WebSecurityCustomizer { web: WebSecurity ->
             web
                 .ignoring()
-
-                //.requestMatchers("/app/**/*.{js,html}")
-                //.requestMatchers("/i18n/**")
-                .requestMatchers("/actuator/health")
-                .requestMatchers("/content/**")
-                .requestMatchers("/h2-console/**")
-                .requestMatchers("/swagger-ui/**")
-                .requestMatchers("/test/**")
+                .requestMatchers(
+                    "/authenticate",
+                    "/register",
+                    "/actuator/health",
+                    "/content/**",
+                    "/h2-console/**",
+                    "/swagger-ui/**",
+                    "/test/**",
+                )
         }
     }
 
@@ -74,7 +78,7 @@ class SecurityConfiguration(
         http
             .csrf { it.disable() }
             .cors { it.configure(http) }
-            .addFilterBefore(jwtFilter(), UsernamePasswordAuthenticationFilter::class.java)
+            //.addFilterBefore(jwtFilter(), UsernamePasswordAuthenticationFilter::class.java)
             .exceptionHandling {}
             .headers { headersConfigurer ->
                 headersConfigurer.contentSecurityPolicy {
@@ -88,26 +92,25 @@ class SecurityConfiguration(
             .sessionManagement {
                 it.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
             }
-            .anonymous { it.configure(http) }
             .authorizeHttpRequests{ requests ->
                 requests
 
-                    .requestMatchers(AntPathRequestMatcher("/api/accounts/authenticate")).permitAll()
-                    .requestMatchers(AntPathRequestMatcher("/api/accounts/register")).permitAll()
-                    .requestMatchers(AntPathRequestMatcher("/api/accounts/activate")).permitAll()
-                    .requestMatchers(AntPathRequestMatcher("/api/accounts/reset-password/init")).permitAll()
-                    .requestMatchers(AntPathRequestMatcher("/api/accounts/reset-password/finish")).permitAll()
-                    .requestMatchers(AntPathRequestMatcher("/api/**")).authenticated()
-                    .requestMatchers(AntPathRequestMatcher("/actuator/swagger-ui/**")).permitAll()
-                    .requestMatchers(AntPathRequestMatcher("/actuator/openapi/**")).permitAll()
-                    .requestMatchers(AntPathRequestMatcher("/actuator/**")).permitAll()
-                    .requestMatchers(AntPathRequestMatcher("/api/admin/**")).hasAuthority(AuthoritiesConstants.ADMIN)
-//
-                    .requestMatchers(AntPathRequestMatcher("/actuator/health")).permitAll()
-                    .requestMatchers(AntPathRequestMatcher("/actuator/health/**")).permitAll()
-                    .requestMatchers(AntPathRequestMatcher("/actuator/info")).permitAll()
-                    .requestMatchers(AntPathRequestMatcher("/actuator/prometheus")).permitAll()
-                    //.requestMatchers(AntPathRequestMatcher("/management/**")).hasAuthority(AuthoritiesConstants.ADMIN)
+                    .requestMatchers(
+                        "/authenticate",
+                        "/register",
+                        "/activate",
+                        "/reset-password/init",
+                        "/reset-password/finish",
+                        "/actuator/swagger-ui/**",
+                        "/actuator/openapi/**",
+                        "/actuator/**",
+                        "/actuator/health",
+                        "/actuator/health/**",
+                        "/actuator/info",
+                        "/actuator/prometheus"
+                    ).permitAll()
+                    .requestMatchers("/api/**").authenticated()
+                    .requestMatchers("/api/admin/**").hasAuthority(AuthoritiesConstants.ADMIN)
                     .anyRequest().denyAll()
             }
             .addFilterBefore(jwtFilter(),  UsernamePasswordAuthenticationFilter::class.java)
@@ -116,6 +119,23 @@ class SecurityConfiguration(
         /* ktlint-enable max_line_length */
         // @formatter:on
         return http.build()!!
+    }
+
+    @Bean
+    @Throws(Exception::class)
+    fun authenticationManager(config: AuthenticationConfiguration): AuthenticationManager {
+        return config.authenticationManager
+    }
+
+    @Bean
+    fun authenticationProvider(
+        encoder: PasswordEncoder,
+        userDetailsService: AuthUserDetailsService
+    ): AuthenticationProvider {
+        val authenticationProvider = DaoAuthenticationProvider()
+        authenticationProvider.setUserDetailsService(userDetailsService)
+        authenticationProvider.setPasswordEncoder(encoder);
+        return authenticationProvider
     }
 
     private fun jwtFilter(): GenericFilterBean {

@@ -166,7 +166,7 @@ tasks.named("compileKotlin", org.jetbrains.kotlin.gradle.tasks.KotlinCompilation
 
 jib {
 	from {
-        image = "registry://bellsoft/liberica-openjdk-alpine:21.0.4-9-cds"
+        image = "registry://ghcr.io/bell-sw/liberica-openjdk-alpine:21"
 	}
 	to {
 		image = "ghcr.io/lostcities-cloud/${project.name}:latest"
