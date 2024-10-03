@@ -72,13 +72,13 @@ class SecurityConfiguration(
     }
 
     @Bean
-    fun securityFilterChain(http: HttpSecurity): DefaultSecurityFilterChain {
+    fun securityFilterChain(http: HttpSecurity, corsConfiguration: CorsConfiguration): DefaultSecurityFilterChain {
         /* ktlint-disable max_line_length */
         // @formatter:off
 
         http
             .csrf { it.disable() }
-            .cors { it.configure(http) }
+            .cors { it.configurationSource(corsConfiguration).configure(http) }
             .addFilterBefore(jwtFilter(), UsernamePasswordAuthenticationFilter::class.java)
             .exceptionHandling {}
             .headers { headersConfigurer ->
