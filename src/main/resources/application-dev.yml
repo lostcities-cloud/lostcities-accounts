@@ -27,10 +27,15 @@ spring:
     validate-on-migrate: false
 
 management:
-  endpoint.health:
-    show-details: "ALWAYS"
+  endpoint:
+    health:
+      show-details: "ALWAYS"
+
   # This property enables the openapi and swagger-ui endpoints to be exposed beneath the actuator base path.
-  endpoints.web.exposure.include: openapi, swagger-ui
+  endpoints:
+    web:
+      exposure:
+        include: "*"
 
 
 application:
