@@ -63,11 +63,11 @@ class SecurityConfiguration(
             web
                 .ignoring()
                 .requestMatchers(antMatcher(HttpMethod.OPTIONS,"/**"))
-                .requestMatchers("/actuator/**")
+                .requestMatchers("/actuator/accounts/**")
                 .requestMatchers(
 
                     "/i18n/**",
-                    "/actuator/**",
+                    "/accounts/**",
                     "/swagger-ui/**",
                 )
         }
@@ -106,11 +106,12 @@ class SecurityConfiguration(
                         "/reset-password/finish",
                         "/swagger-ui/**",
                         "/openapi/**",
-                        "/actuator/**",
-                        "/health/**",
+                        "/health",
+                        "/accounts/**",
                         "/info",
                         "/prometheus"
                     ).permitAll()
+                    .requestMatchers("/health").permitAll()
                     .requestMatchers("/actuator/health").permitAll()
                     .requestMatchers("/api/admin/**").hasAuthority(AuthoritiesConstants.ADMIN)
                     .anyRequest().authenticated()
