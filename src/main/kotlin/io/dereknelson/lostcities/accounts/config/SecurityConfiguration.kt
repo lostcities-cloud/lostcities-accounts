@@ -78,7 +78,7 @@ class SecurityConfiguration(
 
         http
             .csrf { it.disable() }
-            .cors { it.configurationSource(corsConfiguration).configure(http) }
+            .cors { it.configure(http) }
             .addFilterBefore(jwtFilter(), UsernamePasswordAuthenticationFilter::class.java)
             .exceptionHandling {}
             .headers { headersConfigurer ->
