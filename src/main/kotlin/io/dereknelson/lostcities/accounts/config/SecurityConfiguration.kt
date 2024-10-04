@@ -105,13 +105,12 @@ class SecurityConfiguration(
                         "/reset-password/init",
                         "/reset-password/finish",
                         "/swagger-ui/**",
-                        "/openapi/**",
                         "/health",
                         "/accounts/**",
                         "/info",
                         "/prometheus"
                     ).permitAll()
-                    .requestMatchers("/health").permitAll()
+                    .requestMatchers("/actuator/**").permitAll()
                     .requestMatchers("/actuator/health").permitAll()
                     .requestMatchers("/api/admin/**").hasAuthority(AuthoritiesConstants.ADMIN)
                     .anyRequest().authenticated()
