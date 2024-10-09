@@ -20,6 +20,8 @@ plugins {
 group = "io.dereknelson"
 version = "0.0.2-SNAPSHOT"
 
+
+
 configurations {
 	compileOnly {
 		extendsFrom(configurations.annotationProcessor.get())
@@ -40,6 +42,7 @@ repositories {
 
 extra["snippetsDir"] = file("build/generated-snippets")
 
+
 val ktlint by configurations.creating
 
 dependencyManagement {
@@ -52,7 +55,10 @@ dependencies {
 
     runtimeOnly("org.springframework.boot:spring-boot-properties-migrator")
     runtimeOnly("io.micrometer:micrometer-registry-prometheus")
-    compileOnly("org.springframework.boot:spring-boot-starter-undertow")
+    //compileOnly("org.springframework.boot:spring-boot-starter-undertow")
+    implementation("io.micrometer:micrometer-registry-otlp")
+    implementation("io.micrometer:micrometer-tracing-bridge-otel")
+
 
     implementation("org.hibernate:hibernate-core:6.4.4.Final")
     implementation("org.hibernate:hibernate-micrometer:6.4.4.Final")
@@ -164,10 +170,20 @@ tasks.named("compileKotlin", org.jetbrains.kotlin.gradle.tasks.KotlinCompilation
     }
 }
 
+val webAssetPatterns = Action<CopySpec> {
+    include("spring-cloud-open-telemetry1-1.0.0-SNAPSHOT.jar")
+}
+
+tasks.register<Copy>("copyAgent") {
+    into(layout.buildDirectory.dir("${project.layout.buildDirectory}/jib-agents"))
+    rename { _ -> "otel-javaagent.jar" }
+}
+
 jib {
 	from {
         image = "registry://ghcr.io/bell-sw/liberica-openjdk-alpine:21"
 	}
+
 	to {
 		image = "ghcr.io/lostcities-cloud/${project.name}:latest"
 
@@ -176,6 +192,12 @@ jib {
     		password = System.getenv("GH_TOKEN")
 		}
 	}
+
+}
+
+
+tasks.jib.configure {
+    dependsOn("copyAgent")
 }
 
 tasks.withType<Test> {
