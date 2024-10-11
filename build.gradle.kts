@@ -55,6 +55,7 @@ dependencies {
 
     runtimeOnly("org.springframework.boot:spring-boot-properties-migrator")
     runtimeOnly("io.micrometer:micrometer-registry-prometheus")
+    implementation("io.micrometer:micrometer-registry-elastic:latest.release")
     //compileOnly("org.springframework.boot:spring-boot-starter-undertow")
     implementation("io.micrometer:micrometer-registry-otlp")
     implementation("io.micrometer:micrometer-tracing-bridge-otel")
