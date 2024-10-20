@@ -67,14 +67,24 @@ info:
   # Comma separated list of profiles that will trigger the ribbon to show
   display-ribbon-on-profiles: 'dev'
 
+management.metrics.export.elastic:
+  # You will probably want disable Elastic publishing in a local development profile.
+  enabled: true
 
+  # The interval at which metrics are sent to Elastic. The default is 1 minute.
+  step: 1m
+
+  # The index to store metrics in, defaults to "micrometer-metrics"
+  index: micrometer-metrics
 
 
 management:
   endpoint.health:
     show-details: "ALWAYS"
-  metrics.tags:
-    application: ${spring.application.name}
+  metrics:
+    tags:
+      application: ${spring.application.name}
+      host: ${spring.application.name}.lostcities.dev
   endpoints:
     web:
       exposure:

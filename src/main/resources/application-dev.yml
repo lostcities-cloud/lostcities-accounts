@@ -52,6 +52,7 @@ logging:
     org.flywaydb: debug
     org.springframework.security: debug
     io.dereknelson.lostcities: debug
+    io.micrometer: debug
 
   pattern:
     console: "%d %-5level %logger : %msg%n"
