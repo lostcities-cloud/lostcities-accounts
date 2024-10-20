@@ -5,9 +5,11 @@ import io.dereknelson.lostcities.accounts.service.Registration
 import io.dereknelson.lostcities.accounts.service.UserService
 import io.dereknelson.lostcities.common.AuthoritiesConstants
 import io.dereknelson.lostcities.common.auth.JwtFilter
+import io.dereknelson.lostcities.common.auth.LostCitiesUserDetails
 import io.dereknelson.lostcities.common.auth.TokenProvider
 import io.dereknelson.lostcities.common.model.User
 import io.swagger.v3.oas.annotations.Operation
+import io.swagger.v3.oas.annotations.Parameter
 import io.swagger.v3.oas.annotations.responses.ApiResponse
 import io.swagger.v3.oas.annotations.responses.ApiResponses
 import io.swagger.v3.oas.annotations.tags.Tag
@@ -24,6 +26,7 @@ import org.springframework.web.bind.annotation.*
 import org.springframework.web.server.ResponseStatusException
 import java.util.*
 import jakarta.servlet.http.HttpServletRequest
+import org.springframework.security.core.annotation.AuthenticationPrincipal
 import javax.validation.Valid
 
 @Tag(name = "User actions")
@@ -53,6 +56,17 @@ class UserController(
         val user = userService.register(registration)
 
         return UserDto(user.id, user.login, user.email, user.langKey)
+    }
+
+    @Operation(summary = "Find a user.")
+    @GetMapping("/user", "/user/")
+    fun findUserById(
+        @AuthenticationPrincipal @Parameter(hidden = true)
+        userDetails: LostCitiesUserDetails,
+    ): UserDto? {
+        return userService.findById(userDetails.id)
+            .map { UserDto(id = it.id, login = it.login, email = it.email, langKey = it.langKey) }
+            .orElseThrow { ResponseStatusException(HttpStatus.NOT_FOUND) }
     }
 
     @Operation(summary = "Find a user.")

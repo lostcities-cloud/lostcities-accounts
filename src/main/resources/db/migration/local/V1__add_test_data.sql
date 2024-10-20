@@ -1,6 +1,6 @@
-INSERT INTO public.authority VALUES ('ROLE_USER');
-INSERT INTO public.authority VALUES ('ROLE_ADMIN');
-INSERT INTO public.authority VALUES ('ROLE_SYSTEM');
+INSERT INTO authority VALUES ('ROLE_USER');
+INSERT INTO authority VALUES ('ROLE_ADMIN');
+INSERT INTO authority VALUES ('ROLE_SYSTEM');
 
 insert into users (id, activated, activation_key, email, first_name, image_url, lang_key, last_name, login,
                    password_hash, reset_date, reset_key, created_by, created_date, last_modified_by, last_modified_date)
@@ -15,5 +15,5 @@ values (2,true, null,'ttesterson@test.com','Test', null, 'en_US','Testerson', 't
         null, null, 'system', '2024-02-23 00:58:32.817828 +00:00', 'system','2024-02-23 00:58:32.817828 +00:00'
        );
 
-INSERT INTO public.users_authority VALUES (1, 'ROLE_USER');
-INSERT INTO public.users_authority VALUES (2, 'ROLE_USER');
+INSERT INTO users_authority VALUES (1, 'ROLE_USER');
+INSERT INTO users_authority VALUES (2, 'ROLE_USER');
