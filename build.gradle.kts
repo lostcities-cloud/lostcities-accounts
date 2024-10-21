@@ -199,11 +199,6 @@ jib {
 
 }
 
-
-tasks.jib.configure {
-    dependsOn("copyAgent")
-}
-
 tasks.withType<Test> {
 	useJUnitPlatform()
 }
