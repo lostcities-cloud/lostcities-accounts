@@ -198,7 +198,7 @@ jib {
 		image = "ghcr.io/lostcities-cloud/${project.name}:latest"
 
 		auth {
-			username = System.getenv("GH_ACTOR")
+			username = System.getenv("GH_USER")
     		password = System.getenv("GH_TOKEN")
 		}
 	}
