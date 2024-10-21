@@ -1,7 +1,6 @@
 package io.dereknelson.lostcities.accounts.config
 
 import io.dereknelson.lostcities.accounts.service.AuthUserDetailsService
-import io.dereknelson.lostcities.common.AuthoritiesConstants
 import io.dereknelson.lostcities.common.auth.JwtFilter
 import io.dereknelson.lostcities.common.auth.TokenProvider
 import io.swagger.v3.oas.annotations.enums.SecuritySchemeType
@@ -24,9 +23,7 @@ import org.springframework.security.core.userdetails.UserDetailsService
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.security.web.DefaultSecurityFilterChain
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter
 import org.springframework.security.web.header.writers.ReferrerPolicyHeaderWriter
-import org.springframework.security.web.util.matcher.AntPathRequestMatcher
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher.antMatcher
 import org.springframework.web.filter.ForwardedHeaderFilter
 import org.springframework.web.filter.GenericFilterBean
@@ -61,7 +58,7 @@ class SecurityConfiguration(
         return WebSecurityCustomizer { web: WebSecurity ->
             web
                 .ignoring()
-                .requestMatchers(antMatcher(HttpMethod.OPTIONS,"/**"))
+                .requestMatchers(antMatcher(HttpMethod.OPTIONS, "/**"))
                 .requestMatchers(antMatcher(HttpMethod.OPTIONS, "/**"))
                 .requestMatchers(antMatcher(HttpMethod.GET, "/actuator/**"))
                 .requestMatchers(
@@ -81,7 +78,7 @@ class SecurityConfiguration(
         http
             .csrf { it.disable() }
             .cors { it.configure(http) }
-            //.addFilterBefore(jwtFilter(), UsernamePasswordAuthenticationFilter::class.java)
+            // .addFilterBefore(jwtFilter(), UsernamePasswordAuthenticationFilter::class.java)
             .exceptionHandling {}
             .headers { headersConfigurer ->
                 headersConfigurer.contentSecurityPolicy {
@@ -110,9 +107,9 @@ class SecurityConfiguration(
                         "/prometheus",
                     ).permitAll()
                     .requestMatchers("/actuator/**").permitAll()
-                    //.requestMatchers("/management/accounts/**").permitAll()
-                    //.requestMatchers("/management/accounts/actuator/**").permitAll()
-                    //.requestMatchers("/api/admin/**").hasAuthority(AuthoritiesConstants.ADMIN)
+                    // .requestMatchers("/management/accounts/**").permitAll()
+                    // .requestMatchers("/management/accounts/actuator/**").permitAll()
+                    // .requestMatchers("/api/admin/**").hasAuthority(AuthoritiesConstants.ADMIN)
                     .anyRequest().authenticated()
             }
         // @formatter:on
