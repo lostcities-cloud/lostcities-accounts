@@ -18,7 +18,7 @@ plugins {
 }
 
 group = "io.dereknelson"
-version = project.properties["verion"]!!
+version = properties["verion"]!!
 
 
 
