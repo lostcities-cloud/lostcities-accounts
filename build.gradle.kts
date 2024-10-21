@@ -63,9 +63,6 @@ dependencies {
 
     runtimeOnly("org.springframework.boot:spring-boot-properties-migrator")
     runtimeOnly("io.micrometer:micrometer-registry-prometheus")
-    implementation("io.micrometer:micrometer-registry-elastic:latest.release")
-    //compileOnly("org.springframework.boot:spring-boot-starter-undertow")
-
 
     implementation("org.hibernate:hibernate-core:6.4.4.Final")
     implementation("org.hibernate:hibernate-micrometer:6.4.4.Final")
