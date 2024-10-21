@@ -65,8 +65,6 @@ dependencies {
     runtimeOnly("io.micrometer:micrometer-registry-prometheus")
     implementation("io.micrometer:micrometer-registry-elastic:latest.release")
     //compileOnly("org.springframework.boot:spring-boot-starter-undertow")
-    implementation("io.micrometer:micrometer-registry-otlp")
-    implementation("io.micrometer:micrometer-tracing-bridge-otel")
 
 
     implementation("org.hibernate:hibernate-core:6.4.4.Final")
@@ -183,15 +181,6 @@ tasks.named("compileKotlin", org.jetbrains.kotlin.gradle.tasks.KotlinCompilation
     compilerOptions {
         freeCompilerArgs.addAll("-Xjsr305=strict")
     }
-}
-
-val webAssetPatterns = Action<CopySpec> {
-    include("spring-cloud-open-telemetry1-1.0.0-SNAPSHOT.jar")
-}
-
-tasks.register<Copy>("copyAgent") {
-    into(layout.buildDirectory.dir("${project.layout.buildDirectory}/jib-agents"))
-    rename { _ -> "otel-javaagent.jar" }
 }
 
 jib {
