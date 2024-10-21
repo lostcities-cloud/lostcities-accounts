@@ -1,4 +1,9 @@
+server:
+  port: 8080
 
+management:
+  server:
+    port: 4452
 
 spring:
   application.name: accounts
@@ -31,11 +36,6 @@ spring:
     web:
       exposure:
         include: "*"
-
-management:
-  server:
-    port: 4452
-
 
 application:
   security:

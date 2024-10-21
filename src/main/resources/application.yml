@@ -51,7 +51,7 @@ spring:
     console-available: true
 
 server:
-  port: 8090
+  port: 8080
   forward-headers-strategy: framework
   servlet:
     contextPath: /api/accounts

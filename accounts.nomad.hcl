@@ -29,7 +29,7 @@ job "accounts" {
       }
 
       port "service-port" {
-        to = 8090
+        to = 8080
       }
 
     }
@@ -73,7 +73,6 @@ job "accounts" {
 
       env {
         SPRING_PROFILES_ACTIVE      = "dev"
-        OTEL_EXPORTER_OTLP_ENDPOINT = "http://192.168.1.231:4317"
       }
 
       resources {
