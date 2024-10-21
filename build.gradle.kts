@@ -163,6 +163,10 @@ noArg {
     annotation("jakarta.persistence.Entity")
 }
 
+semver {
+    noGitPush = false
+}
+
 tasks.withType<KotlinCompile>() {
 
     compilerOptions {
