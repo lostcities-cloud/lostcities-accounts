@@ -1,7 +1,7 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-    id("org.springframework.boot") version "3.1.+"
+    id("org.springframework.boot") version "3.1.12"
     id("com.github.rising3.semver") version "0.8.2"
     // id("org.graalvm.buildtools.native") version "0.10.+"
 	id("io.spring.dependency-management") version "1.1.4"
@@ -71,8 +71,8 @@ dependencies {
     implementation("org.ehcache:ehcache:3.9.2")
 
     implementation("org.springframework.boot:spring-boot-devtools")
-    implementation("io.dereknelson.lostcities-cloud:lostcities-common:1.0-SNAPSHOT")
-    implementation("io.dereknelson.lostcities-cloud:lostcities-models:1.0-SNAPSHOT")
+    implementation("io.dereknelson.lostcities-cloud:lostcities-common:0.0.0")
+    implementation("io.dereknelson.lostcities-cloud:lostcities-models:0.0.0")
 	implementation("org.apache.commons:commons-lang3:3.12.0")
 
 	implementation("org.springframework.boot:spring-boot-starter-web")
@@ -94,8 +94,8 @@ dependencies {
 	implementation("org.zalando:problem-spring-web:0.21.0")
 
 	// implementation("org.springdoc:springdoc-openapi-core:1.5.10")
-	implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.6.0")
-	implementation("org.springdoc:springdoc-openapi-starter-webmvc-api:2.6.0")
+	implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.6.+")
+	//implementation("org.springdoc:springdoc-openapi-starter-webmvc-api:2.6.+")
 	implementation("org.springdoc:springdoc-openapi-kotlin:1.8.0")
 
 	implementation("org.modelmapper:modelmapper:2.4.1")

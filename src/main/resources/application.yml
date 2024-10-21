@@ -59,7 +59,7 @@ server:
 
 springdoc:
   use-management-port: true
-  api-docs.enabled: true
+  api-docs.enabled: false
   packagesToScan: io.dereknelson.lostcities.accounts.api
 
 # Properties to be exposed on the /info management endpoint
@@ -78,6 +78,7 @@ management:
     web:
       exposure:
         include: "*"
+        #exclude: "swagger-ui"
   server:
     port: 4452
     base-path: /management/${spring.application.name}

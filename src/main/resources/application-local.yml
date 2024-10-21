@@ -20,10 +20,7 @@ spring:
     baseline-version: 0
     validate-on-migrate: false
   # This property enables the openapi and swagger-ui endpoints to be exposed beneath the actuator base path.
-  endpoints:
-    web:
-      exposure:
-        include: "*"
+
 
 
 application:
@@ -37,19 +34,16 @@ application:
         token-validity-in-seconds-for-remember-me: 2592000
 
 
-management:
-  server:
-    port: 4450
-
 logging:
   level:
     ROOT: error
     org.springframework.aop.interceptor.PerformanceMonitorInterceptor: TRACE
     org.springframework.web.filter.CommonsRequestLoggingFilter: DEBUG
-    org.springframework.cloud.consul: debug
+    org.springframework: debug
     org.flywaydb: debug
     org.springframework.security: debug
     io.dereknelson.lostcities: debug
+    "org.springframework.boot.actuate": debug
 
   pattern:
     console: "%d %-5level %logger : %msg%n"

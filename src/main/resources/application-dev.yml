@@ -1,10 +1,3 @@
-server:
-  port: 8080
-
-management:
-  server:
-    port: 4452
-
 spring:
   application.name: accounts
   devtools.restart.enabled: true
@@ -36,6 +29,29 @@ spring:
     web:
       exposure:
         include: "*"
+
+server:
+  port: 8080
+  forward-headers-strategy: framework
+  servlet:
+    contextPath: /api/accounts
+
+management:
+
+  endpoint.health:
+    show-details: "ALWAYS"
+  metrics:
+    tags:
+      application: ${spring.application.name}
+      host: ${spring.application.name}.lostcities.dev
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+    enabled-by-default: true
+  server:
+    port: 4452
+    base-path: /management/${spring.application.name}
 
 application:
   security:
