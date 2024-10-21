@@ -1,15 +1,15 @@
 package io.dereknelson.lostcities.accounts.persistence
 
-import org.hibernate.annotations.Cache
-import org.hibernate.annotations.CacheConcurrencyStrategy
-import java.io.Serializable
-import java.util.*
 import jakarta.persistence.Column
 import jakarta.persistence.Entity
 import jakarta.persistence.Id
 import jakarta.persistence.Table
 import jakarta.validation.constraints.NotNull
 import jakarta.validation.constraints.Size
+import org.hibernate.annotations.Cache
+import org.hibernate.annotations.CacheConcurrencyStrategy
+import java.io.Serializable
+import java.util.*
 
 @Entity
 @Table(name = "authority")
@@ -17,7 +17,10 @@ import jakarta.validation.constraints.Size
 data class AuthorityEntity(
     @Id
     @Column(length = 50)
-    var name: @NotNull @Size(max = 50) String
+    var name:
+    @NotNull
+    @Size(max = 50)
+    String,
 ) : Serializable {
 
     override fun equals(other: Any?): Boolean {

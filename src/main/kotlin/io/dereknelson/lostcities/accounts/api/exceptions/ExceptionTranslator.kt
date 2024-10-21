@@ -1,6 +1,7 @@
 package io.dereknelson.lostcities.accounts.api.exceptions
 import io.dereknelson.lostcities.accounts.api.InvalidPasswordException
 import io.dereknelson.lostcities.accounts.library.SpringProfileConstants
+import jakarta.servlet.http.HttpServletRequest
 import org.apache.commons.lang3.StringUtils
 import org.springframework.core.env.Environment
 import org.springframework.dao.ConcurrencyFailureException
@@ -20,7 +21,6 @@ import org.zalando.problem.spring.web.advice.validation.ConstraintViolationProbl
 import java.net.URI
 import java.util.*
 import java.util.stream.Collectors
-import jakarta.servlet.http.HttpServletRequest
 
 /**
  * Controller advice to translate the server side exceptions to client-friendly json structures.
@@ -33,22 +33,21 @@ class ExceptionTranslator(private val env: Environment) : ProblemHandling, Secur
     /**
      * Post-process the Problem payload to add the message key for the front-end if needed.
      */
-    override fun process(entity: ResponseEntity<Problem>, request: NativeWebRequest):
-        ResponseEntity<Problem>? {
-
+    override fun process(entity: ResponseEntity<Problem>, request: NativeWebRequest): ResponseEntity<Problem>? {
         val problem: Problem = entity.body!!
         if (!(problem is ConstraintViolationProblem || problem is DefaultProblem)) {
             return entity
         }
         val nativeRequest: HttpServletRequest? = request.getNativeRequest(
-            HttpServletRequest::class.java
+            HttpServletRequest::class.java,
         )
         val requestUri = if (nativeRequest != null) nativeRequest.requestURI else StringUtils.EMPTY
         val builder: ProblemBuilder = Problem
             .builder()
             .withType(
-                if (Problem.DEFAULT_TYPE == problem.type) ErrorConstants.DEFAULT_TYPE
-                else problem.type
+                if (Problem.DEFAULT_TYPE == problem.type) {
+                    ErrorConstants.DEFAULT_TYPE
+                } else problem.type,
             )
             .withStatus(problem.status)
             .withTitle(problem.title)
@@ -70,22 +69,23 @@ class ExceptionTranslator(private val env: Environment) : ProblemHandling, Secur
 
     override fun handleMethodArgumentNotValid(
         ex: MethodArgumentNotValidException,
-        request: NativeWebRequest
+        request: NativeWebRequest,
     ): ResponseEntity<Problem> {
         val result: BindingResult = ex.bindingResult
         val fieldErrors: List<FieldError> = result
             .fieldErrors
             .stream()
             .map { f: FieldError ->
-                val code: String = if (StringUtils.isNotBlank(f.defaultMessage))
+                val code: String = if (StringUtils.isNotBlank(f.defaultMessage)) {
                     f.defaultMessage!!
-                else
+                } else {
                     f.code!!
+                }
 
                 FieldError(
                     f.objectName.replaceFirst("DTO$".toRegex(), ""),
                     f.field,
-                    code
+                    code,
                 )
             }
             .collect(Collectors.toList())
@@ -103,7 +103,7 @@ class ExceptionTranslator(private val env: Environment) : ProblemHandling, Secur
     @ExceptionHandler
     fun handleInvalidPasswordException(
         ex: InvalidPasswordException?,
-        request: NativeWebRequest?
+        request: NativeWebRequest?,
     ): ResponseEntity<Problem> {
         return create(InvalidPasswordException(), request!!)
     }
@@ -111,7 +111,7 @@ class ExceptionTranslator(private val env: Environment) : ProblemHandling, Secur
     @ExceptionHandler
     fun handleConcurrencyFailure(
         ex: ConcurrencyFailureException?,
-        request: NativeWebRequest?
+        request: NativeWebRequest?,
     ): ResponseEntity<Problem> {
         val problem: Problem =
             Problem.builder().withStatus(Status.CONFLICT)
@@ -134,7 +134,7 @@ class ExceptionTranslator(private val env: Environment) : ProblemHandling, Secur
                         Optional.ofNullable(throwable.cause)
                             .filter { isCausalChainsEnabled }
                             .map { this.toProblem(it) }
-                            .orElse(null)
+                            .orElse(null),
                     )
             }
             if (throwable is DataAccessException) {
@@ -148,7 +148,7 @@ class ExceptionTranslator(private val env: Environment) : ProblemHandling, Secur
                         Optional.ofNullable(throwable.cause)
                             .filter { isCausalChainsEnabled }
                             .map { this.toProblem(it) }
-                            .orElse(null)
+                            .orElse(null),
                     )
             }
             if (containsPackageName(throwable.message)) {
@@ -162,7 +162,7 @@ class ExceptionTranslator(private val env: Environment) : ProblemHandling, Secur
                         Optional.ofNullable(throwable.cause)
                             .filter { isCausalChainsEnabled }
                             .map { this.toProblem(it) }
-                            .orElse(null)
+                            .orElse(null),
                     )
             }
         }
@@ -176,7 +176,7 @@ class ExceptionTranslator(private val env: Environment) : ProblemHandling, Secur
                 Optional.ofNullable(throwable.cause)
                     .filter { isCausalChainsEnabled }
                     .map { this.toProblem(it) }
-                    .orElse(null)
+                    .orElse(null),
             )
     }
 
@@ -191,7 +191,7 @@ class ExceptionTranslator(private val env: Environment) : ProblemHandling, Secur
             "com.",
             "io.",
             "de.",
-            "io.dereknelson."
+            "io.dereknelson.",
         )
     }
 

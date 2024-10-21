@@ -12,5 +12,5 @@ class AuthUserDetails(
     val accountNonExpired: Boolean,
     val accountNonLocked: Boolean,
     val credentialsNonExpired: Boolean,
-    val enabled: Boolean
+    val enabled: Boolean,
 ) : User(login, password, authorities)

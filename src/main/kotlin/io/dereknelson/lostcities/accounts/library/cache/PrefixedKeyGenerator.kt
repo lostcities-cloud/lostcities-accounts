@@ -20,9 +20,8 @@ class PrefixedKeyGenerator(gitProperties: GitProperties?, buildProperties: Build
 
     private fun generatePrefix(
         gitProperties: GitProperties?,
-        buildProperties: BuildProperties?
+        buildProperties: BuildProperties?,
     ): String {
-
         var shortCommitId: String? = null
         if (gitProperties != null) {
             shortCommitId = gitProperties.shortCommitId
@@ -37,7 +36,7 @@ class PrefixedKeyGenerator(gitProperties: GitProperties?, buildProperties: Build
             shortCommitId,
             time,
             version,
-            RandomStringUtils.randomAlphanumeric(12)
+            RandomStringUtils.randomAlphanumeric(12),
         )!!
 
         return if (p is Instant) {

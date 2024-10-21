@@ -29,7 +29,7 @@ class CustomUserDetailsService(private val userRepository: UserRepository) : Use
                 .map { user -> createSpringSecurityUser(login, user) }
                 .orElseThrow {
                     UsernameNotFoundException(
-                        "User with email $login was not found in the database"
+                        "User with email $login was not found in the database",
                     )
                 }
         }
@@ -44,7 +44,7 @@ class CustomUserDetailsService(private val userRepository: UserRepository) : Use
 
     private fun createSpringSecurityUser(
         lowercaseLogin: String,
-        userEntity: UserEntity
+        userEntity: UserEntity,
     ): User {
         if (!userEntity.activated) {
             throw UserNotActivatedException("User $lowercaseLogin was not activated")
@@ -58,7 +58,7 @@ class CustomUserDetailsService(private val userRepository: UserRepository) : Use
         return User(
             userEntity.login!!,
             userEntity.password!!,
-            grantedAuthorities
+            grantedAuthorities,
         )
     }
 }

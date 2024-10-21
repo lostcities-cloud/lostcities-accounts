@@ -2,7 +2,6 @@ package io.dereknelson.lostcities.accounts
 
 import io.swagger.v3.oas.annotations.OpenAPIDefinition
 import io.swagger.v3.oas.annotations.servers.Server
-
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.autoconfigure.web.servlet.error.ErrorMvcAutoConfiguration
 import org.springframework.boot.context.properties.EnableConfigurationProperties
@@ -16,7 +15,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories
     "io.dereknelson.lostcities.accounts.config",
     "io.dereknelson.lostcities.accounts.library",
     "io.dereknelson.lostcities.common.auth",
-    "io.dereknelson.lostcities.common.library"
+    "io.dereknelson.lostcities.common.library",
 )
 @EnableConfigurationProperties
 @EnableJpaRepositories

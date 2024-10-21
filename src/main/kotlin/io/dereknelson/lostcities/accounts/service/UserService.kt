@@ -17,7 +17,7 @@ class UserService(
     private var modelMapper: ModelMapper,
     private var userRepository: UserRepository,
     private var passwordEncoder: PasswordEncoder,
-    private var cacheManager: CacheManager
+    private var cacheManager: CacheManager,
 ) {
 
     fun findRefByLogin(login: String): Optional<UserRef> {
@@ -32,7 +32,7 @@ class UserService(
                     id = it.id,
                     login = it.login!!,
                     email = it.email!!,
-                    langKey = it.langKey ?: Constants.DEFAULT_LANGUAGE
+                    langKey = it.langKey ?: Constants.DEFAULT_LANGUAGE,
                 )
             }
     }
@@ -58,7 +58,7 @@ class UserService(
 
         var userEntity = modelMapper.map(
             registration,
-            UserEntity::class.java
+            UserEntity::class.java,
         )
         userEntity.createdBy = Constants.SYSTEM_ACCOUNT
         userEntity.activated = true
@@ -67,7 +67,7 @@ class UserService(
         return User(
             id = userEntity.id,
             login = userEntity.login!!,
-            email = userEntity.email!!
+            email = userEntity.email!!,
         )
     }
 

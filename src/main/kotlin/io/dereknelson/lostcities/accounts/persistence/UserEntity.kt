@@ -3,6 +3,11 @@ package io.dereknelson.lostcities.accounts.persistence
 import com.fasterxml.jackson.annotation.JsonIgnore
 import io.dereknelson.lostcities.common.Constants
 import io.dereknelson.lostcities.common.library.AbstractAuditingEntity
+import jakarta.persistence.*
+import jakarta.validation.constraints.Email
+import jakarta.validation.constraints.NotNull
+import jakarta.validation.constraints.Pattern
+import jakarta.validation.constraints.Size
 import org.apache.commons.lang3.StringUtils
 import org.hibernate.annotations.BatchSize
 import org.hibernate.annotations.Cache
@@ -10,11 +15,6 @@ import org.hibernate.annotations.CacheConcurrencyStrategy
 import java.io.Serializable
 import java.time.Instant
 import java.util.*
-import jakarta.persistence.*
-import jakarta.validation.constraints.Email
-import jakarta.validation.constraints.NotNull
-import jakarta.validation.constraints.Pattern
-import jakarta.validation.constraints.Size
 
 @Entity
 @Table(
@@ -22,49 +22,71 @@ import jakarta.validation.constraints.Size
     indexes = [
         Index(name = "users_login_index", columnList = "login", unique = true),
         Index(name = "users_email_index", columnList = "email", unique = true),
-    ]
+    ],
 )
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 class UserEntity : AbstractAuditingEntity(), Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequenceGenerator")
-    @SequenceGenerator(name = "sequenceGenerator", initialValue=3)
+    @SequenceGenerator(name = "sequenceGenerator", initialValue = 3)
     val id: Long? = null
 
     @Column(length = 50, unique = true, nullable = false)
-    var login: @NotNull @Pattern(regexp = Constants.LOGIN_REGEX) @Size(min = 1, max = 50) String? =
+    var login:
+        @NotNull
+        @Pattern(regexp = Constants.LOGIN_REGEX)
+        @Size(min = 1, max = 50)
+        String? =
         null
         set(username) { field = StringUtils.lowerCase(username, Locale.ENGLISH) }
 
     @Column(length = 254, unique = true)
-    var email: @Email @Size(min = 5, max = 254) String? = null
+    var email:
+        @Email
+        @Size(min = 5, max = 254)
+        String? = null
 
     @JsonIgnore
     @Column(name = "password_hash", unique = false, length = 60, nullable = false)
-    var password: @NotNull @Size(min = 60, max = 60) String? = null
+    var password:
+        @NotNull
+        @Size(min = 60, max = 60)
+        String? = null
 
     @Column(name = "first_name", length = 50)
-    var firstName: @Size(max = 50) String? = null
+    var firstName:
+        @Size(max = 50)
+        String? = null
 
     @Column(name = "last_name", length = 50)
-    var lastName: @Size(max = 50) String? = null
+    var lastName:
+        @Size(max = 50)
+        String? = null
 
     @Column(nullable = false)
     var activated = false
 
     @Column(name = "lang_key", length = 10)
-    var langKey: @Size(min = 2, max = 10) String? = null
+    var langKey:
+        @Size(min = 2, max = 10)
+        String? = null
 
     @Column(name = "image_url", length = 256)
-    var imageUrl: @Size(max = 256) String? = null
+    var imageUrl:
+        @Size(max = 256)
+        String? = null
 
     @Column(name = "activation_key", length = 20)
     @JsonIgnore
-    var activationKey: @Size(max = 20) String? = null
+    var activationKey:
+        @Size(max = 20)
+        String? = null
 
     @Column(name = "reset_key", length = 20)
     @JsonIgnore
-    var resetKey: @Size(max = 20) String? = null
+    var resetKey:
+        @Size(max = 20)
+        String? = null
 
     @Column(name = "reset_date")
     var resetDate: Instant? = null

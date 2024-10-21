@@ -116,7 +116,7 @@ dependencies {
     runtimeOnly("org.postgresql:postgresql")
     runtimeOnly("com.h2database:h2")
 
-	ktlint("com.pinterest:ktlint:0.44.0") {
+	ktlint("com.pinterest:ktlint:0.49.1") {
 		attributes {
 			attribute(Bundling.BUNDLING_ATTRIBUTE, objects.named(Bundling.EXTERNAL))
 		}

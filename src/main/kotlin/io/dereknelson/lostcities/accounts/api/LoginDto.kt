@@ -1,8 +1,6 @@
 package io.dereknelson.lostcities.accounts.api
 
 import io.swagger.v3.oas.annotations.media.Schema
-import javax.validation.constraints.NotNull
-import javax.validation.constraints.Size
 
 @Schema(description = "Login")
 class LoginDto(
@@ -13,5 +11,5 @@ class LoginDto(
     val password: String? = null,
 
     @Schema(example = "test@example.com", required = false, defaultValue = "false")
-    val rememberMe: Boolean = false
+    val rememberMe: Boolean = false,
 )

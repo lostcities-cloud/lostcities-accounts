@@ -6,7 +6,6 @@ import io.dereknelson.lostcities.common.auth.JwtFilter
 import io.dereknelson.lostcities.common.auth.TokenProvider
 import io.swagger.v3.oas.annotations.enums.SecuritySchemeType
 import io.swagger.v3.oas.annotations.security.SecurityScheme
-import io.swagger.v3.oas.models.PathItem
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.http.HttpMethod
@@ -27,7 +26,6 @@ import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.security.web.DefaultSecurityFilterChain
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter
 import org.springframework.security.web.header.writers.ReferrerPolicyHeaderWriter
-import org.springframework.security.web.util.matcher.AntPathRequestMatcher
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher.antMatcher
 import org.springframework.web.filter.ForwardedHeaderFilter
 import org.springframework.web.filter.GenericFilterBean
@@ -38,12 +36,12 @@ import org.springframework.web.filter.GenericFilterBean
     name = "jwt_auth",
     type = SecuritySchemeType.HTTP,
     bearerFormat = "JWT",
-    scheme = "bearer"
+    scheme = "bearer",
 )
 @Configuration
 class SecurityConfiguration(
     private val tokenProvider: TokenProvider,
-    private val lostCitiesUserDetailsService: AuthUserDetailsService
+    private val lostCitiesUserDetailsService: AuthUserDetailsService,
 ) {
 
     @Bean
@@ -62,7 +60,7 @@ class SecurityConfiguration(
         return WebSecurityCustomizer { web: WebSecurity ->
             web
                 .ignoring()
-                .requestMatchers(antMatcher(HttpMethod.OPTIONS,"/**"))
+                .requestMatchers(antMatcher(HttpMethod.OPTIONS, "/**"))
                 .requestMatchers("/actuator/accounts/**")
                 .requestMatchers(
 
@@ -75,7 +73,6 @@ class SecurityConfiguration(
 
     @Bean
     fun securityFilterChain(http: HttpSecurity, corsConfiguration: CorsConfiguration): DefaultSecurityFilterChain {
-        /* ktlint-disable max_line_length */
         // @formatter:off
 
         http
@@ -88,16 +85,13 @@ class SecurityConfiguration(
                     it.policyDirectives("default-src 'self'; frame-src 'self' data:; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://storage.googleapis.com; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self' data:")
                 }.referrerPolicy {
                     it.policy(ReferrerPolicyHeaderWriter.ReferrerPolicy.STRICT_ORIGIN_WHEN_CROSS_ORIGIN)
-                }.cacheControl {  }
-
+                }.cacheControl { }
             }
-
             .sessionManagement {
                 it.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
             }
-            .authorizeHttpRequests{ requests ->
+            .authorizeHttpRequests { requests ->
                 requests
-
                     .requestMatchers(
                         "/authenticate",
                         "/register",
@@ -108,15 +102,13 @@ class SecurityConfiguration(
                         "/health",
                         "/accounts/**",
                         "/info",
-                        "/prometheus"
+                        "/prometheus",
                     ).permitAll()
                     .requestMatchers("/actuator/**").permitAll()
                     .requestMatchers("/actuator/health").permitAll()
                     .requestMatchers("/api/admin/**").hasAuthority(AuthoritiesConstants.ADMIN)
                     .anyRequest().authenticated()
             }
-
-        /* ktlint-enable max_line_length */
         // @formatter:on
         return http.build()!!
     }
@@ -130,11 +122,11 @@ class SecurityConfiguration(
     @Bean
     fun authenticationProvider(
         encoder: PasswordEncoder,
-        userDetailsService: AuthUserDetailsService
+        userDetailsService: AuthUserDetailsService,
     ): AuthenticationProvider {
         val authenticationProvider = DaoAuthenticationProvider()
         authenticationProvider.setUserDetailsService(userDetailsService)
-        authenticationProvider.setPasswordEncoder(encoder);
+        authenticationProvider.setPasswordEncoder(encoder)
         return authenticationProvider
     }
 

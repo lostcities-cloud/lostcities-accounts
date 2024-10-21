@@ -15,5 +15,5 @@ data class UserDto(
     val email: String? = null,
 
     @Schema(example = "en_US", required = true)
-    val langKey: String = Constants.DEFAULT_LANGUAGE
+    val langKey: String = Constants.DEFAULT_LANGUAGE,
 )

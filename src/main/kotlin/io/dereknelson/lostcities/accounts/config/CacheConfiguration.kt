@@ -58,13 +58,14 @@ class CacheConfiguration() {
     init {
         jcacheConfiguration = Eh107Configuration.fromEhcacheCacheConfiguration(
             CacheConfigurationBuilder.newCacheConfigurationBuilder(
-                Any::class.java, Any::class.java,
-                ResourcePoolsBuilder.heap(maxEntries)
+                Any::class.java,
+                Any::class.java,
+                ResourcePoolsBuilder.heap(maxEntries),
             )
                 .withExpiry(
-                    ExpiryPolicyBuilder.timeToLiveExpiration(Duration.ofSeconds(timeToLiveSeconds))
+                    ExpiryPolicyBuilder.timeToLiveExpiration(Duration.ofSeconds(timeToLiveSeconds)),
                 )
-                .build()
+                .build(),
         )
     }
 }
