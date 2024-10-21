@@ -1,6 +1,5 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
-
 plugins {
     id("org.springframework.boot") version "3.1.+"
     // id("org.graalvm.buildtools.native") version "0.10.+"
@@ -9,7 +8,7 @@ plugins {
     id("com.google.cloud.tools.jib") version "3.4.2"
     //id("org.springframework.experimental.aot") version "0.11.4"
     id("com.gorylenko.gradle-git-properties") version "2.4.0"
-    id("com.dipien:semantic-version-gradle-plugin") version "2.0.0"
+    // id("com.dipien.semantic-version") version "2.0.0"
 	kotlin("jvm") version "2.0.+"
 	kotlin("plugin.spring") version "2.0.+"
 	kotlin("plugin.jpa") version "2.0.+"
@@ -18,7 +17,7 @@ plugins {
 }
 
 group = "io.dereknelson"
-version = "0.0.2-SNAPSHOT"
+version = "0.0.2"
 
 
 
@@ -29,14 +28,22 @@ configurations {
 }
 
 repositories {
-	maven {
-		url = uri("https://maven.pkg.github.com/lostcities-cloud/lostcities-common")
-		credentials {
-			username = System.getenv("GITHUB_ACTOR")
-			password = System.getenv("GITHUB_TOKEN")
-		}
-	}
+    maven {
+        url = uri("https://maven.pkg.github.com/lostcities-cloud/lostcities-common")
+        credentials {
+            username = System.getenv("GH_USER")
+            password = System.getenv("GH_TOKEN")
+        }
+    }
+    maven {
+        url = uri("https://maven.pkg.github.com/lostcities-cloud/lostcities-models")
+        credentials {
+            username = System.getenv("GH_USER")
+            password = System.getenv("GH_TOKEN")
+        }
+    }
 	mavenCentral()
+    gradlePluginPortal()
 }
 
 
@@ -68,7 +75,8 @@ dependencies {
     implementation("org.ehcache:ehcache:3.9.2")
 
     implementation("org.springframework.boot:spring-boot-devtools")
-    implementation(project(":lostcities-common"))
+    implementation("io.dereknelson.lostcities-cloud:lostcities-common:1.0-SNAPSHOT")
+    implementation("io.dereknelson.lostcities-cloud:lostcities-models:1.0-SNAPSHOT")
 	implementation("org.apache.commons:commons-lang3:3.12.0")
 
 	implementation("org.springframework.boot:spring-boot-starter-web")
