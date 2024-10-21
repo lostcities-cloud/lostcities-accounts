@@ -41,5 +41,7 @@ jobs:
           FOLDER: build/dokka/html
           TARGET_FOLDER: javadoc
       - name: Semver
-        run: ./gradlew semver --patch
+        run: |
+          ./gradlew semver --patch
+          git push
 
