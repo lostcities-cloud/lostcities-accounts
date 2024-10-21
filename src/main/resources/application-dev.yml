@@ -32,6 +32,10 @@ spring:
       exposure:
         include: "*"
 
+management:
+  server:
+    port: 4452
+
 
 application:
   security:
