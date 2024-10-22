@@ -23,6 +23,7 @@ import org.springframework.security.core.userdetails.UserDetailsService
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.security.web.DefaultSecurityFilterChain
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter
 import org.springframework.security.web.header.writers.ReferrerPolicyHeaderWriter
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher.antMatcher
 import org.springframework.web.filter.ForwardedHeaderFilter
@@ -59,7 +60,6 @@ class SecurityConfiguration(
             web
                 .ignoring()
                 .requestMatchers(antMatcher(HttpMethod.OPTIONS, "/**"))
-                .requestMatchers(antMatcher(HttpMethod.OPTIONS, "/**"))
                 .requestMatchers(antMatcher(HttpMethod.GET, "/actuator/**"))
                 .requestMatchers(
 
@@ -78,7 +78,7 @@ class SecurityConfiguration(
         http
             .csrf { it.disable() }
             .cors { it.configure(http) }
-            // .addFilterBefore(jwtFilter(), UsernamePasswordAuthenticationFilter::class.java)
+            .addFilterBefore(JwtFilter(tokenProvider), UsernamePasswordAuthenticationFilter::class.java)
             .exceptionHandling {}
             .headers { headersConfigurer ->
                 headersConfigurer.contentSecurityPolicy {
@@ -107,9 +107,6 @@ class SecurityConfiguration(
                         "/prometheus",
                     ).permitAll()
                     .requestMatchers("/actuator/**").permitAll()
-                    // .requestMatchers("/management/accounts/**").permitAll()
-                    // .requestMatchers("/management/accounts/actuator/**").permitAll()
-                    // .requestMatchers("/api/admin/**").hasAuthority(AuthoritiesConstants.ADMIN)
                     .anyRequest().authenticated()
             }
         // @formatter:on
@@ -131,10 +128,6 @@ class SecurityConfiguration(
         authenticationProvider.setUserDetailsService(userDetailsService)
         authenticationProvider.setPasswordEncoder(encoder)
         return authenticationProvider
-    }
-
-    private fun jwtFilter(): GenericFilterBean {
-        return JwtFilter(tokenProvider)
     }
 
     @Bean
