@@ -15,14 +15,12 @@ jobs:
         uses: egor-tensin/setup-wireguard@v1
         with:
           endpoint: '${{ secrets.ENDPOINT }}'
-          endpoint_public_key: '${{ secrets.ENDPOINT_PUBLIC }}'
-          ips: '${{ secrets.IPS }}'
+          endpoint_public_key: '${{ secrets.PUBLIC_KEY }}'
+          ips: '${{ secrets.ADDRESS }}'
           allowed_ips: '${{ secrets.ALLOWED_IPS }}'
-          private_key: '${{ secrets.PRIVATE }}'
-          preshared_key: '${{ secrets.PRESHARED }}'
+          private_key: '${{ secrets.PRIVATE_KEY }}'
+          preshared_key: '${{ secrets.PRESHARED_KEY }}'
       - name: Setup `nomad`
         uses: hashicorp/setup-nomad@main
         id: setup
-        with:
-          version: ${{ env.PRODUCT_VERSION }}
-
+      - run: ping 192.168.1.200
