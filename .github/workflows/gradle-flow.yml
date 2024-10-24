@@ -25,7 +25,8 @@ jobs:
       - name: Run Ktlint
         run: ./gradlew ktlintCheck
       - name: Test
-        run: ./gradlew check
+        run: ./      - name: Check tree
+        run: git statusgradlew check
       - name: Dependency  Scan Cache
         id: dependency-scan-cache
         uses: actions/cache@v4
@@ -53,6 +54,8 @@ jobs:
           CLEAN: true
           FOLDER: build/dokka/html
           TARGET_FOLDER: javadoc
+      - name: Check tree
+        run: git status
       - name: Semver
         run: ./gradlew semver --patch
       - name: Build docker
