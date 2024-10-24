@@ -25,8 +25,9 @@ jobs:
       - name: Run Ktlint
         run: ./gradlew ktlintCheck
       - name: Test
-        run: ./      - name: Check tree
-        run: git statusgradlew check
+        run: ./gradlew check
+      - name: Check tree
+        run: git status
       - name: Dependency  Scan Cache
         id: dependency-scan-cache
         uses: actions/cache@v4
