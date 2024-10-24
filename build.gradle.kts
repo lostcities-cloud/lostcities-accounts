@@ -1,7 +1,8 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-    id("org.springframework.boot") version "3.1.12"
+    id("org.springframework.boot") version "3.2.0"
+    id("org.owasp.dependencycheck") version "11.0.0"
     id("com.github.rising3.semver") version "0.8.2"
     // id("org.graalvm.buildtools.native") version "0.10.+"
 	id("io.spring.dependency-management") version "1.1.4"
@@ -9,7 +10,8 @@ plugins {
     id("com.google.cloud.tools.jib") version "3.4.2"
     //id("org.springframework.experimental.aot") version "0.11.4"
     id("com.gorylenko.gradle-git-properties") version "2.4.0"
-    // id("com.dipien.semantic-version") version "2.0.0"
+
+
 	kotlin("jvm") version "2.0.+"
 	kotlin("plugin.spring") version "2.0.+"
 	kotlin("plugin.jpa") version "2.0.+"
@@ -63,6 +65,9 @@ dependencies {
 
     runtimeOnly("org.springframework.boot:spring-boot-properties-migrator")
     runtimeOnly("io.micrometer:micrometer-registry-prometheus")
+
+    implementation("io.micrometer:micrometer-tracing")
+    implementation("io.micrometer:micrometer-tracing-bridge-otel")
 
     implementation("org.hibernate:hibernate-core:6.4.4.Final")
     implementation("org.hibernate:hibernate-micrometer:6.4.4.Final")
@@ -194,6 +199,23 @@ jib {
 		}
 	}
 
+}
+
+dependencyCheck {
+    failBuildOnCVSS = 11f
+    failOnError = false
+    formats = mutableListOf("JUNIT", "HTML", "JSON")
+    data {
+        directory = "${rootDir}/owasp"
+    }
+    //suppressionFiles = ['shared-owasp-suppressions.xml']
+    analyzers {
+        assemblyEnabled = false
+    }
+    nvd {
+        apiKey = System.getenv("NVD_KEY")
+        delay = 16000
+    }
 }
 
 tasks.withType<Test> {
