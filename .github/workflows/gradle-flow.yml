@@ -26,14 +26,14 @@ jobs:
         run: ./gradlew ktlintCheck
       - name: Test
         run: ./gradlew check
-      - name: Dependency Scan Cache
+      - name: Dependency  Scan Cache
         id: dependency-scan-cache
         uses: actions/cache@v4
         with:
           path: owasap
           key: dependency-scan-cache
       - name: Check Dependencies
-        run: ./gradlew dependencyCheckAnalyze
+        run: ./gradlew dependencyCheckAnalyze -Dorg.gradle.jvmargs="-Xmx4g"
       - uses: actions/upload-artifact@v4
         with:
           name: dependency-scan-results
