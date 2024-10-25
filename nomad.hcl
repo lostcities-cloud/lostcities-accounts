@@ -23,6 +23,11 @@ variable max_parallel {
     default = 6
 }
 
+variable profile {
+    type = string
+    default = "dev"
+}
+
 job "accounts" {
   region = "global"
   datacenters = [ "tower-datacenter"]
@@ -97,7 +102,7 @@ job "accounts" {
       driver = "podman"
 
       env {
-        SPRING_PROFILES_ACTIVE      = "dev"
+        SPRING_PROFILES_ACTIVE      = var.profile
       }
 
       resources {
