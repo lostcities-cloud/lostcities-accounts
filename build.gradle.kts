@@ -87,14 +87,9 @@ dependencies {
 	implementation("org.springframework.boot:spring-boot-starter-security")
 	implementation("org.springframework.boot:spring-boot-starter-validation")
 
-	implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.13.2")
-	implementation("com.fasterxml.jackson.datatype:jackson-datatype-hppc")
-	implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310")
-	implementation("com.fasterxml.jackson.module:jackson-module-jaxb-annotations")
-	implementation("com.fasterxml.jackson.datatype:jackson-datatype-hibernate5")
-	implementation("com.fasterxml.jackson.core:jackson-annotations")
-	implementation("com.fasterxml.jackson.core:jackson-databind")
-	implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
+    implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
+    implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310")
+    implementation("com.fasterxml.jackson.datatype:jackson-datatype-hibernate6")
 
 	implementation("org.zalando:problem-spring-web:0.21.0")
 
