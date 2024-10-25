@@ -31,6 +31,11 @@ job "accounts" {
     max_parallel = var.max_parallel
   }
 
+  spread {
+    attribute = "${node.datacenter}"
+    weight    = 100
+  }
+
   group "accounts" {
     count = var.count
 
