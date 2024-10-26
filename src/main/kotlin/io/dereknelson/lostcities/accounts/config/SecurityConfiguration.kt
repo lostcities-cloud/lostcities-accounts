@@ -110,10 +110,11 @@ class SecurityConfiguration(
         // @formatter:on
         return http.build()!!
     }
+
     @Bean
     fun authenticationManager(
         passwordEncoder: PasswordEncoder,
-        userDetailsService: AuthUserDetailsService
+        userDetailsService: AuthUserDetailsService,
     ): AuthenticationManager {
         val provider = DaoAuthenticationProvider()
         provider.setPasswordEncoder(passwordEncoder)
