@@ -9,10 +9,9 @@ import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.http.HttpMethod
 import org.springframework.security.authentication.AuthenticationManager
-import org.springframework.security.authentication.AuthenticationProvider
+import org.springframework.security.authentication.ProviderManager
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder
-import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.config.annotation.web.builders.WebSecurity
@@ -111,22 +110,15 @@ class SecurityConfiguration(
         // @formatter:on
         return http.build()!!
     }
-
     @Bean
-    @Throws(Exception::class)
-    fun authenticationManager(config: AuthenticationConfiguration): AuthenticationManager {
-        return config.authenticationManager
-    }
-
-    @Bean
-    fun authenticationProvider(
-        encoder: PasswordEncoder,
-        userDetailsService: AuthUserDetailsService,
-    ): AuthenticationProvider {
-        val authenticationProvider = DaoAuthenticationProvider()
-        authenticationProvider.setUserDetailsService(userDetailsService)
-        authenticationProvider.setPasswordEncoder(encoder)
-        return authenticationProvider
+    fun authenticationManager(
+        passwordEncoder: PasswordEncoder,
+        userDetailsService: AuthUserDetailsService
+    ): AuthenticationManager {
+        val provider = DaoAuthenticationProvider()
+        provider.setPasswordEncoder(passwordEncoder)
+        provider.setUserDetailsService(userDetailsService)
+        return ProviderManager(provider)
     }
 
     @Bean

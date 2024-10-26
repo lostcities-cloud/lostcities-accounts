@@ -10,6 +10,7 @@ spring:
     show-sql: true
   datasource:
     #type: com.zaxxer.hikari.HikariDataSource
+    driver-class-name: org.h2.Driver
     url: jdbc:h2:./h2/accounts-db
 
   flyway:
