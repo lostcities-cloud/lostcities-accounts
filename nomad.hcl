@@ -121,6 +121,10 @@ job "accounts" {
       }
       template {
         data        = <<EOF
+{{ range service "zipkin" }}
+ZIPKIN_ENDPOINT="{{ .Address }}{{ .Port }}"
+{{ else }}
+{{ end }}
 {{ range service "postgres" }}
 POSTGRES_IP="{{ .Address }}"
 {{ else }}

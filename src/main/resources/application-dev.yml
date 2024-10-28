@@ -52,7 +52,9 @@ management:
   server:
     port: 4452
     base-path: /management/${spring.application.name}
-
+  tracing:
+    sampling.probability: 1
+  otlp.tracing.endpoint: "http://${ZIPKIN_ENDPOINT}/v1/traces"
 application:
   security:
     authentication:
