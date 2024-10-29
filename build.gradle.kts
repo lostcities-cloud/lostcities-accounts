@@ -7,7 +7,7 @@ plugins {
     // id("org.graalvm.buildtools.native") version "0.10.+"
 	id("io.spring.dependency-management") version "1.1.4"
     id("org.jetbrains.dokka") version "2.0.0-Beta"
-    id("com.google.cloud.tools.jib") version "3.4.2"
+    id("com.google.cloud.tools.jib") version "3.4.4"
     //id("org.springframework.experimental.aot") version "0.11.4"
     id("com.gorylenko.gradle-git-properties") version "2.4.0"
 
