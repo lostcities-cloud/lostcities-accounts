@@ -38,13 +38,18 @@ server:
 
 management:
 
+
+
   endpoint.health:
     show-details: "ALWAYS"
   metrics:
     tags:
       application: ${spring.application.name}
       host: ${spring.application.name}.lostcities.dev
+
   endpoints:
+
+
     web:
       exposure:
         include: "*"
@@ -54,7 +59,13 @@ management:
     base-path: /management/${spring.application.name}
   tracing:
     sampling.probability: 1
-  otlp.tracing.endpoint: "http://${ZIPKIN_ENDPOINT}/v1/traces"
+    enabled: true
+  #otlp.tracing.endpoint: "http://${ZIPKIN_ENDPOINT}/v1/traces"
+  otlp:
+    metrics:
+      export.url:  	http://192.168.1.233:29401/v1/metrics
+    tracing.endpoint: http://192.168.1.233:29401/v1/traces
+
 application:
   security:
     authentication:
@@ -80,6 +91,8 @@ logging:
     console: "%d %-5level %logger : %msg%n"
     file: '%d{"yyyy-MM-dd''T''HH:mm:ss,SSS"} application=${spring.application.name} profiles=${spring.profiles.active} %-5level [%thread] %logger : %msg%n'
     dateformat: yyyy-MM-dd'T'HH:mm:ssxxx
+    level: "%5p [${spring.application.name:},%X{traceId:-},%X{spanId:-}]"
+  include-application-name: false
   file:
     name: ${user.home}/Logs/${spring.application.name}-dev.log
   logback:
