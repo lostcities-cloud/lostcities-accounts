@@ -25,7 +25,7 @@ import org.springframework.security.web.header.writers.ReferrerPolicyHeaderWrite
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher.antMatcher
 import org.springframework.web.filter.ForwardedHeaderFilter
 
-@EnableWebSecurity
+@EnableWebSecurity(debug = true)
 @EnableMethodSecurity(securedEnabled = true, jsr250Enabled = true)
 @SecurityScheme(
     name = "jwt_auth",
@@ -42,44 +42,6 @@ class SecurityConfiguration(
     @Bean
     fun forwardedHeaderFilter(): ForwardedHeaderFilter? {
         return ForwardedHeaderFilter()
-    }
-
-    @Bean
-    @Throws(Exception::class)
-    fun authenticationManager(
-        http: HttpSecurity,
-        bCryptPasswordEncoder: PasswordEncoder,
-        userDetailService: AuthUserDetailsService,
-    ): AuthenticationManager {
-        val builder = http.getSharedObject(
-            AuthenticationManagerBuilder::class.java,
-        )
-        builder.userDetailsService(userDetailService)
-            .passwordEncoder(bCryptPasswordEncoder)
-        return builder.build()
-    }
-
-    @Bean
-    fun userDetailsService(authenticationManagerBuilder: AuthenticationManagerBuilder): UserDetailsService {
-        authenticationManagerBuilder.userDetailsService(lostCitiesUserDetailsService)
-        return lostCitiesUserDetailsService
-    }
-
-    @Bean
-    fun webSecurityCustomizer(): WebSecurityCustomizer {
-        return WebSecurityCustomizer { web: WebSecurity ->
-            web
-                .ignoring()
-                .requestMatchers(antMatcher(HttpMethod.OPTIONS, "/**"))
-                .requestMatchers(antMatcher(HttpMethod.GET, "/actuator/**"))
-                .requestMatchers(
-
-                    "/i18n/**",
-                    "/content/**",
-                    "/accounts/**",
-                    "/swagger-ui/**",
-                )
-        }
     }
 
     @Bean
@@ -127,6 +89,44 @@ class SecurityConfiguration(
             }
         // @formatter:on
         return http.build()!!
+    }
+
+    @Bean
+    fun webSecurityCustomizer(): WebSecurityCustomizer {
+        return WebSecurityCustomizer { web: WebSecurity ->
+            web
+                .ignoring()
+                .requestMatchers(antMatcher(HttpMethod.OPTIONS, "/**"))
+                .requestMatchers(antMatcher(HttpMethod.GET, "/actuator/**"))
+                .requestMatchers(
+
+                    "/i18n/**",
+                    "/content/**",
+                    "/accounts/**",
+                    "/swagger-ui/**",
+                )
+        }
+    }
+
+    @Bean
+    @Throws(Exception::class)
+    fun authenticationManager(
+        http: HttpSecurity,
+        bCryptPasswordEncoder: PasswordEncoder,
+        userDetailService: AuthUserDetailsService,
+    ): AuthenticationManager {
+        val builder = http.getSharedObject(
+            AuthenticationManagerBuilder::class.java,
+        )
+        builder.userDetailsService(userDetailService)
+            .passwordEncoder(bCryptPasswordEncoder)
+        return builder.build()
+    }
+
+    @Bean
+    fun userDetailsService(authenticationManagerBuilder: AuthenticationManagerBuilder): UserDetailsService {
+        authenticationManagerBuilder.userDetailsService(lostCitiesUserDetailsService)
+        return lostCitiesUserDetailsService
     }
 
     @Bean
