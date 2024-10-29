@@ -74,10 +74,10 @@ dependencies {
 
     runtimeOnly("org.springframework.boot:spring-boot-properties-migrator")
     runtimeOnly("io.micrometer:micrometer-registry-prometheus")
-    runtimeOnly("io.micrometer:micrometer-tracing-bridge-brave")
-    runtimeOnly("io.opentelemetry.instrumentation:opentelemetry-spring-boot-starter")
-    runtimeOnly("io.zipkin.contrib.otel:encoder-brave:0.1.0")
-    //runtimeOnly("io.opentelemetry:opentelemetry-logging-exporter")
+    // runtimeOnly("io.micrometer:micrometer-tracing-bridge-brave")
+    // runtimeOnly("io.opentelemetry.instrumentation:opentelemetry-spring-boot-starter")
+    // runtimeOnly("io.zipkin.contrib.otel:encoder-brave:0.1.0")
+    // runtimeOnly("io.opentelemetry:opentelemetry-logging-exporter")
 
     implementation("org.hibernate:hibernate-core:6.4.4.Final")
     implementation("org.hibernate:hibernate-micrometer:6.4.4.Final")
