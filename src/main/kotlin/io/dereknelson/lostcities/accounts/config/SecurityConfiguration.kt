@@ -9,8 +9,6 @@ import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.http.HttpMethod
 import org.springframework.security.authentication.AuthenticationManager
-import org.springframework.security.authentication.ProviderManager
-import org.springframework.security.authentication.dao.DaoAuthenticationProvider
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
@@ -47,6 +45,21 @@ class SecurityConfiguration(
     }
 
     @Bean
+    @Throws(Exception::class)
+    fun authenticationManager(
+        http: HttpSecurity,
+        bCryptPasswordEncoder: PasswordEncoder,
+        userDetailService: AuthUserDetailsService,
+    ): AuthenticationManager {
+        val builder = http.getSharedObject(
+            AuthenticationManagerBuilder::class.java,
+        )
+        builder.userDetailsService(userDetailService)
+            .passwordEncoder(bCryptPasswordEncoder)
+        return builder.build()
+    }
+
+    @Bean
     fun userDetailsService(authenticationManagerBuilder: AuthenticationManagerBuilder): UserDetailsService {
         authenticationManagerBuilder.userDetailsService(lostCitiesUserDetailsService)
         return lostCitiesUserDetailsService
@@ -70,13 +83,18 @@ class SecurityConfiguration(
     }
 
     @Bean
-    fun securityFilterChain(http: HttpSecurity, corsConfiguration: CorsConfiguration): DefaultSecurityFilterChain {
+    fun securityFilterChain(
+        http: HttpSecurity,
+        corsConfiguration: CorsConfiguration,
+        authenticationManager: AuthenticationManager,
+    ): DefaultSecurityFilterChain {
         // @formatter:off
 
         http
             .csrf { it.disable() }
             .cors { it.configure(http) }
             .addFilterBefore(JwtFilter(tokenProvider), UsernamePasswordAuthenticationFilter::class.java)
+            .authenticationManager(authenticationManager)
             .exceptionHandling {}
             .headers { headersConfigurer ->
                 headersConfigurer.contentSecurityPolicy {
@@ -109,17 +127,6 @@ class SecurityConfiguration(
             }
         // @formatter:on
         return http.build()!!
-    }
-
-    @Bean
-    fun authenticationManager(
-        passwordEncoder: PasswordEncoder,
-        userDetailsService: AuthUserDetailsService,
-    ): AuthenticationManager {
-        val provider = DaoAuthenticationProvider()
-        provider.setPasswordEncoder(passwordEncoder)
-        provider.setUserDetailsService(userDetailsService)
-        return ProviderManager(provider)
     }
 
     @Bean

@@ -62,6 +62,15 @@ job "accounts" {
         to = 8080
       }
 
+      port "zipkin-port" {
+          to = 9411
+      }
+
+    }
+
+    service {
+        name = "accounts-zipkin"
+        port = "zipkin-port"
     }
 
     service {

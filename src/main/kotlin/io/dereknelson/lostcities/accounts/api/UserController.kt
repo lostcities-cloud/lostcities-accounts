@@ -20,8 +20,8 @@ import org.slf4j.LoggerFactory
 import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
+import org.springframework.security.authentication.AuthenticationManager
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder
 import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.web.bind.annotation.*
@@ -33,7 +33,7 @@ import javax.validation.Valid
 @RestController
 class UserController(
     private var tokenProvider: TokenProvider,
-    private var authenticationManagerBuilder: AuthenticationManagerBuilder,
+    private var authenticationManager: AuthenticationManager,
     private var userService: UserService,
     private var modelMapper: ModelMapper,
 ) {
@@ -91,9 +91,7 @@ class UserController(
             loginDto.password,
         )
 
-        val authentication = authenticationManagerBuilder
-            .getObject()
-            .authenticate(authenticationToken)
+        val authentication = authenticationManager.authenticate(authenticationToken)
 
         SecurityContextHolder.getContext().authentication = authentication
         val userRef = userService.findRefByLogin(loginDto.login!!).get()

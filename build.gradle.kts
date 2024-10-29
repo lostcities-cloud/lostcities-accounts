@@ -1,7 +1,7 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-    id("org.springframework.boot") version "3.1.+"
+    id("org.springframework.boot") version "3.2.+"
     id("org.owasp.dependencycheck") version "11.0.0"
     id("com.github.rising3.semver") version "0.8.2"
     // id("org.graalvm.buildtools.native") version "0.10.+"
@@ -58,6 +58,7 @@ val ktlint by configurations.creating
 dependencyManagement {
     imports {
         mavenBom(org.springframework.boot.gradle.plugin.SpringBootPlugin.BOM_COORDINATES)
+        mavenBom("io.opentelemetry.instrumentation:opentelemetry-instrumentation-bom:2.6.0")
     }
 }
 
@@ -73,11 +74,10 @@ dependencies {
 
     runtimeOnly("org.springframework.boot:spring-boot-properties-migrator")
     runtimeOnly("io.micrometer:micrometer-registry-prometheus")
-    runtimeOnly("io.micrometer:micrometer-tracing-bridge-otel")
-    runtimeOnly("io.opentelemetry:opentelemetry-exporter-zipkin")
-
-    implementation("io.micrometer:micrometer-tracing")
-    implementation("io.micrometer:micrometer-tracing-bridge-otel")
+    runtimeOnly("io.micrometer:micrometer-tracing-bridge-brave")
+    runtimeOnly("io.opentelemetry.instrumentation:opentelemetry-spring-boot-starter")
+    runtimeOnly("io.zipkin.contrib.otel:encoder-brave:0.1.0")
+    //runtimeOnly("io.opentelemetry:opentelemetry-logging-exporter")
 
     implementation("org.hibernate:hibernate-core:6.4.4.Final")
     implementation("org.hibernate:hibernate-micrometer:6.4.4.Final")
@@ -86,7 +86,7 @@ dependencies {
     implementation("org.ehcache:ehcache:3.9.2")
 
     implementation("org.springframework.boot:spring-boot-devtools")
-    implementation("io.dereknelson.lostcities-cloud:lostcities-common:0.0.0")
+    implementation("io.dereknelson.lostcities-cloud:lostcities-common:0.0.2")
     implementation("io.dereknelson.lostcities-cloud:lostcities-models:0.0.0")
 	implementation("org.apache.commons:commons-lang3:3.12.0")
 
