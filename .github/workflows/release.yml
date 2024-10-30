@@ -47,6 +47,9 @@ jobs:
       - run: git status
       - name: Semver
         run: ./gradlew semver --patch
-      - name: Build docker
-        run: ./gradlew jib
-
+      - name: Build Container
+        uses: nick-fields/retry@v2
+        with:
+          timeout_minutes: 10
+          max_attempts: 3
+          command: ./gradlew jib
