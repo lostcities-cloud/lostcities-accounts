@@ -88,10 +88,10 @@ logging:
     io.micrometer: debug
 
   pattern:
-    console: "%d %-5level %logger : %msg%n"
+    console: '%d{"yyyy-MM-dd''T''HH:mm:ss,SSS"} application=${spring.application.name} profiles=${spring.profiles.active} %-5level [%thread] %logger : %msg%n'
     file: '%d{"yyyy-MM-dd''T''HH:mm:ss,SSS"} application=${spring.application.name} profiles=${spring.profiles.active} %-5level [%thread] %logger : %msg%n'
     dateformat: yyyy-MM-dd'T'HH:mm:ssxxx
-    level: "%5p [${spring.application.name:},%X{traceId:-},%X{spanId:-}]"
+    #level: "%5p [${spring.application.name:},%X{traceId:-},%X{spanId:-}]"
   include-application-name: false
   file:
     name: ${user.home}/Logs/${spring.application.name}-dev.log

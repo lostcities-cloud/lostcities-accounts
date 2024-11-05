@@ -120,13 +120,9 @@ job "accounts" {
         network_mode = "host"
         image        = "ghcr.io/lostcities-cloud/lostcities-accounts:${var.version}"
         ports = ["service-port", "management-port"]
-        logging {
-            type = "journald"
-            config {
-                mode            = "non-blocking"
-                max-buffer-size = "16m"
-            }
-        }
+          logging {
+              driver = "journald"
+          }
       }
       template {
         data        = <<EOF
