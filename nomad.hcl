@@ -1,36 +1,57 @@
 variable "version" {
-    type = string
-    default = "latest"
+  type    = string
+  default = "latest"
 }
 
 variable "cpu" {
-    type = number
-    default = 500
+  type    = number
+  default = 300
 }
 
 variable "memory" {
-    type = number
-    default = 500
+  type    = number
+  default = 512
+}
+
+variable "memory_max" {
+  type    = number
+  default = 1028
+}
+
+variable "memory_reservation_mb" {
+  type    = number
+  default = 256
+}
+
+variable "memory_swap_mb" {
+  type = number
+  default = 512
+}
+
+variable "memory_swappiness" {
+  type = number
+  default = 0
 }
 
 variable count {
-    type = number
-    default = 2
+  type    = number
+  default = 2
 }
 
 variable max_parallel {
-    type = number
-    default = 2
+  type    = number
+  default = 2
 }
 
 variable profile {
-    type = string
-    default = "dev"
+  type    = string
+  default = "dev"
 }
 
 job "accounts" {
-  region = "global"
-  datacenters = [ "tower-datacenter"]
+  region    = "global"
+  namespace = "lostcities"
+  datacenters = ["tower-datacenter"]
 
   spread {
     attribute = "${node.datacenter}"
@@ -51,7 +72,7 @@ job "accounts" {
       mode = "bridge"
 
       port "management-port" {
-        to     = 4452
+        to = 4452
       }
 
       port "service-port" {
@@ -59,14 +80,14 @@ job "accounts" {
       }
 
       port "zipkin-port" {
-          to = 9411
+        to = 9411
       }
 
     }
 
     service {
-        name = "accounts-zipkin"
-        port = "zipkin-port"
+      name = "accounts-zipkin"
+      port = "zipkin-port"
     }
 
     service {
@@ -76,13 +97,13 @@ job "accounts" {
       #address_mode = "host"
 
       check {
-        type = "http"
-        port = "management-port"
-        path = "/management/accounts/actuator/health"
-        interval = "30s"
-        timeout  = "10s"
+        type                     = "http"
+        port                     = "management-port"
+        path                     = "/management/accounts/actuator/health"
+        interval                 = "30s"
+        timeout                  = "10s"
         failures_before_critical = 20
-        failures_before_warning = 10
+        failures_before_warning  = 10
       }
     }
 
@@ -93,13 +114,13 @@ job "accounts" {
 
 
       check {
-        type = "http"
-        port = "management-port"
-        path = "/management/accounts/actuator/health"
-        interval = "30s"
-        timeout  = "10s"
+        type                     = "http"
+        port                     = "management-port"
+        path                     = "/management/accounts/actuator/health"
+        interval                 = "30s"
+        timeout                  = "10s"
         failures_before_critical = 20
-        failures_before_warning = 10
+        failures_before_warning  = 10
       }
     }
 
@@ -107,22 +128,29 @@ job "accounts" {
       driver = "podman"
 
       env {
-        SPRING_PROFILES_ACTIVE      = var.profile
+        SPRING_PROFILES_ACTIVE = var.profile
       }
 
       resources {
-        cpu    = var.cpu
-        memory = var.memory
+        cpu      = var.cpu
+        memory     = var.memory
+        memory_max = var.memory_max
       }
 
       config {
         force_pull   = true
         network_mode = "host"
         image        = "ghcr.io/lostcities-cloud/lostcities-accounts:${var.version}"
+
+        #memory_swap = "${var.memory_swap_mb}m"
+        #memory_swappiness = var.memory_swappiness
+        memory_reservation = "${var.memory_reservation_mb}m"
+
+
         ports = ["service-port", "management-port"]
-          logging {
-              driver = "journald"
-          }
+        logging {
+          driver = "journald"
+        }
       }
       template {
         data        = <<EOF
