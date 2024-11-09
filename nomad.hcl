@@ -150,6 +150,11 @@ job "accounts" {
         ports = ["service-port", "management-port"]
         logging {
           driver = "journald"
+          options = [
+            {
+              "tag" = "redis"
+            }
+          ]
         }
       }
       template {
