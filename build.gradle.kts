@@ -93,8 +93,8 @@ dependencies {
         implementation(project(":lostcities-common"))
         implementation(project(":lostcities-models"))
     } else {
-        implementation("io.dereknelson.lostcities-cloud:lostcities-common:0.0.3")
-        implementation("io.dereknelson.lostcities-cloud:lostcities-models:0.0.3")
+        implementation("io.dereknelson.lostcities-cloud:lostcities-common:0.0.4")
+        implementation("io.dereknelson.lostcities-cloud:lostcities-models:0.0.4")
     }
 
 	implementation("org.apache.commons:commons-lang3:3.12.0")
