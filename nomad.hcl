@@ -110,8 +110,11 @@ job "accounts" {
     service {
       name = "accounts-management"
       port = "management-port"
-      tags = ["urlprefix-/management/accounts/actuator"]
-
+      tags = [
+        "prometheus",
+        "urlprefix-/management/accounts/actuator",
+        "metricspath-/management/accounts/actuator/prometheus",
+      ]
 
       check {
         type                     = "http"
