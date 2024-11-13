@@ -27,7 +27,7 @@ import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.web.bind.annotation.*
 import org.springframework.web.server.ResponseStatusException
 import java.util.*
-import javax.validation.Valid
+import jakarta.validation.Valid
 
 @Tag(name = "User actions")
 @RestController
@@ -108,7 +108,7 @@ class UserController(
 
     @Operation(summary = "Activate a user.")
     @GetMapping("/activate")
-    fun activateAccount(@RequestParam(value = "key", required = true) key: String) {
+    fun activateAccount(@RequestParam(required = true) key: String) {
         val user: Optional<User> = userService.activateRegistration(key)
         user.orElseThrow { InvalidActivationKeyException() }
     }

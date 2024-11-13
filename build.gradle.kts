@@ -3,7 +3,7 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 plugins {
     jacoco
 
-    id("org.springframework.boot") version "3.2.+"
+    id("org.springframework.boot") version "3.3.+"
     id("org.owasp.dependencycheck") version "11.0.0"
     id("com.github.rising3.semver") version "0.8.2"
     // id("org.graalvm.buildtools.native") version "0.10.+"
@@ -12,6 +12,7 @@ plugins {
     id("com.google.cloud.tools.jib") version "3.4.4"
     //id("org.springframework.experimental.aot") version "0.11.4"
     id("com.gorylenko.gradle-git-properties") version "2.4.0"
+    id("org.openrewrite.rewrite") version "6.27.+"
 
 
 	kotlin("jvm") version "2.0.+"
@@ -47,6 +48,8 @@ repositories {
             password = System.getenv("GH_TOKEN")
         }
     }
+
+    google()
 	mavenCentral()
     gradlePluginPortal()
 }
@@ -72,7 +75,16 @@ configurations.matching { it.name.startsWith("dokka") }.configureEach {
     }
 }
 
+rewrite {
+    activeRecipe("org.openrewrite.java.spring.boot3.UpgradeSpringBoot_3_3")
+    //exportDatatables = true
+
+    sizeThresholdMb = 10
+}
+
 dependencies {
+    rewrite("org.openrewrite:rewrite-kotlin:1.21.2")
+    rewrite("org.openrewrite.recipe:rewrite-spring:5.22.0")
 
     runtimeOnly("org.springframework.boot:spring-boot-properties-migrator")
     runtimeOnly("io.micrometer:micrometer-registry-prometheus")

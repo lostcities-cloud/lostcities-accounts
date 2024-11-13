@@ -20,32 +20,25 @@ spring:
     baseline-on-migrate: true
     baseline-version: 0
     validate-on-migrate: false
+    username: ${spring.datasource.username}
+    password: ${spring.datasource.password}
   # This property enables the openapi and swagger-ui endpoints to be exposed beneath the actuator base path.
-  output:
-    ansi:
-      enabled: always
+  output.ansi.enabled: always
   mvc.problemdetails.enabled: true
 management:
   info:
     env.enabled: true
     java.enabled: true
     os.enabled: true
-  endpoint.health:
-    show-details: "ALWAYS"
-  metrics:
-
-
-
-    tags:
-      application: ${spring.application.name}
-      host: ${spring.application.name}.lostcities.dev
+  endpoint.health.show-details: "ALWAYS"
+  metrics.tags:
+    application: ${spring.application.name}
+    host: ${spring.application.name}.lostcities.dev
 
   endpoints:
 
 
-    web:
-      exposure:
-        include: "*"
+    web.exposure.include: "*"
     enabled-by-default: true
   server:
     port: 4452
@@ -54,34 +47,28 @@ management:
     sampling.probability: 1
     enabled: true
   #otlp.tracing.endpoint: "http://${ZIPKIN_ENDPOINT}/v1/traces"
-  otlp:
-    metrics.export:
-      url: http://192.168.1.233:9090/v1/metrics
-  # only for demo purposes
-      step: 2s
+  otlp.metrics.export:
+    url: http://192.168.1.233:9090/v1/metrics
+# only for demo purposes
+    step: 2s
   zipkin.tracing:
     endpoint: http://192.168.1.233:9411/v1/traces
     encoding: PROTO3
 
 otel:
-  resource:
-    attributes:
-      deployment.environment: dev
-      service.name: ${spring.application.name}
-  exporter:
-    endpoint: http://192.168.1.233:30195
+  resource.attributes:
+    deployment.environment: dev
+    service.name: ${spring.application.name}
+  exporter.endpoint: http://192.168.1.233:30195
 
   #instrumentation.micrometer.enabled: false
 
-application:
-  security:
-    authentication:
-      jwt:
-        #      # This token must be encoded using Base64 and be at least 256 bits long (you can type `openssl rand -base64 64` on your command line to generate a 512 bits one)
-        base64-secret: ZmNhZmUyNzNkNTE1ZTdiZDA2MmJjNWY4MWE2NzFlMTRkMmViNGE3M2E0YTRiYjg1ZGMxMDY1NGZkNjhhMTdmMjI4OTA5NTUzMzkyZjI1NDUyNjFlY2M3MjBkY2Y2OTAwMGU3NDQwYWMxNmZiNTJjZmZjMzkxMmU1OGZmYzQxOGU=
-        #      # Token is valid 24 hours
-        token-validity-in-seconds: 86400
-        token-validity-in-seconds-for-remember-me: 2592000
+application.security.authentication.jwt:
+  #      # This token must be encoded using Base64 and be at least 256 bits long (you can type `openssl rand -base64 64` on your command line to generate a 512 bits one)
+  base64-secret: ZmNhZmUyNzNkNTE1ZTdiZDA2MmJjNWY4MWE2NzFlMTRkMmViNGE3M2E0YTRiYjg1ZGMxMDY1NGZkNjhhMTdmMjI4OTA5NTUzMzkyZjI1NDUyNjFlY2M3MjBkY2Y2OTAwMGU3NDQwYWMxNmZiNTJjZmZjMzkxMmU1OGZmYzQxOGU=
+  #      # Token is valid 24 hours
+  token-validity-in-seconds: 86400
+  token-validity-in-seconds-for-remember-me: 2592000
 
 
 logging:
@@ -99,11 +86,9 @@ logging:
     console: "%d %-5level %logger : %msg%n"
     file: '%d{"yyyy-MM-dd''T''HH:mm:ss,SSS"} application=${spring.application.name} profiles=${spring.profiles.active} %-5level [%thread] %logger : %msg%n'
     dateformat: yyyy-MM-dd'T'HH:mm:ssxxx
-  file:
-    name: ${user.home}/Logs/${spring.application.name}-dev.log
-  logback:
-    rollingpolicy:
-      max-file-size: 10MB
-      max-history: 10
+  file.name: ${user.home}/Logs/${spring.application.name}-dev.log
+  logback.rollingpolicy:
+    max-file-size: 10MB
+    max-history: 10
 
 
