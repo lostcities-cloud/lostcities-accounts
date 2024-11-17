@@ -223,7 +223,7 @@ tasks.named("compileKotlin", org.jetbrains.kotlin.gradle.tasks.KotlinCompilation
 
 jib {
 	from {
-        image = "registry://ghcr.io/bell-sw/liberica-openjdk-alpine:21"
+        image = "registry://public.ecr.aws/amazoncorretto/amazoncorretto:21-alpine-jdk"
 	}
 
 	to {
