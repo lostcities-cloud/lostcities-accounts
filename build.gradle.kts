@@ -223,7 +223,7 @@ tasks.named("compileKotlin", org.jetbrains.kotlin.gradle.tasks.KotlinCompilation
 
 jib {
 	from {
-        image = "registry://public.ecr.aws/amazoncorretto/amazoncorretto:21-alpine-jdk"
+        image = "registry://docker.io/amazoncorretto:21-alpine-jdk"
 	}
 
 	to {
