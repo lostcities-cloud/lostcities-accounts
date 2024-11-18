@@ -1,6 +1,5 @@
 spring:
   application.name: accounts
-
   profiles:
     # The commented value for `active` can be replaced with valid Spring profiles to load.
     # Otherwise, it will be filled in by gradle when building the JAR file
@@ -8,10 +7,6 @@ spring:
     active: #spring.profiles.active#
   jmx:
     enabled: false
-  data:
-    jpa:
-      repositories:
-        bootstrap-mode: deferred
 
   jpa:
     open-in-view: false
@@ -48,10 +43,7 @@ spring:
     lazy-initialization: true
   output.ansi:
     enabled: DETECT
-    console-available: true
-  threads:
-    virtual:
-      enabled: true
+  threads.virtual.enabled: true
 
 server:
   port: 8080
