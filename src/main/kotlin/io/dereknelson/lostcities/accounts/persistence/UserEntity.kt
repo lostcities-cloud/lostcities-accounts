@@ -2,14 +2,14 @@ package io.dereknelson.lostcities.accounts.persistence
 
 import com.fasterxml.jackson.annotation.JsonIgnore
 import io.dereknelson.lostcities.common.Constants
-import io.dereknelson.lostcities.common.library.AbstractAuditingEntity
+import io.dereknelson.lostcities.common.auditing.AbstractAuditingEntity
+import io.dereknelson.lostcities.common.model.Role
 import jakarta.persistence.*
 import jakarta.validation.constraints.Email
 import jakarta.validation.constraints.NotNull
 import jakarta.validation.constraints.Pattern
 import jakarta.validation.constraints.Size
 import org.apache.commons.lang3.StringUtils
-import org.hibernate.annotations.BatchSize
 import org.hibernate.annotations.Cache
 import org.hibernate.annotations.CacheConcurrencyStrategy
 import java.io.Serializable
@@ -92,17 +92,14 @@ class UserEntity : AbstractAuditingEntity(), Serializable {
     var resetDate: Instant? = null
 
     @JsonIgnore
-    @ManyToMany(fetch = FetchType.EAGER, cascade = [CascadeType.MERGE])
-    @JoinTable(
+    @ElementCollection(targetClass = Role::class, fetch = FetchType.EAGER)
+    @CollectionTable(
         name = "users_authority",
         joinColumns = [JoinColumn(name = "users_id", referencedColumnName = "id")],
-        inverseJoinColumns = [JoinColumn(name = "authority_name", referencedColumnName = "name")],
         foreignKey = ForeignKey(name = "USER_AUTHORITY_FOREIGN_KEY"),
-
     )
-    @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-    @BatchSize(size = 20)
-    var authorities: Set<AuthorityEntity> = HashSet()
+    @Enumerated(EnumType.STRING)
+    var authorities: Set<Role> = HashSet()
 
     override fun equals(other: Any?): Boolean {
         if (this === other) {

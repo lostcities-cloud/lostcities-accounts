@@ -3,6 +3,11 @@ variable "version" {
   default = "latest"
 }
 
+variable "priority" {
+  type = number
+  default = 20
+}
+
 variable "cpu" {
   type    = number
   default = 300
@@ -52,6 +57,7 @@ job "accounts" {
   region    = "global"
   namespace = "lostcities"
   datacenters = ["tower-datacenter"]
+  priority = var.priority
 
   spread {
     attribute = "${node.datacenter}"
@@ -169,6 +175,7 @@ ZIPKIN_ENDPOINT="{{ .Address }}{{ .Port }}"
 {{ end }}
 {{ range service "postgres" }}
 POSTGRES_IP="{{ .Address }}"
+POSTGRES_PORT=""
 {{ else }}
 {{ end }}
 {{ range service "redis" }}

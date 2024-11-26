@@ -17,7 +17,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories
     "io.dereknelson.lostcities.accounts.config",
     "io.dereknelson.lostcities.accounts.library",
     "io.dereknelson.lostcities.common.auth",
-    "io.dereknelson.lostcities.common.library",
+    "io.dereknelson.lostcities.common.auditing",
 )
 @EnableConfigurationProperties
 @EnableJpaRepositories

@@ -63,7 +63,7 @@ class UserController(
         @AuthenticationPrincipal @Parameter(hidden = true)
         userDetails: LostCitiesUserDetails,
     ): UserDto? {
-        return userService.findById(userDetails.id)
+        return userService.findById(userDetails.getId())
             .map { UserDto(id = it.id, login = it.login, email = it.email, langKey = it.langKey) }
             .orElseThrow { ResponseStatusException(HttpStatus.NOT_FOUND) }
     }

@@ -40,7 +40,7 @@ spring:
     basename: i18n/messages
   main:
     allow-bean-definition-overriding: true
-    lazy-initialization: true
+    #lazy-initialization: false
   output.ansi:
     enabled: DETECT
   threads.virtual.enabled: true
