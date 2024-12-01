@@ -99,7 +99,7 @@ job "accounts" {
     service {
       name = "accounts-service"
       port = "service-port"
-      tags = ["urlprefix-/api/accounts"]
+      tags = ["urlprefix-lostcities.app/api/accounts"]
       #address_mode = "host"
 
       check {
@@ -118,7 +118,7 @@ job "accounts" {
       port = "management-port"
       tags = [
         "prometheus",
-        "urlprefix-/management/accounts/actuator",
+        "urlprefix-lostcities.app/management/accounts/actuator",
         "metricspath-/management/accounts/actuator/prometheus",
       ]
 
