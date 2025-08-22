@@ -1,4 +1,4 @@
-package io.dereknelson.lostcities.accounts
+package io.dereknelson.lostcities.accounts.config
 
 import io.dereknelson.lostcities.accounts.api.RegistrationDto
 import io.dereknelson.lostcities.accounts.persistence.AuthorityEntity

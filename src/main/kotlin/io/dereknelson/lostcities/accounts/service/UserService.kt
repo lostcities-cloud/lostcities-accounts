@@ -7,7 +7,6 @@ import io.dereknelson.lostcities.common.Constants
 import io.dereknelson.lostcities.common.auth.entity.UserRef
 import io.dereknelson.lostcities.common.model.User
 import org.modelmapper.ModelMapper
-import org.springframework.cache.CacheManager
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
 import java.util.*
@@ -17,7 +16,6 @@ class UserService(
     private var modelMapper: ModelMapper,
     private var userRepository: UserRepository,
     private var passwordEncoder: PasswordEncoder,
-    private var cacheManager: CacheManager,
 ) {
 
     fun findRefByLogin(login: String): Optional<UserRef> {
@@ -77,18 +75,7 @@ class UserService(
             .map { user ->
                 user.activated = true
                 user.activationKey = null
-                clearUserCaches(user)
                 User(id = user.id, login = user.login!!, user.email!!, user.langKey!!)
             }
-    }
-
-    private fun clearUserCaches(user: UserEntity) {
-        Objects.requireNonNull(cacheManager.getCache(UserRepository.USERS_BY_LOGIN_CACHE))!!
-            .evict(user.login!!)
-
-        if (user.email != null) {
-            Objects.requireNonNull(cacheManager.getCache(UserRepository.USERS_BY_EMAIL_CACHE))!!
-                .evict(user.email!!)
-        }
     }
 }

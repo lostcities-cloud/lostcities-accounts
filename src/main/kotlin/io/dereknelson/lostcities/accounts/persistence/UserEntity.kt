@@ -10,8 +10,6 @@ import jakarta.validation.constraints.NotNull
 import jakarta.validation.constraints.Pattern
 import jakarta.validation.constraints.Size
 import org.apache.commons.lang3.StringUtils
-import org.hibernate.annotations.Cache
-import org.hibernate.annotations.CacheConcurrencyStrategy
 import java.io.Serializable
 import java.time.Instant
 import java.util.*
@@ -24,7 +22,6 @@ import java.util.*
         Index(name = "users_email_index", columnList = "email", unique = true),
     ],
 )
-@Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 class UserEntity : AbstractAuditingEntity(), Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequenceGenerator")

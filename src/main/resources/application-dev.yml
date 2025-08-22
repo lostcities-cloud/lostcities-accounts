@@ -9,17 +9,16 @@ spring:
   datasource:
     type: com.zaxxer.hikari.HikariDataSource
     driver-class-name: org.postgresql.Driver
-
-    url: jdbc:postgresql://${POSTGRES_IP:192.168.1.233}:5432/lostcities-accounts # postgres.service.consul
-    username: accounts
-    password: example
+    url: jdbc:postgresql://${POSTGRES_IP:accounts-database}:5432/lostcities-accounts # postgres.service.consul
+    username: ${POSTGRES_USER:accounts}
+    password: ${POSTGRES_PASSWORD:example}
 
   flyway:
-    enabled: false
+    enabled: true
 
     #url: jdbc:postgresql://192.168.1.233:5432/lostcities-accounts
     #user: accounts
-    password: example
+    #password: example
     baseline-on-migrate: true
     baseline-version: 0
     validate-on-migrate: false

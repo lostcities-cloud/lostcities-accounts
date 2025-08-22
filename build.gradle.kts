@@ -8,7 +8,7 @@ plugins {
     id("com.github.rising3.semver") version "0.8.2"
     // id("org.graalvm.buildtools.native") version "0.10.+"
 	id("io.spring.dependency-management") version "1.1.4"
-    id("org.jetbrains.dokka") version "2.0.0-Beta"
+    id("org.jetbrains.dokka") version "2.0.0"
     id("com.google.cloud.tools.jib") version "3.4.4"
     //id("org.springframework.experimental.aot") version "0.11.4"
     id("com.gorylenko.gradle-git-properties") version "2.4.0"
@@ -26,7 +26,6 @@ group = "io.dereknelson"
 version = project.property("version")!!
 
 
-
 configurations {
 	compileOnly {
 		extendsFrom(configurations.annotationProcessor.get())
@@ -37,15 +36,15 @@ repositories {
     maven {
         url = uri("https://maven.pkg.github.com/lostcities-cloud/lostcities-common")
         credentials {
-            username = System.getenv("GH_USER")
-            password = System.getenv("GH_TOKEN")
+            username = System.getenv("GITHUB_ACTOR")
+            password = System.getenv("GITHUB_TOKEN")
         }
     }
     maven {
         url = uri("https://maven.pkg.github.com/lostcities-cloud/lostcities-models")
         credentials {
-            username = System.getenv("GH_USER")
-            password = System.getenv("GH_TOKEN")
+            username = System.getenv("GITHUB_ACTOR")
+            password = System.getenv("GITHUB_TOKEN")
         }
     }
 
@@ -67,24 +66,40 @@ dependencyManagement {
     }
 }
 
-configurations.matching { it.name.startsWith("dokka") }.configureEach {
-    resolutionStrategy.eachDependency {
-        if (requested.group.startsWith("com.fasterxml.jackson")) {
-            useVersion("2.15.3")
+
+/*dokka {
+    moduleName.set(rootProject.name)
+    dokkaPublications.html {
+        suppressInheritedMembers.set(true)
+        failOnWarning.set(true)
+    }
+    dokkaSourceSets.main {
+        includes.from("README.md")
+        sourceLink {
+            localDirectory.set(file("src/main/kotlin"))
+            remoteUrl("https://github.com/lostcities-cloud")
+            // remoteLineSuffix.set("#L")
         }
     }
-}
+    pluginsConfiguration.html {
+        // customStyleSheets.from("styles.css")
+        // customAssets.from("logo.png")
+        footerMessage.set("(c) contact@dereknelson.io")
+    }
+}*/
 
-rewrite {
+/*rewrite {
     activeRecipe("org.openrewrite.java.spring.boot3.UpgradeSpringBoot_3_3")
     //exportDatatables = true
 
     sizeThresholdMb = 10
-}
+}*/
 
+
+val hibernateVersion: String = "6.5.+"
 dependencies {
-    rewrite("org.openrewrite:rewrite-kotlin:1.21.2")
-    rewrite("org.openrewrite.recipe:rewrite-spring:5.22.0")
+    //rewrite("org.openrewrite:rewrite-kotlin:1.21.2")
+    //rewrite("org.openrewrite.recipe:rewrite-spring:5.22.0")
 
     runtimeOnly("org.springframework.boot:spring-boot-properties-migrator")
     runtimeOnly("io.micrometer:micrometer-registry-prometheus")
@@ -93,11 +108,8 @@ dependencies {
     // runtimeOnly("io.zipkin.contrib.otel:encoder-brave:0.1.0")
     // runtimeOnly("io.opentelemetry:opentelemetry-logging-exporter")
 
-    implementation("org.hibernate:hibernate-core:6.4.4.Final")
-    implementation("org.hibernate:hibernate-micrometer:6.4.4.Final")
-    implementation("org.hibernate:hibernate-jcache:6.4.4.Final")
-    implementation("org.ehcache.modules:ehcache-107:3.9.2")
-    implementation("org.ehcache:ehcache:3.9.2")
+    implementation("org.hibernate:hibernate-core:${hibernateVersion}")
+    implementation("org.hibernate:hibernate-micrometer:${hibernateVersion}")
 
     implementation("org.springframework.boot:spring-boot-devtools")
 
@@ -120,8 +132,6 @@ dependencies {
 
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
     implementation("com.fasterxml.jackson.datatype:jackson-datatype-hibernate6")
-
-	implementation("org.zalando:problem-spring-web:0.21.0")
 
 	// implementation("org.springdoc:springdoc-openapi-core:1.5.10")
 	implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.6.+")
@@ -147,7 +157,7 @@ dependencies {
 			attribute(Bundling.BUNDLING_ATTRIBUTE, objects.named(Bundling.EXTERNAL))
 		}
 	}
-    dokkaHtmlPlugin("org.jetbrains.dokka:kotlin-as-java-plugin:2.0.0-Beta")
+    dokkaHtmlPlugin("org.jetbrains.dokka:kotlin-as-java-plugin:2.0.0")
 
 	annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
 
@@ -192,7 +202,9 @@ semver {
     noGitPush = false
 }
 
-
+tasks.bootBuildImage {
+    docker.host = "unix:///run/user/1000/podman/podman.sock"
+}
 
 tasks.test {
     finalizedBy(tasks.jacocoTestReport) // report is always generated after tests run
@@ -223,15 +235,15 @@ tasks.named("compileKotlin", org.jetbrains.kotlin.gradle.tasks.KotlinCompilation
 
 jib {
 	from {
-        image = "registry://docker.io/library/amazoncorretto:21-alpine-jdk"
+        image = "registry://public.ecr.aws/amazoncorretto/amazoncorretto:21.0.8-al2023-headless"
 	}
 
 	to {
         image = "ghcr.io/lostcities-cloud/${project.name}:${project.version}"
         tags = mutableSetOf("latest", "${project.version}")
 		auth {
-			username = System.getenv("GH_USER")
-    		password = System.getenv("GH_TOKEN")
+            username = System.getenv("GITHUB_ACTOR")
+            password = System.getenv("GITHUB_TOKEN")
 		}
 	}
 

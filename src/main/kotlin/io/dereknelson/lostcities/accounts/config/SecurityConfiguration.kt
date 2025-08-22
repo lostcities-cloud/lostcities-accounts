@@ -96,8 +96,8 @@ class SecurityConfiguration(
         return WebSecurityCustomizer { web: WebSecurity ->
             web
                 .ignoring()
-                .requestMatchers(antMatcher(HttpMethod.OPTIONS, "/**"))
-                .requestMatchers(antMatcher(HttpMethod.GET, "/actuator/**"))
+                .requestMatchers(HttpMethod.OPTIONS, "/**")
+                .requestMatchers(HttpMethod.GET, "/actuator/**")
                 .requestMatchers(
 
                     "/i18n/**",

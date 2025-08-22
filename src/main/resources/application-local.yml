@@ -25,6 +25,10 @@ spring:
   # This property enables the openapi and swagger-ui endpoints to be exposed beneath the actuator base path.
   output.ansi.enabled: always
   mvc.problemdetails.enabled: true
+
+server:
+  port: 8080
+
 management:
   info:
     env.enabled: true
@@ -40,8 +44,10 @@ management:
 
     web.exposure.include: "*"
     enabled-by-default: true
+
+
   server:
-    port: 4452
+    port: 4450
     base-path: /management/${spring.application.name}
   tracing:
     sampling.probability: 1
@@ -55,11 +61,13 @@ management:
     endpoint: http://192.168.1.233:9411/v1/traces
     encoding: PROTO3
 
-otel:
-  resource.attributes:
-    deployment.environment: dev
-    service.name: ${spring.application.name}
-  exporter.endpoint: http://192.168.1.233:30195
+web:
+  cors:
+    allowed-origins: http://192.168.1.241:8080, http://192.168.1.201:8091, http://localhost:8080, http://localhost:4452, http://127.0.0.1:8080, http://127.0.0.1:4452, http://192.168.1.233:80
+    allowed-methods: GET, POST, PATCH, PUT, DELETE, OPTIONS, HEAD
+    max-age: 3600
+    allowed-headers: "*"
+    exposed-headers: "*"
 
   #instrumentation.micrometer.enabled: false
 
