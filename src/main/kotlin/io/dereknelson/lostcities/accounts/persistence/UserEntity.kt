@@ -88,6 +88,8 @@ class UserEntity : AbstractAuditingEntity(), Serializable {
     @Column(name = "reset_date")
     var resetDate: Instant? = null
 
+
+
     @JsonIgnore
     @ElementCollection(targetClass = Role::class, fetch = FetchType.EAGER)
     @CollectionTable(
@@ -96,7 +98,12 @@ class UserEntity : AbstractAuditingEntity(), Serializable {
         foreignKey = ForeignKey(name = "USER_AUTHORITY_FOREIGN_KEY"),
     )
     @Enumerated(EnumType.STRING)
-    var authorities: Set<Role> = HashSet()
+    var authorities: Set<Role> = setOf()
+        get() = Collections.unmodifiableSet(field)
+        set(value) {
+            field = Collections.unmodifiableSet(value)
+        }
+
 
     override fun equals(other: Any?): Boolean {
         if (this === other) {

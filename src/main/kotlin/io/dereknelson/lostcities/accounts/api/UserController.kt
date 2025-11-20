@@ -32,10 +32,10 @@ import java.util.*
 @Tag(name = "User actions")
 @RestController
 class UserController(
-    private var tokenProvider: TokenProvider,
-    private var authenticationManager: AuthenticationManager,
-    private var userService: UserService,
-    private var modelMapper: ModelMapper,
+    private val tokenProvider: TokenProvider,
+    private val authenticationManager: AuthenticationManager,
+    private val userService: UserService,
+    private val modelMapper: ModelMapper,
 ) {
 
     private val log: Logger = LoggerFactory.getLogger(UserController::class.java)
@@ -51,7 +51,6 @@ class UserController(
     @ResponseStatus(HttpStatus.CREATED)
     fun register(@RequestBody registrationDto: RegistrationDto): UserDto? {
         val registration = modelMapper.map(registrationDto, Registration::class.java)
-        registration.authorities = setOf(AuthorityEntity(name = AuthoritiesConstants.USER))
         val user = userService.register(registration)
 
         return UserDto(user.id, user.login, user.email, user.langKey)

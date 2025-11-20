@@ -3,28 +3,31 @@ package io.dereknelson.lostcities.accounts.api
 import io.dereknelson.lostcities.common.AuthoritiesConstants
 import io.dereknelson.lostcities.common.Constants
 import io.swagger.v3.oas.annotations.media.Schema
+import java.util.Collections
 
 @Schema(description = "Registration")
-data class RegistrationDto(
+class RegistrationDto(
 
     @Schema(example = "ttesterson", required = true)
-    var login: String,
+    val login: String,
 
     @Schema(example = "test@example.com", required = true)
-    var email: String,
+    val email: String,
 
     @Schema(example = "p@ssword", required = true)
-    var password: String,
+    val password: String,
 
     @Schema(example = "Test", required = true)
-    var firstName: String,
+    val firstName: String = "unknown-first-name",
 
     @Schema(example = "Testerson", required = true)
-    var lastName: String?,
+    val lastName: String?,
 
     @Schema(example = "en_US", required = true)
-    var langKey: String = Constants.DEFAULT_LANGUAGE,
+    val langKey: String = Constants.DEFAULT_LANGUAGE,
 
     @Schema(example = "AuthoritiesConstants.USER", required = true)
-    var authorities: Set<String> = setOf(AuthoritiesConstants.USER),
-)
+    initialAuthorities: Set<String> = setOf(AuthoritiesConstants.USER),
+) {
+    val authorities: Set<String> = Collections.unmodifiableSet(initialAuthorities)
+}

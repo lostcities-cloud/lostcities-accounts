@@ -1,21 +1,25 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+import com.github.spotbugs.snom.Confidence
+import com.github.spotbugs.snom.Effort
+import com.github.spotbugs.snom.SpotBugsTask
 
 plugins {
     jacoco
 
-    id("org.springframework.boot") version "3.3.+"
+    id("org.springframework.boot") version "3.2.+"
     id("org.owasp.dependencycheck") version "11.0.0"
     id("com.github.rising3.semver") version "0.8.2"
     // id("org.graalvm.buildtools.native") version "0.10.+"
 	id("io.spring.dependency-management") version "1.1.4"
-    id("org.jetbrains.dokka") version "2.0.0"
+    id("org.jetbrains.dokka") version "2.1.0"
     id("com.google.cloud.tools.jib") version "3.4.4"
     //id("org.springframework.experimental.aot") version "0.11.4"
     id("com.gorylenko.gradle-git-properties") version "2.4.0"
     id("org.openrewrite.rewrite") version "6.27.+"
+    id("com.github.spotbugs") version "6.4.4"
 
 
-	kotlin("jvm") version "2.0.+"
+    kotlin("jvm") version "2.0.+"
 	kotlin("plugin.spring") version "2.0.+"
 	kotlin("plugin.jpa") version "2.0.+"
     kotlin("plugin.noarg") version "2.0.+"
@@ -25,6 +29,8 @@ plugins {
 group = "io.dereknelson"
 version = project.property("version")!!
 
+var commonsLang3Version = "3.18.0"
+project.ext.set("commons-lang3.version", commonsLang3Version)
 
 configurations {
 	compileOnly {
@@ -53,40 +59,13 @@ repositories {
     gradlePluginPortal()
 }
 
-
+extra["commons-lang3.version"] = commonsLang3Version
 extra["snippetsDir"] = file("build/generated-snippets")
 
 
 val ktlint by configurations.creating
 
-dependencyManagement {
-    imports {
-        mavenBom(org.springframework.boot.gradle.plugin.SpringBootPlugin.BOM_COORDINATES)
-        // mavenBom("io.opentelemetry.instrumentation:opentelemetry-instrumentation-bom:2.6.0")
-    }
-}
 
-
-/*dokka {
-    moduleName.set(rootProject.name)
-    dokkaPublications.html {
-        suppressInheritedMembers.set(true)
-        failOnWarning.set(true)
-    }
-    dokkaSourceSets.main {
-        includes.from("README.md")
-        sourceLink {
-            localDirectory.set(file("src/main/kotlin"))
-            remoteUrl("https://github.com/lostcities-cloud")
-            // remoteLineSuffix.set("#L")
-        }
-    }
-    pluginsConfiguration.html {
-        // customStyleSheets.from("styles.css")
-        // customAssets.from("logo.png")
-        footerMessage.set("(c) contact@dereknelson.io")
-    }
-}*/
 
 /*rewrite {
     activeRecipe("org.openrewrite.java.spring.boot3.UpgradeSpringBoot_3_3")
@@ -96,11 +75,14 @@ dependencyManagement {
 }*/
 
 
-val hibernateVersion: String = "6.5.+"
+val hibernateVersion: String = "6.4.+"
 dependencies {
+    implementation(platform(org.springframework.boot.gradle.plugin.SpringBootPlugin.BOM_COORDINATES))
+
     //rewrite("org.openrewrite:rewrite-kotlin:1.21.2")
     //rewrite("org.openrewrite.recipe:rewrite-spring:5.22.0")
-
+    spotbugs("com.github.spotbugs:spotbugs:4.9.8")
+    spotbugsPlugins("com.h3xstream.findsecbugs:findsecbugs-plugin:1.14.0")
     runtimeOnly("org.springframework.boot:spring-boot-properties-migrator")
     runtimeOnly("io.micrometer:micrometer-registry-prometheus")
     // runtimeOnly("io.micrometer:micrometer-tracing-bridge-brave")
@@ -111,6 +93,8 @@ dependencies {
     implementation("org.hibernate:hibernate-core:${hibernateVersion}")
     implementation("org.hibernate:hibernate-micrometer:${hibernateVersion}")
 
+    implementation("org.apache.httpcomponents.client5:httpclient5:5.5.1")
+    implementation("org.apache.httpcomponents.core5:httpcore5:5.3.6")
     implementation("org.springframework.boot:spring-boot-devtools")
 
     if(rootProject.hasProperty("debug")){
@@ -121,11 +105,11 @@ dependencies {
         implementation("io.dereknelson.lostcities-cloud:lostcities-models:0.0.6")
     }
 
-	implementation("org.apache.commons:commons-lang3:3.12.0")
+    implementation("org.apache.commons:commons-lang3:$commonsLang3Version")
 
 	implementation("org.springframework.boot:spring-boot-starter-web")
 	implementation("org.springframework.boot:spring-boot-starter-actuator")
-	implementation("org.springframework.boot:spring-boot-starter-data-jpa")
+    implementation("org.springframework.boot:spring-boot-starter-data-jpa")
 	implementation("org.springframework.boot:spring-boot-starter-mail")
 	implementation("org.springframework.boot:spring-boot-starter-security")
 	implementation("org.springframework.boot:spring-boot-starter-validation")
@@ -142,9 +126,9 @@ dependencies {
     runtimeOnly("org.flywaydb:flyway-core:10.8.1")
     runtimeOnly("org.flywaydb:flyway-database-postgresql:10.8.1")
 
-	implementation("io.jsonwebtoken:jjwt-api:0.11.2")
-	implementation("io.jsonwebtoken:jjwt-impl:0.11.2")
-	implementation("io.jsonwebtoken:jjwt-jackson:0.11.2")
+	implementation("io.jsonwebtoken:jjwt-api:0.12.7")
+	implementation("io.jsonwebtoken:jjwt-impl:0.12.7")
+	implementation("io.jsonwebtoken:jjwt-jackson:0.12.7")
 
 	implementation("org.jetbrains.kotlin:kotlin-reflect")
 	implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
@@ -157,7 +141,6 @@ dependencies {
 			attribute(Bundling.BUNDLING_ATTRIBUTE, objects.named(Bundling.EXTERNAL))
 		}
 	}
-    dokkaHtmlPlugin("org.jetbrains.dokka:kotlin-as-java-plugin:2.0.0")
 
 	annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
 
@@ -169,9 +152,7 @@ dependencies {
 	testImplementation("org.springframework.security:spring-security-test")
 	testImplementation("org.mockito.kotlin:mockito-kotlin:3.2.0")
 	testImplementation("org.assertj:assertj-core:3.19.0")
-}
-
-val outputDir = "${project.layout.buildDirectory}/reports/ktlint/"
+} val outputDir = "${project.layout.buildDirectory}/reports/ktlint/"
 val inputFiles = project.fileTree(mapOf("dir" to "src", "include" to "**/*.kt"))
 
 val ktlintCheck by tasks.creating(JavaExec::class) {
@@ -214,12 +195,38 @@ tasks.jacocoTestReport {
 }
 
 
+spotbugs {
+    ignoreFailures = true
+    showStackTraces = true
+    showProgress = true
+    //effort = Effort.MAX
+    //reportLevel = Confidence.HIGH
+    //visitors = listOf("FindSqlInjection", "SwitchFallthrough")
+    //omitVisitors = listOf("FindNonShortCircuit")
+    //chooseVisitors = listOf("-FindNonShortCircuit", "+TestASM")
+    //reportsDir = file("${project.layout.buildDirectory}/reports/spotbugs")
+    //includeFilter = file("include.xml")
+    //excludeFilter = file("exclude.xml")
+    //baselineFile = file("baseline.xml")
+    //onlyAnalyze = listOf("com.foobar.MyClass", "com.foobar.mypkg.*")
+    maxHeapSize = "1g"
+    extraArgs = listOf("-nested:false")
+    //jvmArgs = listOf()
+}
+
+tasks.spotbugsMain {
+    val html = reports.create("html")
+    html.required.set(true)
+    //html.outputLocation = file("${project.layout.buildDirectory}/reports/spotbugs/spotbugs.html")
+    html.setStylesheet("fancy-hist.xsl")
+
+}
 
 tasks.withType<KotlinCompile>() {
 
     compilerOptions {
-        apiVersion.set(org.jetbrains.kotlin.gradle.dsl.KotlinVersion.KOTLIN_2_0)
-        languageVersion.set(org.jetbrains.kotlin.gradle.dsl.KotlinVersion.KOTLIN_2_0)
+        apiVersion.set(org.jetbrains.kotlin.gradle.dsl.KotlinVersion.KOTLIN_2_2)
+        languageVersion.set(org.jetbrains.kotlin.gradle.dsl.KotlinVersion.KOTLIN_2_2)
 
         freeCompilerArgs.addAll(listOf(
             "-Xjsr305=strict", "-opt-in=kotlin.RequiresOptIn"

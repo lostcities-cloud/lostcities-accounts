@@ -2,7 +2,7 @@ package io.dereknelson.lostcities.accounts.config
 
 import io.dereknelson.lostcities.accounts.service.AuthUserDetailsService
 import io.dereknelson.lostcities.common.auth.JwtFilter
-import io.dereknelson.lostcities.common.auth.TokenProvider
+import io.dereknelson.lostcities.common.auth.PublicTokenValidator
 import io.swagger.v3.oas.annotations.enums.SecuritySchemeType
 import io.swagger.v3.oas.annotations.security.SecurityScheme
 import org.springframework.beans.factory.annotation.Autowired
@@ -35,8 +35,7 @@ import org.springframework.web.filter.ForwardedHeaderFilter
 )
 @Configuration
 class SecurityConfiguration(
-    private val tokenProvider: TokenProvider,
-    private val lostCitiesUserDetailsService: AuthUserDetailsService,
+    private val publicTokenValidator: PublicTokenValidator
 ) {
 
     @Bean
@@ -55,7 +54,7 @@ class SecurityConfiguration(
         http
             .csrf { it.disable() }
             .cors { it.configure(http) }
-            .addFilterBefore(JwtFilter(tokenProvider), UsernamePasswordAuthenticationFilter::class.java)
+            .addFilterBefore(JwtFilter(publicTokenValidator), UsernamePasswordAuthenticationFilter::class.java)
             .authenticationManager(authenticationManager)
             .exceptionHandling {}
             .headers { headersConfigurer ->
@@ -81,6 +80,7 @@ class SecurityConfiguration(
                         "/swagger-ui/**",
                         "/health",
                         "/accounts/**",
+                        "/public-key",
                         "/info",
                         "/prometheus",
                     ).permitAll()
@@ -118,13 +118,17 @@ class SecurityConfiguration(
         val builder = http.getSharedObject(
             AuthenticationManagerBuilder::class.java,
         )
-        builder.userDetailsService(userDetailService)
+
+        builder
+            .userDetailsService(userDetailService)
             .passwordEncoder(bCryptPasswordEncoder)
+
         return builder.build()
     }
 
     @Autowired
     fun injectUserDetailsService(
+        lostCitiesUserDetailsService: AuthUserDetailsService,
         authenticationManagerBuilder: AuthenticationManagerBuilder,
     ): AuthenticationManagerBuilder {
         authenticationManagerBuilder.userDetailsService(lostCitiesUserDetailsService)

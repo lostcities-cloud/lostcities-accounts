@@ -1,6 +1,7 @@
 package io.dereknelson.lostcities.accounts.service
 
 import io.dereknelson.lostcities.accounts.persistence.AuthorityEntity
+import io.dereknelson.lostcities.common.AuthoritiesConstants
 import io.dereknelson.lostcities.common.Constants
 import jakarta.validation.constraints.NotNull
 import jakarta.validation.constraints.Size
@@ -24,7 +25,7 @@ data class Registration(
     @NotNull
     @Size(min = 2, max = 10)
     String = Constants.DEFAULT_LANGUAGE,
-    var authorities:
+    val authorities:
     @Size(min = 1)
-    Set<AuthorityEntity> = HashSet(),
+    Set<AuthorityEntity> = setOf(AuthorityEntity(AuthoritiesConstants.USER)),
 )

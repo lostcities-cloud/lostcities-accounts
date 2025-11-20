@@ -29,3 +29,4 @@ fun main(args: Array<String>) {
     logger.info("Starting Accounts service")
     runApplication<LostcitiesAccountsApplication>(*args)
 }
+

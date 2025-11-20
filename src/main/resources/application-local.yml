@@ -5,26 +5,20 @@ spring:
   devtools.restart.enabled: true
 
   jpa:
-    database-platform: org.hibernate.dialect.H2Dialect
     hibernate.ddl-auto: update
     show-sql: true
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
   datasource:
-    #type: com.zaxxer.hikari.HikariDataSource
-    driver-class-name: org.h2.Driver
-    url: jdbc:h2:./h2/accounts-db
-
+    type: com.zaxxer.hikari.HikariDataSource
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://${POSTGRES_IP:127.0.0.1}:5432/lostcities-accounts # postgres.service.consul
+    username: ${POSTGRES_USER:accounts}
+    password: ${POSTGRES_PASSWORD:example}
   flyway:
-    enabled: false
-    url: jdbc:h2:./h2/accounts-db
-    locations: classpath:db/migration/local
-    baseline-on-migrate: true
-    baseline-version: 0
-    validate-on-migrate: false
-    username: ${spring.datasource.username}
-    password: ${spring.datasource.password}
+    enabled: true
   # This property enables the openapi and swagger-ui endpoints to be exposed beneath the actuator base path.
   output.ansi.enabled: always
-  mvc.problemdetails.enabled: true
+
 
 server:
   port: 8080
@@ -62,12 +56,11 @@ management:
     encoding: PROTO3
 
 web:
-  cors:
-    allowed-origins: http://192.168.1.241:8080, http://192.168.1.201:8091, http://localhost:8080, http://localhost:4452, http://127.0.0.1:8080, http://127.0.0.1:4452, http://192.168.1.233:80
-    allowed-methods: GET, POST, PATCH, PUT, DELETE, OPTIONS, HEAD
-    max-age: 3600
-    allowed-headers: "*"
-    exposed-headers: "*"
+  allowed-origins: http://192.168.1.241:8080, http://192.168.1.201:8091, http://localhost:8080, http://localhost:4452, http://127.0.0.1:8080, http://127.0.0.1:4452, http://192.168.1.233:80
+  allowed-methods: GET, POST, PATCH, PUT, DELETE, OPTIONS, HEAD
+  max-age: 3600
+  allowed-headers: "*"
+  exposed-headers: "*"
 
   #instrumentation.micrometer.enabled: false
 
@@ -83,12 +76,12 @@ logging:
   level:
     ROOT: error
     org.springframework.aop.interceptor.PerformanceMonitorInterceptor: TRACE
-    org.springframework.web.filter.CommonsRequestLoggingFilter: DEBUG
-    org.springframework: debug
-    org.flywaydb: debug
-    org.springframework.security: debug
-    io.dereknelson.lostcities: debug
-    "org.springframework.boot.actuate": debug
+    org.springframework.web.filter.CommonsRequestLoggingFilter: info
+    org.springframework: info
+    org.flywaydb: info
+    org.springframework.security: info
+    io.dereknelson.lostcities: info
+    "org.springframework.boot.actuate": info
 
   pattern:
     console: "%d %-5level %logger : %msg%n"

@@ -14,13 +14,13 @@ class AuthUserDetailsService(
     override fun loadUserByUsername(username: String): AuthUserDetails {
         return userRepository.findUserForLogin(username)
             .map {
-                AuthUserDetails(
+                AuthUserDetails.create(
                     id = it.id!!,
                     login = it.login!!,
                     email = it.email!!,
                     authorities = it.authorities
                         .map { authorityEntity -> SimpleGrantedAuthority(authorityEntity.name) }
-                        .toSet(),
+                        .toMutableSet(),
                     password = it.password!!,
                     accountNonExpired = true,
                     accountNonLocked = true,
