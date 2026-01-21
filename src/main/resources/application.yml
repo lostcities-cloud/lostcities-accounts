@@ -52,8 +52,8 @@ server:
 
 springdoc:
   use-management-port: true
-  api-docs.enabled: false
-  packagesToScan: io.dereknelson.lostcities.accounts.api
+  api-docs.enabled: true
+  packagesToScan: io.dereknelson.lostcities.accounts
 
 # Properties to be exposed on the /info management endpoint
 info:

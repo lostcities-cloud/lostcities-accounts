@@ -2,6 +2,8 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import com.github.spotbugs.snom.Confidence
 import com.github.spotbugs.snom.Effort
 import com.github.spotbugs.snom.SpotBugsTask
+import org.gradle.internal.configuration.problems.firstTypeFrom
+import org.springframework.boot.gradle.tasks.run.BootRun
 
 plugins {
     jacoco
@@ -17,7 +19,7 @@ plugins {
     id("com.gorylenko.gradle-git-properties") version "2.4.0"
     id("org.openrewrite.rewrite") version "6.27.+"
     id("com.github.spotbugs") version "6.4.4"
-
+    id("org.graalvm.buildtools.native") version "0.11.1"
 
     kotlin("jvm") version "2.0.+"
 	kotlin("plugin.spring") version "2.0.+"
@@ -28,9 +30,6 @@ plugins {
 
 group = "io.dereknelson"
 version = project.property("version")!!
-
-var commonsLang3Version = "3.18.0"
-project.ext.set("commons-lang3.version", commonsLang3Version)
 
 configurations {
 	compileOnly {
@@ -59,9 +58,6 @@ repositories {
     gradlePluginPortal()
 }
 
-extra["commons-lang3.version"] = commonsLang3Version
-extra["snippetsDir"] = file("build/generated-snippets")
-
 
 val ktlint by configurations.creating
 
@@ -74,8 +70,12 @@ val ktlint by configurations.creating
     sizeThresholdMb = 10
 }*/
 
+tasks.named<BootRun>("bootRun") {
+    if(rootProject.hasProperty("debug")) {
+        systemProperty("spring.profiles.active", "local")
+    }
+}
 
-val hibernateVersion: String = "6.4.+"
 dependencies {
     implementation(platform(org.springframework.boot.gradle.plugin.SpringBootPlugin.BOM_COORDINATES))
 
@@ -90,22 +90,23 @@ dependencies {
     // runtimeOnly("io.zipkin.contrib.otel:encoder-brave:0.1.0")
     // runtimeOnly("io.opentelemetry:opentelemetry-logging-exporter")
 
-    implementation("org.hibernate:hibernate-core:${hibernateVersion}")
-    implementation("org.hibernate:hibernate-micrometer:${hibernateVersion}")
+    implementation("org.hibernate:hibernate-core:${rootProject.extra["hibernate.version"]}")
+    implementation("org.hibernate:hibernate-micrometer:${rootProject.extra["hibernate.version"]}")
 
-    implementation("org.apache.httpcomponents.client5:httpclient5:5.5.1")
-    implementation("org.apache.httpcomponents.core5:httpcore5:5.3.6")
-    implementation("org.springframework.boot:spring-boot-devtools")
+    implementation("org.apache.httpcomponents.client5:httpclient5:${rootProject.extra["httpclient5.version"]}")
+    implementation("org.apache.httpcomponents.core5:httpcore5:${rootProject.extra["httpcore5.version"]}")
 
-    if(rootProject.hasProperty("debug")){
+
+    if(rootProject.hasProperty("debug") || project.hasProperty("debug")){
+        implementation("org.springframework.boot:spring-boot-devtools")
         implementation(project(":lostcities-common"))
         implementation(project(":lostcities-models"))
     } else {
-        implementation("io.dereknelson.lostcities-cloud:lostcities-common:0.0.7")
-        implementation("io.dereknelson.lostcities-cloud:lostcities-models:0.0.6")
+        implementation("io.dereknelson.lostcities-cloud:lostcities-common:${rootProject.extra["lostcities-common.version"]}")
+        implementation("io.dereknelson.lostcities-cloud:lostcities-models:${rootProject.extra["lostcities-models.version"]}")
     }
 
-    implementation("org.apache.commons:commons-lang3:$commonsLang3Version")
+    implementation("org.apache.commons:commons-lang3:${rootProject.extra["commonsLang3.version"]}")
 
 	implementation("org.springframework.boot:spring-boot-starter-web")
 	implementation("org.springframework.boot:spring-boot-starter-actuator")
@@ -117,26 +118,24 @@ dependencies {
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
     implementation("com.fasterxml.jackson.datatype:jackson-datatype-hibernate6")
 
-	// implementation("org.springdoc:springdoc-openapi-core:1.5.10")
-	implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.6.+")
-	//implementation("org.springdoc:springdoc-openapi-starter-webmvc-api:2.6.+")
-	implementation("org.springdoc:springdoc-openapi-kotlin:1.8.0")
+	implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:${rootProject.extra["springdoc.version"]}")
+    implementation("org.springdoc:springdoc-openapi-starter-webmvc-api:${rootProject.extra["springdoc.version"]}")
+    // implementation("org.springdoc:springdoc-openapi-starter-webmvc-scalar:${rootProject.extra["springdoc.version"]}")
 
 	implementation("org.modelmapper:modelmapper:2.4.1")
     runtimeOnly("org.flywaydb:flyway-core:10.8.1")
     runtimeOnly("org.flywaydb:flyway-database-postgresql:10.8.1")
 
-	implementation("io.jsonwebtoken:jjwt-api:0.12.7")
-	implementation("io.jsonwebtoken:jjwt-impl:0.12.7")
-	implementation("io.jsonwebtoken:jjwt-jackson:0.12.7")
+	implementation("io.jsonwebtoken:jjwt-api:${rootProject.extra["jjwt.version"]}")
+	implementation("io.jsonwebtoken:jjwt-impl:${rootProject.extra["jjwt.version"]}")
+	implementation("io.jsonwebtoken:jjwt-jackson:${rootProject.extra["jjwt.version"]}")
 
 	implementation("org.jetbrains.kotlin:kotlin-reflect")
 	implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
 	implementation("org.springframework.boot:spring-boot-devtools")
     runtimeOnly("org.postgresql:postgresql")
-    runtimeOnly("com.h2database:h2")
 
-	ktlint("com.pinterest:ktlint:0.49.1") {
+	ktlint("com.pinterest:ktlint:${rootProject.extra["ktlint.version"]}") {
 		attributes {
 			attribute(Bundling.BUNDLING_ATTRIBUTE, objects.named(Bundling.EXTERNAL))
 		}
@@ -144,9 +143,9 @@ dependencies {
 
 	annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
 
-	testImplementation("org.junit.jupiter:junit-jupiter:5.6.2")
-	testImplementation("org.junit.jupiter:junit-jupiter-engine:5.6.2")
-	testImplementation("org.mockito:mockito-junit-jupiter:2.23.0")
+	testImplementation("org.junit.jupiter:junit-jupiter")
+	testImplementation("org.junit.jupiter:junit-jupiter-engine")
+	testImplementation("org.mockito:mockito-junit-jupiter")
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
 	testImplementation("org.springframework.restdocs:spring-restdocs-mockmvc")
 	testImplementation("org.springframework.security:spring-security-test")

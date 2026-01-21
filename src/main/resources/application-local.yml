@@ -15,9 +15,15 @@ spring:
     username: ${POSTGRES_USER:accounts}
     password: ${POSTGRES_PASSWORD:example}
   flyway:
-    enabled: true
+    enabled: false
   # This property enables the openapi and swagger-ui endpoints to be exposed beneath the actuator base path.
   output.ansi.enabled: always
+
+springdoc:
+  use-management-port: true
+  show-actuator: true
+  api-docs.enabled: true
+  packagesToScan: io.dereknelson.lostcities.accounts
 
 
 server:
@@ -28,15 +34,14 @@ management:
     env.enabled: true
     java.enabled: true
     os.enabled: true
+
   endpoint.health.show-details: "ALWAYS"
   metrics.tags:
     application: ${spring.application.name}
     host: ${spring.application.name}.lostcities.dev
 
   endpoints:
-
-
-    web.exposure.include: "*"
+    web.exposure.include: "*, openapi, swagger-ui"
     enabled-by-default: true
 
 
@@ -79,7 +84,7 @@ logging:
     org.springframework.web.filter.CommonsRequestLoggingFilter: info
     org.springframework: info
     org.flywaydb: info
-    org.springframework.security: info
+    org.springframework.security: debug
     io.dereknelson.lostcities: info
     "org.springframework.boot.actuate": info
 
