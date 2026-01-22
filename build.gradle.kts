@@ -4,6 +4,7 @@ import com.github.spotbugs.snom.Effort
 import com.github.spotbugs.snom.SpotBugsTask
 import org.gradle.internal.configuration.problems.firstTypeFrom
 import org.springframework.boot.gradle.tasks.run.BootRun
+import com.google.cloud.tools.jib.gradle.ExtraDirectoryParameters
 
 plugins {
     jacoco
@@ -19,7 +20,7 @@ plugins {
     id("com.gorylenko.gradle-git-properties") version "2.4.0"
     id("org.openrewrite.rewrite") version "6.27.+"
     id("com.github.spotbugs") version "6.4.4"
-    id("org.graalvm.buildtools.native") version "0.11.1"
+    //id("org.graalvm.buildtools.native") version "0.11.1"
 
     kotlin("jvm") version "2.0.+"
 	kotlin("plugin.spring") version "2.0.+"
@@ -38,21 +39,6 @@ configurations {
 }
 
 repositories {
-    maven {
-        url = uri("https://maven.pkg.github.com/lostcities-cloud/lostcities-common")
-        credentials {
-            username = System.getenv("GITHUB_ACTOR")
-            password = System.getenv("GITHUB_TOKEN")
-        }
-    }
-    maven {
-        url = uri("https://maven.pkg.github.com/lostcities-cloud/lostcities-models")
-        credentials {
-            username = System.getenv("GITHUB_ACTOR")
-            password = System.getenv("GITHUB_TOKEN")
-        }
-    }
-
     google()
 	mavenCentral()
     gradlePluginPortal()
@@ -73,9 +59,26 @@ val ktlint by configurations.creating
 tasks.named<BootRun>("bootRun") {
     if(rootProject.hasProperty("debug")) {
         systemProperty("spring.profiles.active", "local")
+
+
     }
+
+        // Pass the -javaagent flag as a JVM argument
+    jvmArgs("-javaagent:${openTelemetryAgent.singleFile.path}")
+
+    // Optional: Configure common OpenTelemetry properties
+    systemProperty("otel.service.name", project.name)
+    systemProperty("otel.exporter.otlp.endpoint", "http://localhost:4318") // Default OTLP gRPC port
+
 }
 
+/***
+ * "-javaagent:/app/otel-agent/${openTelemetryAgent.singleFile.name}",
+ *             "-Dotel.service.name=${project.name}", // Customize service name
+ *             "-Dotel.exporter.otlp.endpoint=http://otel-collector:4317"
+ */
+val openTelemetryAgent: Configuration by configurations.creating
+val otelAgentVersion = "2.24.0" // Use the desired agent version
 dependencies {
     implementation(platform(org.springframework.boot.gradle.plugin.SpringBootPlugin.BOM_COORDINATES))
 
@@ -96,6 +99,8 @@ dependencies {
     implementation("org.apache.httpcomponents.client5:httpclient5:${rootProject.extra["httpclient5.version"]}")
     implementation("org.apache.httpcomponents.core5:httpcore5:${rootProject.extra["httpcore5.version"]}")
 
+    implementation("io.micrometer:micrometer-tracing-bridge-otel")
+    openTelemetryAgent("io.opentelemetry.javaagent:opentelemetry-javaagent:${otelAgentVersion}") // Use the latest stable version
 
     if(rootProject.hasProperty("debug") || project.hasProperty("debug")){
         implementation("org.springframework.boot:spring-boot-devtools")
@@ -151,7 +156,15 @@ dependencies {
 	testImplementation("org.springframework.security:spring-security-test")
 	testImplementation("org.mockito.kotlin:mockito-kotlin:3.2.0")
 	testImplementation("org.assertj:assertj-core:3.19.0")
-} val outputDir = "${project.layout.buildDirectory}/reports/ktlint/"
+}
+
+val copyAgent = tasks.register<Copy>("copyAgent") {
+    from(openTelemetryAgent.singleFile)
+    into(layout.buildDirectory.dir("agent"))
+    rename("opentelemetry-javaagent-.*\\.jar", "opentelemetry-javaagent.jar")
+}
+
+val outputDir = "${project.layout.buildDirectory}/reports/ktlint/"
 val inputFiles = project.fileTree(mapOf("dir" to "src", "include" to "**/*.kt"))
 
 val ktlintCheck by tasks.creating(JavaExec::class) {
@@ -173,6 +186,8 @@ val ktlintFormat by tasks.creating(JavaExec::class) {
 	args = listOf("-F", "src/**/*.kt")
 	jvmArgs("--add-opens", "java.base/java.lang=ALL-UNNAMED")
 }
+
+
 
 noArg {
     annotation("jakarta.persistence.Entity")
@@ -252,6 +267,28 @@ jib {
             password = System.getenv("GITHUB_TOKEN")
 		}
 	}
+
+
+
+
+    @Suppress("MISSING_DEPENDENCY_SUPERCLASS")
+    extraDirectories {
+        paths {
+            path {
+                this.setFrom(openTelemetryAgent.singleFile.path)
+                this.into = "app/otel-agent"
+            }
+        }
+    }
+
+    container {
+        // Configure the JVM to use the OpenTelemetry agent with the javaagent flag
+        jvmFlags = listOf(
+            "-javaagent:/app/otel-agent/${openTelemetryAgent.singleFile.name}",
+            "-Dotel.service.name=${project.name}", // Customize service name
+            "-Dotel.exporter.otlp.endpoint=http://otel-collector:4317" // Point to your OTel collector
+        )
+    }
 
 }
 
