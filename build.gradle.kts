@@ -22,10 +22,10 @@ plugins {
     id("com.github.spotbugs") version "6.4.4"
     //id("org.graalvm.buildtools.native") version "0.11.1"
 
-    kotlin("jvm") version "2.0.+"
-	kotlin("plugin.spring") version "2.0.+"
-	kotlin("plugin.jpa") version "2.0.+"
-    kotlin("plugin.noarg") version "2.0.+"
+    kotlin("jvm") version "2.3.+"
+	kotlin("plugin.spring") version "2.3.+"
+	kotlin("plugin.jpa") version "2.3.+"
+    kotlin("plugin.noarg") version "2.3.+"
 
 }
 
@@ -239,8 +239,8 @@ tasks.spotbugsMain {
 tasks.withType<KotlinCompile>() {
 
     compilerOptions {
-        apiVersion.set(org.jetbrains.kotlin.gradle.dsl.KotlinVersion.KOTLIN_2_2)
-        languageVersion.set(org.jetbrains.kotlin.gradle.dsl.KotlinVersion.KOTLIN_2_2)
+        apiVersion.set(org.jetbrains.kotlin.gradle.dsl.KotlinVersion.KOTLIN_2_3)
+        languageVersion.set(org.jetbrains.kotlin.gradle.dsl.KotlinVersion.KOTLIN_2_3)
 
         freeCompilerArgs.addAll(listOf(
             "-Xjsr305=strict", "-opt-in=kotlin.RequiresOptIn"
