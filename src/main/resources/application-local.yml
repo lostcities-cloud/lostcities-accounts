@@ -12,10 +12,10 @@ spring:
     type: com.zaxxer.hikari.HikariDataSource
     driver-class-name: org.postgresql.Driver
     url: jdbc:postgresql://${POSTGRES_IP:127.0.0.1}:5432/lostcities-accounts # postgres.service.consul
-    username: ${POSTGRES_USER:accounts}
-    password: ${POSTGRES_PASSWORD:example}
+    username: accounts #${POSTGRES_USER:accounts}
+    password: example #${POSTGRES_PASSWORD:example}
   flyway:
-    enabled: false
+    enabled: true
   # This property enables the openapi and swagger-ui endpoints to be exposed beneath the actuator base path.
   output.ansi.enabled: always
 

@@ -39,7 +39,8 @@ import java.util.Locale
 @EnableConfigurationProperties
 @EnableJpaRepositories(
    "io.dereknelson.lostcities.accounts.user",
-    "io.dereknelson.lostcities.accounts.auth.crypto"
+    "io.dereknelson.lostcities.accounts.auth.crypto",
+    "io.dereknelson.lostcities.common.model"
 )
 @EnableJpaAuditing(auditorAwareRef = "springSecurityAuditorAware")
 @EnableTransactionManagement

@@ -98,10 +98,9 @@ class UserEntity : AbstractAuditingEntity(), Serializable {
     @CollectionTable(
         name = "users_authority",
         joinColumns = [JoinColumn(name = "users_id", referencedColumnName = "id")],
-        //foreignKey = ForeignKey(name = "USER_AUTHORITY_FOREIGN_KEY"),
+        foreignKey = ForeignKey(name = "USER_AUTHORITY_FOREIGN_KEY"),
     )
     @Column(name = "authorities", nullable = false) // Specifies the column in the join table to hold the enum value
-
     var authorities: Set<Role> = setOf()
         get() = Collections.unmodifiableSet(field)
         set(value) {

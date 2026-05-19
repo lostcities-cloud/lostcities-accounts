@@ -9,16 +9,19 @@ import java.security.PublicKey
 import java.security.SecureRandom
 import java.security.spec.X509EncodedKeySpec
 
-@Service
+//@Service
 class KeyPairService(
-    val keyPairRepository : KeyPairRepository
+    val keyPairRepository : KeyPairRepository,
+
+
 ) {
-
-    companion object {
-        val keyFactory: KeyFactory = KeyFactory.getInstance("RSA")
-    }
-
+    private val algorithm: String = "SHA1PRNG"
     private val keyBytes: Int = 2048
+    val secureRandom: SecureRandom = SecureRandom.getInstance(algorithm)
+
+
+    private val keyFactory: KeyFactory = KeyFactory.getInstance(algorithm)
+
 
     fun loadKeyPair(): Pair<PublicKey, PrivateKey> {
         var keyPair = keyPairRepository.findLatest()
@@ -38,9 +41,12 @@ class KeyPairService(
         keyPairRepository.save(keyPairEntity)
     }
 
+    private fun getRandomSeed(): ByteArray {
+        return secureRandom.generateSeed(keyBytes)
+    }
+
+
     private fun generateKeyPair(): KeyPairEntity {
-        val randomSeed: ByteArray = SecureRandom.getInstance("SHA1PRNG").generateSeed(keyBytes)
-        val secureRandom = SecureRandom(randomSeed)
         val keyPair = Jwts.SIG.RS256.keyPair().random(secureRandom).build()
 
         val entity = KeyPairEntity.fromKeyPair(keyPair)

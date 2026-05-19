@@ -256,7 +256,7 @@ tasks.named("compileKotlin", org.jetbrains.kotlin.gradle.tasks.KotlinCompilation
 
 jib {
 	from {
-        image = "registry://public.ecr.aws/amazoncorretto/amazoncorretto:21.0.8-al2023-headless"
+        image = "registry://gcr.io/distroless/java21-debian13"
 	}
 
 	to {
@@ -289,7 +289,6 @@ jib {
             "-Dotel.exporter.otlp.endpoint=http://otel-collector:4317" // Point to your OTel collector
         )
     }
-
 }
 
 dependencyCheck {
